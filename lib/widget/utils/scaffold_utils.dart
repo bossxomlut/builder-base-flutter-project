@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../common/loading_widget.dart';
+import '../loading_widget.dart';
 
 mixin StatelessTemplate on StatelessWidget {
   @override
