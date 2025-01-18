@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../domain/repository/authentication_repository.dart';
-import '../../../widget/index.dart';
+import '../../utils/index.dart';
 import 'login_state.dart';
 
 @injectable

@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import '../../route/app_router.gr.dart';
-import '../../widget/index.dart';
+import '../utils/index.dart';
 
 @RoutePage()
 class SplashPage extends StatefulWidget {

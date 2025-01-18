@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../resource/string.dart';
 import '../../route/app_router.gr.dart';
-import '../../widget/index.dart';
+import '../utils/index.dart';
 import 'cubit/login_cubit.dart';
 import 'cubit/login_state.dart';
 
@@ -19,7 +19,7 @@ class _LoginPageState extends BaseState<LoginPage, LoginState, LoginCubit> {
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
     return AppBar(
-      title: const LText(LocalizationKey.login),
+      title: const LText(LKey.login),
     );
   }
 

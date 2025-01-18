@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../loading_widget.dart';
+import '../../widget/index.dart';
 
 mixin StatelessTemplate on StatelessWidget {
   @override
@@ -19,12 +19,18 @@ mixin StatelessTemplate on StatelessWidget {
 }
 
 mixin StateTemplate<T extends StatefulWidget> on State<T> {
+  bool get isScaffold => true;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: buildAppBar(context),
-      body: buildBody(context),
-    );
+    if (isScaffold) {
+      return Scaffold(
+        appBar: buildAppBar(context),
+        body: buildBody(context),
+      );
+    } else {
+      return buildBody(context);
+    }
   }
 
   PreferredSizeWidget? buildAppBar(BuildContext context) => null;
