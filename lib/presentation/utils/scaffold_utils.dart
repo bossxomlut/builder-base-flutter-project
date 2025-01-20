@@ -21,10 +21,15 @@ mixin StatelessTemplate on StatelessWidget {
 mixin StateTemplate<T extends StatefulWidget> on State<T> {
   bool get isScaffold => true;
 
+  ThemeData get theme => Theme.of(context);
+
+  Color get backgroundColor => theme.scaffoldBackgroundColor;
+
   @override
   Widget build(BuildContext context) {
     if (isScaffold) {
       return Scaffold(
+        backgroundColor: backgroundColor,
         appBar: buildAppBar(context),
         body: buildBody(context),
       );

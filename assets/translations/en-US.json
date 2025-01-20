@@ -1,3 +1,5 @@
 {
-  "login": "Login"
+  "inputPinCode": "Input pin code",
+  "forgotPinCode": "Forgot pin code?",
+  "wrongPinCode": "Wrong pin code"
 }

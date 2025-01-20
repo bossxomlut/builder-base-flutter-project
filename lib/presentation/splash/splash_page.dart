@@ -1,6 +1,8 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
+import '../../domain/index.dart';
+import '../../injection/injection.dart';
+import '../../route/app_router.dart';
 import '../../route/app_router.gr.dart';
 import '../utils/index.dart';
 
@@ -16,9 +18,21 @@ class _SplashPageState extends State<SplashPage> with StateTemplate<SplashPage> 
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 5), () {
-      context.router.replace(LoginRoute());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      navigationHandler();
     });
+  }
+
+  void navigationHandler() {
+    getIt.get<CheckConfiguredPinCodeUseCase>().execute(null).then(
+      (bool value) {
+        if (value) {
+          appRouter.goToLoginAtTop();
+        } else {
+          appRouter.replaceAll([const SetUpPinCodeRoute()]);
+        }
+      },
+    );
   }
 
   @override

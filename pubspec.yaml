@@ -24,6 +24,7 @@ dependencies:
   dartz: ^0.10.1  # Provides functional data types like Either and Option in Dart.
   dio: ^5.7.0  # A powerful HTTP client library for Flutter, with support for interceptors, global configuration, and retry logic.
   dotted_border: ^2.1.0
+  device_preview:
 
   # E
   easy_localization: ^3.0.7  # A localization library that makes it easy to handle internationalization in Flutter apps.
@@ -34,10 +35,12 @@ dependencies:
   flutter_bloc: ^8.1.6  # State management using the Bloc pattern for Flutter applications.
   flutter_screenutil: ^5.9.3  # Supports responsive design for multiple screen sizes.
   freezed_annotation: ^2.4.4  # Annotation support for the Freezed package to create immutable and sealed classes.
+  flutter_secure_storage: ^9.2.2 #Flutter Secure Storage provides API to store data in secure storage.
 
   # G
   gap: ^3.0.1  # Provides spacing between widgets in Flutter layouts.
   get_it: ^7.2.0  # Service locator for Flutter and Dart, helps with dependency injection.
+  google_fonts: ^6.2.1
 
   # I
   injectable: ^2.4.4  # Simplifies dependency registration with GetIt using code generation.

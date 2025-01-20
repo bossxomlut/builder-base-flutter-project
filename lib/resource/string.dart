@@ -1,7 +1,7 @@
 export 'package:easy_localization/easy_localization.dart';
 
-export '/widget/localization_text.dart';
-
 abstract class LKey {
-  static const String login = 'login';
+  static const String inputPinCode = 'inputPinCode';
+  static const String forgotPinCode = 'forgotPinCode';
+  static const String wrongPinCode = 'wrongPinCode';
 }

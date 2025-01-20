@@ -1,12 +1,95 @@
-import '../../core/index.dart';
+import 'package:injectable/injectable.dart';
 
-class LoginByPinCodeUseCase extends FutureUseCase<void, String> {
+import '../../core/index.dart';
+import '../../route/app_router.dart';
+import '../../widget/toast.dart';
+import '../entity/index.dart';
+import '../repository/index.dart';
+
+@injectable
+class CheckConfiguredPinCodeUseCase extends FutureUseCase<bool, void> {
+  CheckConfiguredPinCodeUseCase(this._pinCodeRepository);
+
+  final PinCodeRepository _pinCodeRepository;
+  @override
+  Future<bool> execute(void input) {
+    return _pinCodeRepository.isSetPinCode;
+  }
+}
+
+@injectable
+class SavePinCodeUseCase extends UseCase<void, SavePinCodeParamEntity> {
+  SavePinCodeUseCase(this._pinCodeRepository);
+
+  final PinCodeRepository _pinCodeRepository;
+
+  @override
+  void execute(SavePinCodeParamEntity input) {
+    _pinCodeRepository.savePinCode(
+      input.question,
+      input.answer,
+      input.pin,
+    );
+  }
+}
+
+@injectable
+class GetSecurityQuestionsUseCase extends UseCase<List<SecurityQuestionEntity>, void> {
+  GetSecurityQuestionsUseCase(this._pinCodeRepository);
+
+  final PinCodeRepository _pinCodeRepository;
+
+  @override
+  List<SecurityQuestionEntity> execute(void input) {
+    return _pinCodeRepository.securityQuestions;
+  }
+}
+
+@injectable
+class CheckSecurityQuestionUseCase extends FutureUseCase<bool, CheckSecurityQuestionParamEntity> {
+  CheckSecurityQuestionUseCase(this._pinCodeRepository);
+
+  final PinCodeRepository _pinCodeRepository;
+
+  @override
+  Future<bool> execute(CheckSecurityQuestionParamEntity input) {
+    return _pinCodeRepository.checkSecurityQuestion(
+      input.question,
+      input.answer,
+    );
+  }
+}
+
+@injectable
+class LoginUseCase extends FutureUseCase<void, String> {
+  LoginUseCase(this._pinCodeRepository);
+
+  final PinCodeRepository _pinCodeRepository;
+
   @override
   Future<void> execute(String input) {
-    if (input == '0000') {
-      return Future.value();
-    } else {
-      return Future.error('Invalid pin code');
-    }
+    return _pinCodeRepository.login(input);
+  }
+}
+
+@injectable
+class UpdatePinCodeUseCase extends FutureUseCase<void, UpdatePinCodeParamEntity> {
+  UpdatePinCodeUseCase(this._pinCodeRepository);
+
+  final PinCodeRepository _pinCodeRepository;
+
+  @override
+  Future<void> execute(UpdatePinCodeParamEntity input) {
+    return _pinCodeRepository
+        .updatePinCode(
+      input.confirmPin,
+      input.newPin,
+    )
+        .then((_) {
+      showSuccess(message: 'Pin code has been updated');
+      appRouter.goHome();
+    }).catchError((error) {
+      showError(message: 'Your pin code is incorrect');
+    });
   }
 }

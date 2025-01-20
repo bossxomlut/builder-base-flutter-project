@@ -14,6 +14,31 @@ class AppRouter extends RootStackRouter {
   List<AutoRoute> get routes => <AutoRoute>[
         AutoRoute(page: SplashRoute.page, initial: true),
         AutoRoute(page: HomeRoute.page),
-        AutoRoute(page: LoginRoute.page),
+        AutoRoute(page: PinCodeRoute.page),
+        AutoRoute(page: SetUpPinCodeRoute.page),
+        AutoRoute(page: ForgotPinCodeRoute.page),
+        AutoRoute(page: UpdatePinCodeRoute.page),
       ];
+}
+
+extension AppRouterX on AppRouter {
+  void goHome() {
+    replaceAll(const [HomeRoute()]);
+  }
+
+  void goToLogin() {
+    push(const PinCodeRoute());
+  }
+
+  void goToLoginAtTop() {
+    replaceAll(const [PinCodeRoute()]);
+  }
+
+  void pushAndRemoveUntilHome(PageRouteInfo route) {
+    pushAndPopUntil(route, predicate: (r) => r.isFirst);
+  }
+
+  void pushAndReplaceAll(PageRouteInfo route) {
+    pushAndPopUntil(route, predicate: (r) => false);
+  }
 }
