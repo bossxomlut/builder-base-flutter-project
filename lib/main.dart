@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:toastification/toastification.dart';
 
 import 'core/persistence/persistence_config.dart';
-import 'core/utils/env.dart';
 import 'injection/injection.dart';
 import 'resource/index.dart';
 import 'route/app_router.dart';
@@ -16,7 +15,7 @@ bool get showDevicePreview => false;
 /*
 * Manual configure environment to load sensitive data
 * */
-const Environment env = Environment.TEST;
+// const Environment env = Environment.TEST;
 
 void main() async {
   ///Ensure flutter binding is initialized
@@ -40,7 +39,7 @@ void main() async {
   await PersistenceConfig.init();
 
   ///Start load environment
-  await getIt.get<EnvLoader>().load(env);
+  // await getIt.get<EnvLoader>().load(env);
 
   ThemeUtils.initThemeMode();
 

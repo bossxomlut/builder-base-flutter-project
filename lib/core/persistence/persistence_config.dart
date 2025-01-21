@@ -1,4 +1,5 @@
 import '../../injection/injection.dart';
+import 'isar_storage.dart';
 import 'local_key_value_storage.dart';
 import 'security_storage.dart';
 import 'simple_key_value_storage.dart';
@@ -9,6 +10,7 @@ abstract class PersistenceConfig {
       getIt.get<SimpleStorage>().init(),
       getIt.get<SecurityStorage>().init(),
       getIt.get<LocalKeyValueStorage>().init(),
+      getIt.get<IsarDatabase>().initialize(),
     ]);
   }
 }
