@@ -13,7 +13,7 @@ class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => <AutoRoute>[
         AutoRoute(page: SplashRoute.page, initial: true),
-        AutoRoute(page: HomeRoute.page),
+        AutoRoute(page: MainRoute.page),
         AutoRoute(page: PinCodeRoute.page),
         AutoRoute(page: SetUpPinCodeRoute.page),
         AutoRoute(page: ForgotPinCodeRoute.page),
@@ -23,7 +23,7 @@ class AppRouter extends RootStackRouter {
 
 extension AppRouterX on AppRouter {
   void goHome() {
-    replaceAll(const [HomeRoute()]);
+    replaceAll(const [MainRoute()]);
   }
 
   void goToLogin() {

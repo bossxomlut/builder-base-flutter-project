@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../domain/index.dart';
 import '../../injection/injection.dart';
+import '../../resource/index.dart';
 import '../../widget/index.dart';
 import '../utils/index.dart';
 import 'pin_code_page.dart';
@@ -31,7 +32,7 @@ class _UpdatePinCodePageState extends State<UpdatePinCodePage>
 
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
-    return CustomAppBar(
+    return const CustomAppBar(
       title: 'Update pin code',
     );
   }
@@ -47,14 +48,14 @@ class _UpdatePinCodePageState extends State<UpdatePinCodePage>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Your current pin code', style: theme.textTheme.titleMedium),
+                LText(LKey.enterCurrentPinCode, style: theme.textTheme.titleMedium),
                 const Gap(8),
                 PinCodeWidget(
                   _existingPin,
                   showPin: true,
                 ),
-                const Gap(20),
-                Text('Enter your new pin code', style: theme.textTheme.titleMedium),
+                const Gap(40),
+                LText(LKey.enterNewPinCode, style: theme.textTheme.titleMedium),
                 const Gap(8),
                 PinCodeWidget(
                   _newPin,
@@ -68,17 +69,18 @@ class _UpdatePinCodePageState extends State<UpdatePinCodePage>
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: FilledButton(
-              onPressed: !isFormValid
-                  ? null
-                  : () {
-                      _updatePinCodeUseCase.execute(
-                        UpdatePinCodeParamEntity(
-                          confirmPin: _existingPin,
-                          newPin: _newPin,
-                        ),
-                      );
-                    },
-              child: Text('Update')),
+            onPressed: !isFormValid
+                ? null
+                : () {
+                    _updatePinCodeUseCase.execute(
+                      UpdatePinCodeParamEntity(
+                        confirmPin: _existingPin,
+                        newPin: _newPin,
+                      ),
+                    );
+                  },
+            child: const LText(LKey.update),
+          ),
         ),
         NumberPad(
           key: _numberPadKey,

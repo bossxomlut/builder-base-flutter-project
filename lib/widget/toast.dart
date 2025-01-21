@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
 
+import '../resource/index.dart';
+import 'index.dart';
+
 void showError({BuildContext? context, required String message}) {
   toastification.show(
     context: context, // optional if you use ToastificationWrapper
@@ -9,7 +12,7 @@ void showError({BuildContext? context, required String message}) {
     autoCloseDuration: const Duration(seconds: 3),
     showProgressBar: false,
     applyBlurEffect: true,
-    title: const Text('Error'),
+    title: const LText(LKey.error),
     alignment: Alignment.topCenter,
     // you can also use RichText widget for title and description parameters
     description: RichText(text: TextSpan(text: message)),
@@ -46,7 +49,7 @@ void showSuccess({BuildContext? context, required String message}) {
     autoCloseDuration: const Duration(seconds: 3),
     showProgressBar: false,
     applyBlurEffect: true,
-    title: const Text('Success'),
+    title: const LText(LKey.success),
     alignment: Alignment.topCenter,
     // you can also use RichText widget for title and description parameters
     description: RichText(text: TextSpan(text: message)),

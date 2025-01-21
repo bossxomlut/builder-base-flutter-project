@@ -72,7 +72,7 @@ class _PinCodePageState extends State<PinCodePage> with StateTemplate<PinCodePag
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                LText(LKey.inputPinCode, style: theme.textTheme.headlineMedium),
+                LText(LKey.enterPinCode, style: theme.textTheme.headlineMedium),
                 const Gap(40),
                 // Hiển thị các ô tròn mã PIN
                 ValueListenableBuilder<String>(

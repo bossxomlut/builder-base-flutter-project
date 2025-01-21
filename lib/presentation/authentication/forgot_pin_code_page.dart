@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../domain/index.dart';
 import '../../injection/injection.dart';
+import '../../resource/index.dart';
 import '../../route/app_router.dart';
 import '../../widget/toast.dart';
 import '../utils/index.dart';
@@ -19,7 +20,7 @@ class _ForgotPinCodePageState extends SetUpPinCodePageState {
   final CheckSecurityQuestionUseCase checkSecurityQuestionUseCase = getIt.get<CheckSecurityQuestionUseCase>();
 
   @override
-  String get title => 'Forgot pin code';
+  String get title => LKey.forgotPinCode.tr();
 
   @override
   void onQuestionAnswered(SecurityQuestionEntity question, String answer) {
@@ -34,7 +35,7 @@ class _ForgotPinCodePageState extends SetUpPinCodePageState {
       if (value) {
         tabController.animateTo(1);
       } else {
-        showError(message: 'Security question is incorrect');
+        showError(message: LKey.messageInvalidSecurityQuestion.tr());
       }
     });
   }

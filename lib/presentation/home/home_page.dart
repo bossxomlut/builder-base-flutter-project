@@ -18,10 +18,6 @@ class _HomePageState extends State<HomePage> {
         alignment: Alignment.center,
         child: Text('Home'),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Text('goto login'),
-        onPressed: () {},
-      ),
     );
   }
 }

@@ -1,5 +1,30 @@
 {
-  "inputPinCode": "Input pin code",
+  "lang": {
+    "en": "English",
+    "vi": "Vietnamese"
+  },
+  "answer": "Answer",
+  "darkMode": "Dark mode",
+  "enterPinCode": "Enter pin code",
+  "error": "Error",
+  "finish": "Finish",
   "forgotPinCode": "Forgot pin code?",
-  "wrongPinCode": "Wrong pin code"
+  "home": "Home",
+  "language": "Language",
+  "logout": "Logout",
+  "next": "Next",
+  "search": "Search",
+  "securityQuestion": "Security question",
+  "setSecurityQuestionDescription": "Set up your security question and pin code",
+  "setUpPinCode": "Set up your pin code",
+  "settings": "Settings",
+  "success": "Success",
+  "updatePinCode": "Update pin code",
+  "wrongPinCode": "Wrong pin code",
+  "enterCurrentPinCode": "Your current pin code",
+  "enterNewPinCode": "Enter your new pin code",
+  "update": "Update",
+  "message": {
+    "invalidSecurityQuestion": "Security question is incorrect"
+  }
 }

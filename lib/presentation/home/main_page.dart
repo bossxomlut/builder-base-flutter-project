@@ -1,0 +1,97 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:line_icons/line_icons.dart';
+import 'package:sample_app/presentation/home/search_page.dart';
+import 'package:sample_app/presentation/home/settings_page.dart';
+
+import '../../resource/index.dart';
+import 'home_page.dart';
+
+@RoutePage()
+class MainPage extends StatefulWidget {
+  const MainPage({Key? key}) : super(key: key);
+
+  @override
+  _MainPageState createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin {
+  int _selectedIndex = 0;
+  late final TabController _tabController = TabController(length: 3, vsync: this);
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Scaffold(
+      appBar: AppBar(),
+      body: TabBarView(
+        physics: const NeverScrollableScrollPhysics(),
+        controller: _tabController,
+        children: [
+          HomePage(),
+          SearchPage(),
+          SettingsPage(),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(LineIcons.plus),
+        onPressed: () {},
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: theme.colorScheme.onSecondary,
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 20,
+              color: Colors.black.withOpacity(.1),
+            )
+          ],
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+            child: AnimatedBuilder(
+              animation: _tabController,
+              builder: (BuildContext context, Widget? child) {
+                return GNav(
+                  gap: 8,
+                  iconSize: 24,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  duration: Duration(milliseconds: 300),
+                  tabActiveBorder: Border.all(
+                    color: theme.colorScheme.secondary,
+                    width: 2,
+                  ), // tab button border
+                  tabs: [
+                    GButton(
+                      icon: LineIcons.home,
+                      text: LKey.home.tr(),
+                    ),
+                    GButton(
+                      icon: LineIcons.search,
+                      text: LKey.search.tr(),
+                    ),
+                    GButton(
+                      icon: LineIcons.cog,
+                      text: LKey.settings.tr(),
+                    ),
+                  ],
+                  selectedIndex: _tabController.index,
+                  onTabChange: (index) {
+                    _tabController.animateTo(index);
+                  },
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

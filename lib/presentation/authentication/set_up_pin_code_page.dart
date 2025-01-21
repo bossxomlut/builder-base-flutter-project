@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../domain/index.dart';
 import '../../injection/injection.dart';
+import '../../resource/index.dart';
 import '../../route/app_router.dart';
 import '../../widget/index.dart';
 import '../utils/index.dart';
@@ -27,7 +28,7 @@ class SetUpPinCodePageState extends State<SetUpPinCodePage>
 
   final SavePinCodeUseCase savePinCodeUseCase = getIt.get<SavePinCodeUseCase>();
 
-  String get title => 'Set up your security question and pin code';
+  String get title => LKey.setSecurityQuestionDescription.tr();
 
   @override
   void dispose() {
@@ -134,7 +135,7 @@ class _SetUpQuestionWidgetState extends State<SetUpQuestionWidget> with StateTem
             style: theme.textTheme.headlineMedium,
           ),
           const SizedBox(height: 40),
-          Text('Security Question', style: theme.textTheme.titleSmall),
+          LText(LKey.securityQuestion, style: theme.textTheme.titleSmall),
           const SizedBox(height: 8),
           ButtonTheme(
             alignedDropdown: true,
@@ -155,11 +156,11 @@ class _SetUpQuestionWidgetState extends State<SetUpQuestionWidget> with StateTem
             ),
           ),
           const SizedBox(height: 16),
-          Text('Answer', style: theme.textTheme.titleSmall),
+          LText(LKey.answer, style: theme.textTheme.titleSmall),
           const SizedBox(height: 8),
           TextField(
             decoration: InputDecoration(
-              hintText: 'Input your answer',
+              hintText: LKey.enterPinCode.tr(),
             ),
             onChanged: (value) {
               setState(() {
@@ -174,8 +175,8 @@ class _SetUpQuestionWidgetState extends State<SetUpQuestionWidget> with StateTem
                     widget.onQuestionAnswered(selectedQuestion!, answer);
                   }
                 : null,
-            child: const Text(
-              'Next',
+            child: const LText(
+              LKey.next,
             ),
           ),
         ],
@@ -212,8 +213,8 @@ class _SetUpPinCodeWidgetState extends State<SetUpPinCodeWidget> with StateTempl
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(
-                  'Set up your pin code',
+                LText(
+                  LKey.setUpPinCode,
                   style: theme.textTheme.headlineMedium,
                 ),
                 const SizedBox(height: 40),
@@ -243,7 +244,7 @@ class _SetUpPinCodeWidgetState extends State<SetUpPinCodeWidget> with StateTempl
                           : () {
                               widget.onPinCodeSet(pin);
                             },
-                      child: const Text('Finish'),
+                      child: const LText(LKey.finish),
                     ),
                   ),
                 ],
