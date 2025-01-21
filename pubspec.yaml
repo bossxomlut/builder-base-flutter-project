@@ -114,3 +114,5 @@ flutter:
     - assets/config/
     - assets/translations/
     - assets/translations/en-US.json
+    - assets/translations/vi-VN.json
+    - assets/vietnam-provinces.json

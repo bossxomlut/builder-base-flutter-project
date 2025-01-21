@@ -16,6 +16,7 @@ class IsarDatabase {
               ProvinceModelSchema,
               DistrictModelSchema,
               WardModelSchema,
+              FlatProvinceModelSchema,
             ],
             directory: dir.path,
           );

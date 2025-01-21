@@ -22,33 +22,9 @@ class WardModel {
   String? name;
 }
 
-// @collection
-// class NoteGroupCollection {
-//   Id id = Isar.autoIncrement;
-//   String? name;
-//   DateTime? updatedDateTime;
-//   bool? isDeleted;
-// }
-//
-// @collection
-// class NoteCollection {
-//   Id id = Isar.autoIncrement;
-//   int? groupId;
-//   String? description;
-//   bool? isDone;
-//   bool? isDeleted;
-//   DateTime? date;
-//   DateTime? updatedDateTime;
-//   List<AttachmentCollection>? attachments;
-// }
-//
-// @embedded
-// class AttachmentCollection {
-//   final String? path;
-//   final String? name;
-//
-//   AttachmentCollection({
-//     this.path,
-//     this.name,
-//   });
-// }
+@collection
+class FlatProvinceModel {
+  Id id = Isar.autoIncrement;
+  String combineId = '';
+  String fullName = '';
+}

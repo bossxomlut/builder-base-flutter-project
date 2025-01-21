@@ -9,7 +9,7 @@ abstract class GetId<Id> {
 mixin IsarCrudRepository<T extends GetId<int>, C> on CrudRepository<T, int> {
   Isar get isar;
 
-  IsarCollection<C> get _collection;
+  IsarCollection<C> get collection;
 
   C createNewItem(T item);
 
@@ -22,7 +22,7 @@ mixin IsarCrudRepository<T extends GetId<int>, C> on CrudRepository<T, int> {
     final C nItem = createNewItem(item);
 
     return isar.writeTxn(() async {
-      return _collection.put(nItem).then((id) => getItemFromCollection(nItem));
+      return collection.put(nItem).then((id) => getItemFromCollection(nItem));
     });
   }
 
@@ -33,14 +33,14 @@ mixin IsarCrudRepository<T extends GetId<int>, C> on CrudRepository<T, int> {
     }
 
     return isar.writeTxn(() async {
-      return _collection.delete(item.getId!);
+      return collection.delete(item.getId!);
     });
   }
 
   @override
   Future<T> read(int id) {
     return isar.writeTxn(() async {
-      return _collection.get(id).then((collection) {
+      return collection.get(id).then((collection) {
         if (collection == null) {
           throw NotFoundException();
         }
@@ -59,7 +59,7 @@ mixin IsarCrudRepository<T extends GetId<int>, C> on CrudRepository<T, int> {
     final nItem = updateNewItem(item);
 
     return isar.writeTxn(() async {
-      return _collection.put(nItem).then((id) => getItemFromCollection(nItem));
+      return collection.put(nItem).then((id) => getItemFromCollection(nItem));
     });
   }
 }

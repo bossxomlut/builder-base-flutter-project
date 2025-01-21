@@ -15,3 +15,9 @@ abstract class DistrictRepository
 
 abstract class WardRepository
     implements CrudRepository<WardEntity, int>, GetListRepository<WardEntity>, SearchRepository<WardEntity> {}
+
+abstract class FlatProvinceRepository
+    implements
+        CrudRepository<FlatProvinceEntity, int>,
+        GetListRepository<FlatProvinceEntity>,
+        SearchRepository<FlatProvinceEntity> {}

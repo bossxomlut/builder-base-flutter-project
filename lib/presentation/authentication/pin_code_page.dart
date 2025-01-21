@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../domain/use_case/login_use.dart';
+import '../../domain/use_case/login_use_case.dart';
 import '../../injection/injection.dart';
 import '../../resource/index.dart';
 import '../../route/app_router.dart';

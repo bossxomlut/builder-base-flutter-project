@@ -5,8 +5,10 @@ import 'package:line_icons/line_icons.dart';
 import 'package:sample_app/presentation/home/search_page.dart';
 import 'package:sample_app/presentation/home/settings_page.dart';
 
+import '../../domain/index.dart';
+import '../../injection/injection.dart';
 import '../../resource/index.dart';
-import 'home_page.dart';
+import '../province/search_province_page.dart';
 
 @RoutePage()
 class MainPage extends StatefulWidget {
@@ -17,8 +19,17 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin {
-  int _selectedIndex = 0;
   late final TabController _tabController = TabController(length: 3, vsync: this);
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      getIt.get<CheckInitialProvinceDataUseCase>().execute(null);
+    });
+  }
+
   @override
   void dispose() {
     _tabController.dispose();
@@ -34,7 +45,7 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
         physics: const NeverScrollableScrollPhysics(),
         controller: _tabController,
         children: [
-          HomePage(),
+          SearchProvincePage(),
           SearchPage(),
           SettingsPage(),
         ],
