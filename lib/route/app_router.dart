@@ -18,6 +18,7 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: SetUpPinCodeRoute.page),
         AutoRoute(page: ForgotPinCodeRoute.page),
         AutoRoute(page: UpdatePinCodeRoute.page),
+        AutoRoute(page: AddLandCertificateRoute.page),
       ];
 }
 

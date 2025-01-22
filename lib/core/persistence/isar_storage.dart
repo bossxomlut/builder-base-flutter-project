@@ -2,6 +2,7 @@ import 'package:injectable/injectable.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../data/model/land_certificate_model.dart';
 import '../../data/model/province_model.dart';
 
 @singleton
@@ -17,6 +18,7 @@ class IsarDatabase {
               DistrictModelSchema,
               WardModelSchema,
               FlatProvinceModelSchema,
+              LandCertificateModelSchema,
             ],
             directory: dir.path,
           );

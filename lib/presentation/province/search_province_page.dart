@@ -8,8 +8,13 @@ import '../home/settings_page.dart';
 import '../utils/index.dart';
 import 'cubit/seach_province_cubit.dart';
 
-class SearchProvincePage extends StatefulWidget {
-  const SearchProvincePage({super.key});
+class SearchProvincePage extends StatefulWidget with ShowBottomSheet<ProvinceSearchEntity> {
+  const SearchProvincePage({
+    super.key,
+    this.filterType = SearchFilterType.combine,
+  });
+
+  final SearchFilterType filterType;
 
   @override
   State<SearchProvincePage> createState() => _SearchProvincePageState();
@@ -17,54 +22,66 @@ class SearchProvincePage extends StatefulWidget {
 
 class _SearchProvincePageState extends BaseState<SearchProvincePage, SearchProvinceCubit, SearchProvinceState> {
   @override
+  Color get backgroundColor => Colors.transparent;
+
+  @override
+  void initState() {
+    super.initState();
+    cubit.onFilterChanged(widget.filterType);
+    cubit.onSearch('');
+  }
+
+  @override
   Widget buildBody(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text('Search Province', style: theme.textTheme.headlineSmall),
-        ),
         const SizedBox(height: 16),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
               Expanded(
-                child: SearchBar(
+                child: CustomTextField(
+                  prefixIcon: Icon(LineIcons.search),
                   onChanged: (String value) {
                     cubit.onSearch(value);
                   },
-                  hintText: 'Search Province',
-                  leading: Icon(LineIcons.search),
+                  label: 'Thành phố',
                 ),
               ),
-              const SizedBox(width: 16),
-              IconButton(
-                icon: Icon(LineIcons.filter),
-                onPressed: () {
-                  ProvinceFilterWidget().show(context).then(
-                    (dynamic value) {
-                      if (value != null) {
-                        cubit.onFilterChanged(value as SearchFilterType);
-                      }
-                    },
-                  );
-                },
-              ),
+              // const SizedBox(width: 16),
+              // IconButton(
+              //   icon: Icon(LineIcons.filter),
+              //   onPressed: () {
+              //     ProvinceFilterWidget().show(context).then(
+              //       (dynamic value) {
+              //         if (value != null) {
+              //           cubit.onFilterChanged(value as SearchFilterType);
+              //         }
+              //       },
+              //     );
+              //   },
+              // ),
             ],
           ),
         ),
         Expanded(
           child: BlocBuilder<SearchProvinceCubit, SearchProvinceState>(builder: (context, state) {
-            return ListView.builder(
+            return ListView.separated(
               padding: EdgeInsets.symmetric(horizontal: 16),
               itemCount: state.results.length,
               itemBuilder: (BuildContext context, int index) {
                 final item = state.results[index];
                 return ListTile(
                   title: Text(item.name),
+                  onTap: () {
+                    Navigator.pop(context, item);
+                  },
                 );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return AppDivider();
               },
             );
           }),

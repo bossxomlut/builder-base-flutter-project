@@ -8,7 +8,9 @@ import 'package:sample_app/presentation/home/settings_page.dart';
 import '../../domain/index.dart';
 import '../../injection/injection.dart';
 import '../../resource/index.dart';
-import '../province/search_province_page.dart';
+import '../../route/app_router.dart';
+import '../../route/app_router.gr.dart';
+import 'home_page.dart';
 
 @RoutePage()
 class MainPage extends StatefulWidget {
@@ -45,14 +47,17 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
         physics: const NeverScrollableScrollPhysics(),
         controller: _tabController,
         children: [
-          SearchProvincePage(),
+          HomePage(),
+          // SearchProvincePage(),
           SearchPage(),
           SettingsPage(),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(LineIcons.plus),
-        onPressed: () {},
+        onPressed: () {
+          appRouter.push(const AddLandCertificateRoute());
+        },
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
