@@ -35,5 +35,45 @@
     "whatIsYourFavoriteMovie": "Bộ phim yêu thích của bạn là gì?"
   },
   "pinCodeEncryptDescription":  "Vui lòng sao chép mã bảo mật và gửi cho nhóm hỗ trợ để lấy lại mã PIN của bạn",
-  "securityCode": "Mã bảo mật"
+  "securityCode": "Mã bảo mật",
+  "addLandCertificatePage": {
+    "appBarTitle": "Thêm mảnh đất",
+    "sections": {
+      "landInfo": "Thông tin đất",
+      "landCertificateImage": "Hình ảnh sổ đỏ",
+      "address": "Địa chỉ",
+      "purchaseDetails": "Chi tiết giá mua",
+      "saleDetails": "Chi tiết giá bán",
+      "landPlot": "Thửa đất",
+      "area": "Diện tích",
+      "tax": "Thuế",
+      "note": "Ghi chú"
+    },
+    "fields": {
+      "nameDescription": "Tên/mô tả",
+      "landCertificateImageTitle": "Hình ảnh sổ đỏ",
+      "provinceCity": "Tỉnh/Thành phố",
+      "district": "Quận/Huyện",
+      "ward": "Phường/Xã",
+      "specificAddress": "Địa chỉ cụ thể",
+      "purchaseDate": "Ngày mua",
+      "purchasePrice": "Giá mua",
+      "saleDate": "Ngày bán",
+      "salePrice": "Giá bán",
+      "landPlotNumber": "Thửa đất số",
+      "mapNumber": "Bản đồ số",
+      "areaSize": "Diện tích",
+      "usageForm": "Hình thức sử dụng",
+      "usagePurpose": "Mục đích sử dụng",
+      "usageDuration": "Thời hạn sử dụng",
+      "residentialLand": "Đất ở",
+      "perennialTrees": "Cây lâu năm",
+      "taxRenewalTime": "Thời điểm gia hạn đất",
+      "taxPaymentDeadline": "Thời hạn đóng thuế",
+      "details": "Chi tiết"
+    },
+    "actions": {
+      "save": "Lưu"
+    }
+  }
 }

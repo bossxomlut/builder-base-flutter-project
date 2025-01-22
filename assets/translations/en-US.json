@@ -35,5 +35,45 @@
     "whatIsYourFavoriteMovie": "What is your favorite movie?"
   },
   "pinCodeEncryptDescription": "Please copy the security code and send to the support team to retrieve your pin code",
-  "securityCode": "Security code"
+  "securityCode": "Security code",
+  "addLandCertificatePage": {
+    "appBarTitle": "Add Land Certificate",
+    "sections": {
+      "landInfo": "Land Information",
+      "landCertificateImage": "Land Certificate Image",
+      "address": "Address",
+      "purchaseDetails": "Purchase Details",
+      "saleDetails": "Sale Details",
+      "landPlot": "Land Plot",
+      "area": "Area",
+      "tax": "Tax",
+      "note": "Note"
+    },
+    "fields": {
+      "nameDescription": "Name/Description",
+      "landCertificateImageTitle": "Land Certificate Image",
+      "provinceCity": "Province/City",
+      "district": "District",
+      "ward": "Ward",
+      "specificAddress": "Specific Address",
+      "purchaseDate": "Purchase Date",
+      "purchasePrice": "Purchase Price",
+      "saleDate": "Sale Date",
+      "salePrice": "Sale Price",
+      "landPlotNumber": "Land Plot Number",
+      "mapNumber": "Map Number",
+      "areaSize": "Area Size",
+      "usageForm": "Usage Form",
+      "usagePurpose": "Usage Purpose",
+      "usageDuration": "Usage Duration",
+      "residentialLand": "Residential Land",
+      "perennialTrees": "Perennial Trees",
+      "taxRenewalTime": "Tax Renewal Time",
+      "taxPaymentDeadline": "Tax Payment Deadline",
+      "details": "Details"
+    },
+    "actions": {
+      "save": "Save"
+    }
+  }
 }
