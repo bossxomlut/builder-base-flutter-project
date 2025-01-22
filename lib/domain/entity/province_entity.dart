@@ -9,6 +9,24 @@ abstract class ProvinceUtil {
   static String fullName(String provinceName, String districtName, String wardName) {
     return [provinceName, districtName, wardName].join(', ');
   }
+
+  //[].length = 3;
+  static List<int> getIds(String combineId) {
+    //check pattern
+    if (combineId.split('_').length != 3) {
+      return [-1, -1, -1];
+    }
+
+    return combineId.split('_').map((String e) => e.parseInt() ?? -1).toList();
+  }
+
+  static List<String> getNames(String fullName) {
+    //check pattern
+    if (fullName.split(', ').length != 3) {
+      return ['', '', ''];
+    }
+    return fullName.split(', ');
+  }
 }
 
 class ProvinceEntity implements GetId<int> {
@@ -151,4 +169,41 @@ class ProvinceSearchEntity {
   final String name;
   final String id;
   final SearchFilterType type;
+
+  int get provinceId {
+    switch (type) {
+      case SearchFilterType.district:
+      case SearchFilterType.ward:
+        return -1;
+      case SearchFilterType.province:
+        return id.parseInt() ?? -1;
+      case SearchFilterType.combine:
+        return ProvinceUtil.getIds(id).first;
+    }
+  }
+
+  int get districtId {
+    switch (type) {
+      case SearchFilterType.ward:
+      case SearchFilterType.province:
+        return -1;
+      case SearchFilterType.district:
+        return id.parseInt() ?? -1;
+
+      case SearchFilterType.combine:
+        return ProvinceUtil.getIds(id).elementAt(1);
+    }
+  }
+
+  int get wardId {
+    switch (type) {
+      case SearchFilterType.district:
+      case SearchFilterType.province:
+        return -1;
+      case SearchFilterType.ward:
+        return id.parseInt() ?? -1;
+      case SearchFilterType.combine:
+        return ProvinceUtil.getIds(id).last;
+    }
+  }
 }

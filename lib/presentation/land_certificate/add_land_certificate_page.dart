@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../domain/entity/land_certificate_entity.dart';
-import '../../domain/use_case/land_certificate_use_case.dart';
+import '../../core/utils/date_time_utils.dart';
+import '../../domain/index.dart';
 import '../../injection/injection.dart';
 import '../../resource/index.dart';
 import '../../widget/image/image_place_holder.dart';
@@ -24,7 +24,55 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
 
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
-    return CustomAppBar(title: 'Thêm mảnh đất');
+    return CustomAppBar(
+      title: LKey.appBarTitle.tr(),
+    );
+  }
+
+  void _updateLandCertificateEntity({
+    String? name,
+    double? area,
+    int? mapNumber,
+    int? number,
+    String? useType,
+    String? purpose,
+    String? residentialArea,
+    String? perennialTreeArea,
+    double? purchasePrice,
+    DateTime? purchaseDate,
+    double? salePrice,
+    DateTime? saleDate,
+    DateTime? taxRenewalTime,
+    DateTime? taxDeadlineTime,
+    String? note,
+    AddressEntity? address,
+  }) {
+    setState(() {
+      landCertificateEntity = LandCertificateEntity(
+        id: landCertificateEntity.id,
+        name: name ?? landCertificateEntity.name,
+        area: area ?? landCertificateEntity.area,
+        mapNumber: mapNumber ?? landCertificateEntity.mapNumber,
+        number: number ?? landCertificateEntity.number,
+        useType: useType ?? landCertificateEntity.useType,
+        purpose: purpose ?? landCertificateEntity.purpose,
+        residentialArea: residentialArea ?? landCertificateEntity.residentialArea,
+        perennialTreeArea: perennialTreeArea ?? landCertificateEntity.perennialTreeArea,
+        purchasePrice: purchasePrice ?? landCertificateEntity.purchasePrice,
+        purchaseDate: purchaseDate ?? landCertificateEntity.purchaseDate,
+        salePrice: salePrice ?? landCertificateEntity.salePrice,
+        saleDate: saleDate ?? landCertificateEntity.saleDate,
+        taxRenewalTime: taxRenewalTime ?? landCertificateEntity.taxRenewalTime,
+        taxDeadlineTime: taxDeadlineTime ?? landCertificateEntity.taxDeadlineTime,
+        note: note ?? landCertificateEntity.note,
+        address: address ?? landCertificateEntity.address, // Không thay đổi địa chỉ
+        files: landCertificateEntity.files, // Không thay đổi files
+      );
+    });
+  }
+
+  void onSave() {
+    _createLandCertificateUseCase.execute(landCertificateEntity);
   }
 
   @override
@@ -39,162 +87,289 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
               child: Column(
                 children: <Widget>[
                   AddCard(
-                    title: 'Thông tin đất',
+                    title: LKey.sectionsLandInfo.tr(),
                     child: CustomTextField(
-                      onChanged: (String value) {},
-                      hint: 'Tên/mô tả',
+                      onChanged: (value) => _updateLandCertificateEntity(name: value),
+                      hint: LKey.fieldsNameDescription.tr(),
                     ),
                   ),
                   Gap(16),
                   AddCard(
-                    title: 'Hình ảnh sổ đỏ',
+                    title: LKey.sectionsLandCertificateImage.tr(),
                     child: UploadImagePlaceholder(
-                      title: 'Hình ảnh sổ đỏ',
-                      onChanged: (String? value) {},
+                      title: LKey.fieldsLandCertificateImageTitle.tr(),
+                      onChanged: (value) {
+                        // Update files if necessary
+                      },
                     ),
                   ),
                   Gap(16),
                   AddCard(
-                    title: 'Địa chỉ',
+                    title: LKey.sectionsAddress.tr(),
                     child: Column(
                       children: [
                         OutlineField(
-                          label: 'Tỉnh/Thành phố',
+                          label: LKey.fieldsProvinceCity.tr(),
+                          value: landCertificateEntity.address?.province?.name,
                           onTap: () {
-                            SearchProvincePage().show(context).then((dynamic value) {});
+                            SearchProvincePage.searchProvince().show(context).then((value) {
+                              // Update address if needed
+                              if (value != null) {
+                                final currentAddress = landCertificateEntity.address ?? AddressEntity.empty();
+
+                                if (currentAddress.province?.id == value.provinceId) {
+                                  return;
+                                }
+
+                                final updatedAddress = AddressEntity.empty().copyWith(
+                                  province: ProvinceEntity(
+                                    id: value.provinceId,
+                                    name: value.name,
+                                  ),
+                                );
+                                _updateLandCertificateEntity(address: updatedAddress);
+                              }
+                            });
                           },
                         ),
                         Gap(16),
                         OutlineField(
-                          label: 'Quận/Huyện',
-                          onTap: () {},
+                          label: LKey.fieldsDistrict.tr(),
+                          value: landCertificateEntity.address?.district?.name,
+                          isDisabled: landCertificateEntity.address?.province == null,
+                          onTap: () {
+                            // Similar to province
+
+                            SearchProvincePage.searchDistrict(
+                              selectedProvince: landCertificateEntity.address?.province,
+                            ).show(context).then((value) {
+                              // Update address if needed
+                              if (value != null) {
+                                final currentAddress = landCertificateEntity.address ?? AddressEntity.empty();
+
+                                if (currentAddress.district?.id == value.districtId) {
+                                  return;
+                                }
+
+                                final updatedAddress = AddressEntity.empty().copyWith(
+                                  province: currentAddress.province,
+                                  district: DistrictEntity(
+                                    id: value.districtId,
+                                    provinceId: value.provinceId,
+                                    name: value.name,
+                                  ),
+                                  ward: null,
+                                );
+                                _updateLandCertificateEntity(address: updatedAddress);
+                              }
+                            });
+                          },
                         ),
                         Gap(16),
                         OutlineField(
-                          label: 'Phường/Xã',
-                          onTap: () {},
+                          label: LKey.fieldsWard.tr(),
+                          value: landCertificateEntity.address?.ward?.name,
+                          isDisabled: landCertificateEntity.address?.district == null,
+                          onTap: () {
+                            // Similar to province
+                            SearchProvincePage.searchWard(
+                              selectedDistrict: landCertificateEntity.address?.district,
+                            ).show(context).then((value) {
+                              // Update address if needed
+                              if (value != null) {
+                                final currentAddress = landCertificateEntity.address ?? AddressEntity.empty();
+
+                                if (currentAddress.ward?.id == value.wardId) {
+                                  return;
+                                }
+
+                                final updatedAddress = currentAddress.copyWith(
+                                  ward: WardEntity(
+                                    id: value.wardId,
+                                    districtId: value.districtId,
+                                    name: value.name,
+                                  ),
+                                );
+                                _updateLandCertificateEntity(address: updatedAddress);
+                              }
+                            });
+                          },
                         ),
                         Gap(16),
                         CustomTextField(
-                          onChanged: (String value) {},
-                          hint: 'Địa chỉ cụ thể',
+                          onChanged: (value) {
+                            final currentAddress = landCertificateEntity.address;
+                            final updatedAddress = AddressEntity(
+                              province: currentAddress?.province,
+                              district: currentAddress?.district,
+                              ward: currentAddress?.ward,
+                              detail: value,
+                            );
+                            _updateLandCertificateEntity(address: updatedAddress);
+                          },
+                          hint: LKey.fieldsSpecificAddress.tr(),
                         ),
                       ],
                     ),
                   ),
                   Gap(16),
                   AddCard(
-                    title: 'Chi tiết giá mua',
+                    title: LKey.sectionsPurchaseDetails.tr(),
                     child: Column(
                       children: [
                         OutlineField(
-                          label: 'Ngày mua',
-                          onTap: () {},
+                          label: LKey.fieldsPurchaseDate.tr(),
+                          value: landCertificateEntity.purchaseDate.date,
+                          onTap: () async {
+                            final selectedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                            );
+                            if (selectedDate != null) {
+                              _updateLandCertificateEntity(purchaseDate: selectedDate);
+                            }
+                          },
+                          trailing: Icon(Icons.calendar_today_outlined),
                         ),
                         Gap(16),
                         CustomTextField(
-                          onChanged: (String value) {},
-                          hint: 'Giá mua',
+                          onChanged: (value) => _updateLandCertificateEntity(purchasePrice: double.tryParse(value)),
+                          hint: LKey.fieldsPurchasePrice.tr(),
                         ),
                       ],
                     ),
                   ),
                   Gap(16),
                   AddCard(
-                    title: 'Chi tiết giá bán',
+                    title: LKey.sectionsSaleDetails.tr(),
                     child: Column(
                       children: [
                         OutlineField(
-                          label: 'Ngày bán',
-                          onTap: () {},
+                          label: LKey.fieldsSaleDate.tr(),
+                          value: landCertificateEntity.saleDate.date,
+                          onTap: () async {
+                            final selectedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                            );
+                            if (selectedDate != null) {
+                              _updateLandCertificateEntity(saleDate: selectedDate);
+                            }
+                          },
+                          trailing: Icon(Icons.calendar_today_outlined),
                         ),
                         Gap(16),
                         CustomTextField(
-                          onChanged: (String value) {},
-                          hint: 'Giá bán',
+                          onChanged: (value) => _updateLandCertificateEntity(salePrice: double.tryParse(value)),
+                          hint: LKey.fieldsSalePrice.tr(),
                         ),
                       ],
                     ),
                   ),
                   Gap(16),
                   AddCard(
-                    title: 'Thửa đất',
+                    title: LKey.sectionsLandPlot.tr(),
                     child: Column(
                       children: [
                         CustomTextField(
-                          onChanged: (String value) {},
-                          hint: 'Thửa đất số',
+                          onChanged: (value) => _updateLandCertificateEntity(number: int.tryParse(value)),
+                          hint: LKey.fieldsLandPlotNumber.tr(),
                         ),
                         Gap(16),
                         CustomTextField(
-                          onChanged: (String value) {},
-                          hint: 'Bản đồ số',
+                          onChanged: (value) => _updateLandCertificateEntity(mapNumber: int.tryParse(value)),
+                          hint: LKey.fieldsMapNumber.tr(),
                         ),
                         Gap(16),
                         CustomTextField(
-                          onChanged: (String value) {},
-                          hint: 'Diện tích',
+                          onChanged: (value) => _updateLandCertificateEntity(area: double.tryParse(value)),
+                          hint: LKey.fieldsAreaSize.tr(),
                         ),
                         Gap(16),
                         CustomTextField(
-                          onChanged: (String value) {},
-                          hint: 'Hình thức sử dụng',
+                          onChanged: (value) => _updateLandCertificateEntity(useType: value),
+                          hint: LKey.fieldsUsageForm.tr(),
                         ),
                         Gap(16),
                         CustomTextField(
-                          onChanged: (String value) {},
-                          hint: 'Mục đích sử dụng',
+                          onChanged: (value) => _updateLandCertificateEntity(purpose: value),
+                          hint: LKey.fieldsUsagePurpose.tr(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Các phần khác tương tự...
+                  Gap(16),
+
+                  AddCard(
+                    title: LKey.sectionsArea.tr(),
+                    child: Column(
+                      children: [
+                        CustomTextField(
+                          onChanged: (value) => _updateLandCertificateEntity(residentialArea: value),
+                          hint: LKey.fieldsResidentialLand.tr(),
                         ),
                         Gap(16),
                         CustomTextField(
-                          onChanged: (String value) {},
-                          hint: 'Thời hạn sử dụng',
+                          onChanged: (value) => _updateLandCertificateEntity(perennialTreeArea: value),
+                          hint: LKey.fieldsPerennialTrees.tr(),
                         ),
                       ],
                     ),
                   ),
                   Gap(16),
                   AddCard(
-                    title: 'Diện tích',
+                    title: LKey.sectionsTax.tr(),
                     child: Column(
                       children: [
-                        CustomTextField(
-                          onChanged: (String value) {},
-                          hint: 'Đất ở',
+                        OutlineField(
+                          label: LKey.fieldsTaxRenewalTime.tr(),
+                          value: landCertificateEntity.taxRenewalTime.date,
+                          onTap: () async {
+                            final selectedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                            );
+                            if (selectedDate != null) {
+                              _updateLandCertificateEntity(taxRenewalTime: selectedDate);
+                            }
+                          },
+                          trailing: Icon(Icons.calendar_today_outlined),
                         ),
                         Gap(16),
-                        CustomTextField(
-                          onChanged: (String value) {},
-                          hint: 'Cây lâu năm',
+                        OutlineField(
+                          label: LKey.fieldsTaxPaymentDeadline.tr(),
+                          value: landCertificateEntity.taxDeadlineTime.date,
+                          onTap: () async {
+                            final selectedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                            );
+                            if (selectedDate != null) {
+                              _updateLandCertificateEntity(taxDeadlineTime: selectedDate);
+                            }
+                          },
+                          trailing: Icon(Icons.calendar_today_outlined),
                         ),
                       ],
                     ),
                   ),
                   Gap(16),
                   AddCard(
-                    title: 'Thuế',
+                    title: LKey.sectionsNote.tr(),
                     child: Column(
                       children: [
                         CustomTextField(
-                          onChanged: (String value) {},
-                          hint: 'Thời điểm gia hạn đất',
-                        ),
-                        Gap(16),
-                        CustomTextField(
-                          onChanged: (String value) {},
-                          hint: 'Thời hạn đóng thuế',
-                        ),
-                      ],
-                    ),
-                  ),
-                  Gap(16),
-                  AddCard(
-                    title: 'Ghi chú',
-                    child: Column(
-                      children: [
-                        CustomTextField(
-                          onChanged: (String value) {},
-                          hint: 'Chi tiết',
+                          onChanged: (value) => _updateLandCertificateEntity(note: value),
+                          hint: LKey.fieldsDetails.tr(),
                         ),
                       ],
                     ),
@@ -208,17 +383,9 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: FilledButton(
-                onPressed: () {
-                  _createLandCertificateUseCase.execute(
-                    LandCertificateEntity(
-                      id: -1,
-                      name: 'name',
-                      area: 100,
-                      mapNumber: 10,
-                    ),
-                  );
-                },
-                child: Text('Lưu')),
+              onPressed: onSave,
+              child: Text(LKey.actionsSave.tr()),
+            ),
           ),
         ),
       ],

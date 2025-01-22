@@ -9,6 +9,7 @@ class LandCertificateModel {
   List<String>? files;
   String? combineAddressId;
   String? combineAddressName;
+  String? detailAddress;
   DateTime? purchaseDate;
   double? purchasePrice;
   DateTime? saleDate;
@@ -39,7 +40,7 @@ class LandCertificateModel {
   String? perennialTreeArea;
 
   //Thời điểm đóng thuế
-  DateTime? taxTime;
+  DateTime? taxDeadlineTime;
 
   //Thời điểm gia hạn thuế
   DateTime? taxRenewalTime;

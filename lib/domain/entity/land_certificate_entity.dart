@@ -20,7 +20,7 @@ class LandCertificateEntity extends GetId<int> {
     this.useTime,
     this.residentialArea,
     this.perennialTreeArea,
-    this.taxTime,
+    this.taxDeadlineTime,
     this.taxRenewalTime,
   });
   final int id;
@@ -58,7 +58,7 @@ class LandCertificateEntity extends GetId<int> {
   final String? perennialTreeArea;
 
   //Thời điểm đóng thuế
-  final DateTime? taxTime;
+  final DateTime? taxDeadlineTime;
 
   //Thời điểm gia hạn thuế
   final DateTime? taxRenewalTime;
@@ -77,6 +77,15 @@ class AddressEntity {
     required this.detail,
   });
 
+  factory AddressEntity.empty() {
+    return AddressEntity(
+      province: null,
+      district: null,
+      ward: null,
+      detail: '',
+    );
+  }
+
   final ProvinceEntity? province;
   final DistrictEntity? district;
   final WardEntity? ward;
@@ -85,10 +94,48 @@ class AddressEntity {
   String get combineProvinceName => ProvinceUtil.fullName(province?.name ?? '', district?.name ?? '', ward?.name ?? '');
 
   String get combineId => ProvinceUtil.combineId(province?.id ?? -1, district?.id ?? -1, ward?.id ?? -1);
+
+  AddressEntity copyWith({
+    ProvinceEntity? province,
+    DistrictEntity? district,
+    WardEntity? ward,
+    String? detail,
+  }) {
+    return AddressEntity(
+      province: province ?? this.province,
+      district: district ?? this.district,
+      ward: ward ?? this.ward,
+      detail: detail ?? this.detail,
+    );
+  }
 }
 
 class ProvinceLandCertificateEntity {
   ProvinceLandCertificateEntity({
+    required this.id,
+    required this.name,
+    required this.certificates,
+  });
+
+  final int? id;
+  final String? name;
+  final List<LandCertificateEntity>? certificates;
+}
+
+class DistrictLandCertificateEntity {
+  DistrictLandCertificateEntity({
+    required this.id,
+    required this.name,
+    required this.certificates,
+  });
+
+  final int? id;
+  final String? name;
+  final List<LandCertificateEntity>? certificates;
+}
+
+class WardLandCertificateEntity {
+  WardLandCertificateEntity({
     required this.id,
     required this.name,
     required this.certificates,

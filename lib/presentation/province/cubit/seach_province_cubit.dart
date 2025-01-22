@@ -34,11 +34,11 @@ class SearchProvinceCubit extends Cubit<SearchProvinceState> {
           ).toList()));
         });
       case SearchFilterType.district:
-        if (state.selectedDistrict != null) {
-          _wardRepository.searchByDistrict(state.selectedDistrict!, keyword).then((results) {
+        if (state.selectedProvince != null) {
+          _districtRepository.searchByProvince(state.selectedProvince!, keyword).then((results) {
             emit(state.copyWith(
                 results: results.map(
-              (WardEntity e) {
+              (DistrictEntity e) {
                 return ProvinceSearchEntity(
                   id: e.id.toString(),
                   name: e.name,
