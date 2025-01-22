@@ -11,10 +11,42 @@ import 'cubit/seach_province_cubit.dart';
 class SearchProvincePage extends StatefulWidget with ShowBottomSheet<ProvinceSearchEntity> {
   const SearchProvincePage({
     super.key,
-    this.filterType = SearchFilterType.combine,
+    this.filterType = SearchFilterType.province,
+    this.selectedProvince,
+    this.selectedDistrict,
   });
 
   final SearchFilterType filterType;
+  final ProvinceEntity? selectedProvince;
+  final DistrictEntity? selectedDistrict;
+
+  factory SearchProvincePage.searchProvince() {
+    return const SearchProvincePage();
+  }
+
+  factory SearchProvincePage.searchDistrict({
+    ProvinceEntity? selectedProvince,
+  }) {
+    return SearchProvincePage(
+      filterType: SearchFilterType.district,
+      selectedProvince: selectedProvince,
+    );
+  }
+
+  factory SearchProvincePage.searchWard({
+    DistrictEntity? selectedDistrict,
+  }) {
+    return SearchProvincePage(
+      filterType: SearchFilterType.ward,
+      selectedDistrict: selectedDistrict,
+    );
+  }
+
+  factory SearchProvincePage.searchCombine() {
+    return const SearchProvincePage(
+      filterType: SearchFilterType.combine,
+    );
+  }
 
   @override
   State<SearchProvincePage> createState() => _SearchProvincePageState();
@@ -27,8 +59,11 @@ class _SearchProvincePageState extends BaseState<SearchProvincePage, SearchProvi
   @override
   void initState() {
     super.initState();
-    cubit.onFilterChanged(widget.filterType);
-    cubit.onSearch('');
+    cubit
+      ..onFilterChanged(widget.filterType)
+      ..onSetSelectedProvince(widget.selectedProvince)
+      ..onSetSelectedDistrict(widget.selectedDistrict)
+      ..onSearch('');
   }
 
   @override

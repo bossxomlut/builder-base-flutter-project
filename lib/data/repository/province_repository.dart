@@ -96,6 +96,21 @@ class DistrictRepositoryImpl extends DistrictRepository with IsarCrudRepository<
   DistrictModel updateNewItem(DistrictEntity item) {
     return createNewItem(item)..id = item.id;
   }
+
+  @override
+  Future<List<DistrictEntity>> searchByProvince(ProvinceEntity province, String keyword) {
+    return isar.writeTxn(() async {
+      return collection
+          .where()
+          .filter()
+          .provinceIdEqualTo(province.id)
+          .nameContains(keyword)
+          .findAll()
+          .then((collections) {
+        return collections.map(getItemFromCollection).toList();
+      });
+    });
+  }
 }
 
 @Injectable(as: WardRepository)
@@ -143,6 +158,21 @@ class WardRepositoryImpl extends WardRepository with IsarCrudRepository<WardEnti
   @override
   WardModel updateNewItem(WardEntity item) {
     return createNewItem(item)..id = item.id;
+  }
+
+  @override
+  Future<List<WardEntity>> searchByDistrict(DistrictEntity district, String keyword) {
+    return isar.writeTxn(() async {
+      return collection
+          .where()
+          .filter()
+          .districtIdEqualTo(district.id)
+          .nameContains(keyword)
+          .findAll()
+          .then((collections) {
+        return collections.map(getItemFromCollection).toList();
+      });
+    });
   }
 }
 
