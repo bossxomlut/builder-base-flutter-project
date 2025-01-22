@@ -6,6 +6,7 @@ abstract class LKey {
   static const String enterPinCode = 'enterPinCode';
   static const String error = 'error';
   static const String finish = 'finish';
+  static const String copied = 'copied';
   static const String forgotPinCode = 'forgotPinCode';
   static const String home = 'home';
   static const String language = 'language';
@@ -25,8 +26,17 @@ abstract class LKey {
 
   //message
   static const String messageInvalidSecurityQuestion = 'message.invalidSecurityQuestion';
+  static const String messagePinCodeSetSuccessfully = 'message.pinCodeSetSuccessfully';
 
   //language
   static const String english = 'lang.en';
   static const String vietnamese = 'lang.vi';
+
+  //questions
+  static const String whatIsYourFavoriteColor = 'question.whatIsYourFavoriteColor';
+  static const String whatIsYourFavoriteFood = 'question.whatIsYourFavoriteFood';
+  static const String whatIsYourFavoriteMovie = 'question.whatIsYourFavoriteMovie';
+
+  static const String pinCodeEncryptDescription = 'pinCodeEncryptDescription';
+  static const String securityCode = 'securityCode';
 }

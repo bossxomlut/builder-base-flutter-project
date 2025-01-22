@@ -4,6 +4,7 @@
     "vi": "Tiếng Việt"
   },
   "answer": "Câu trả lời",
+  "copied": "Đã sao chép",
   "darkMode": "Chế độ tối",
   "enterPinCode": "Nhập mã PIN",
   "error": "Lỗi",
@@ -25,6 +26,14 @@
   "enterNewPinCode": "Nhập mã PIN mới của bạn",
   "update": "Cập nhật",
   "message": {
-    "invalidSecurityQuestion": "Câu hỏi bảo mật không chính xác"
-  }
+    "invalidSecurityQuestion": "Câu hỏi bảo mật không chính xác",
+    "pinCodeSetSuccessfully": "Thiết lập mã PIN thành công"
+  },
+  "question": {
+    "whatIsYourFavoriteColor": "Màu yêu thích của bạn là gì?",
+    "whatIsYourFavoriteFood": "Món ăn yêu thích của bạn là gì?",
+    "whatIsYourFavoriteMovie": "Bộ phim yêu thích của bạn là gì?"
+  },
+  "pinCodeEncryptDescription":  "Vui lòng sao chép mã bảo mật và gửi cho nhóm hỗ trợ để lấy lại mã PIN của bạn",
+  "securityCode": "Mã bảo mật"
 }

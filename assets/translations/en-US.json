@@ -4,6 +4,7 @@
     "vi": "Vietnamese"
   },
   "answer": "Answer",
+  "copied": "Copied",
   "darkMode": "Dark mode",
   "enterPinCode": "Enter pin code",
   "error": "Error",
@@ -25,6 +26,14 @@
   "enterNewPinCode": "Enter your new pin code",
   "update": "Update",
   "message": {
-    "invalidSecurityQuestion": "Security question is incorrect"
-  }
+    "invalidSecurityQuestion": "Security question is incorrect",
+    "pinCodeSetSuccessfully": "Pin code set successfully"
+  },
+  "question": {
+    "whatIsYourFavoriteColor": "What is your favorite color?",
+    "whatIsYourFavoriteFood": "What is your favorite food?",
+    "whatIsYourFavoriteMovie": "What is your favorite movie?"
+  },
+  "pinCodeEncryptDescription": "Please copy the security code and send to the support team to retrieve your pin code",
+  "securityCode": "Security code"
 }

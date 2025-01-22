@@ -1,6 +1,7 @@
 import 'package:injectable/injectable.dart';
 
 import '../../core/index.dart';
+import '../../core/utils/encrypt_utils.dart';
 import '../../route/app_router.dart';
 import '../../widget/toast.dart';
 import '../entity/index.dart';
@@ -91,5 +92,19 @@ class UpdatePinCodeUseCase extends FutureUseCase<void, UpdatePinCodeParamEntity>
     }).catchError((error) {
       showError(message: 'Your pin code is incorrect');
     });
+  }
+}
+
+@injectable
+class GetEncryptPinCodeUseCase extends FutureUseCase<String, void> {
+  GetEncryptPinCodeUseCase(this._pinCodeRepository);
+
+  final PinCodeRepository _pinCodeRepository;
+
+  @override
+  Future<String> execute(void input) async {
+    final pinCode = await _pinCodeRepository.getPinCode();
+
+    return PinCodeEncryptUtils.encryptToLettersWithExtra(pinCode);
   }
 }

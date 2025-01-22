@@ -42,3 +42,13 @@ class ThemeUtils {
     );
   }
 }
+
+extension ThemeExtension on BuildContext {
+  ThemeData get appTheme {
+    return Theme.of(this);
+  }
+}
+
+extension ThemeDataExtension on ThemeData {
+  Color get borderColor => colorScheme.onSurface.withOpacity(0.12);
+}

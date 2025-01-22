@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 import '../../core/persistence/security_storage.dart';
 import '../../domain/entity/index.dart';
 import '../../domain/repository/index.dart';
+import '../../resource/index.dart';
 
 @Singleton(as: PinCodeRepository)
 class PinCodeRepositoryImpl extends PinCodeRepository {
@@ -60,9 +61,9 @@ class PinCodeRepositoryImpl extends PinCodeRepository {
 
   @override
   List<SecurityQuestionEntity> get securityQuestions => [
-        SecurityQuestionEntity(id: 1, question: 'What is your favorite color?'),
-        SecurityQuestionEntity(id: 2, question: 'What is your favorite food?'),
-        SecurityQuestionEntity(id: 3, question: 'What is your favorite animal?'),
+        SecurityQuestionEntity(id: 1, question: LKey.whatIsYourFavoriteColor.tr()),
+        SecurityQuestionEntity(id: 2, question: LKey.whatIsYourFavoriteFood.tr()),
+        SecurityQuestionEntity(id: 3, question: LKey.whatIsYourFavoriteMovie.tr()),
       ];
 
   @override

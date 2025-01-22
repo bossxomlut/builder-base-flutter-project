@@ -30,6 +30,8 @@ class SetUpPinCodePageState extends State<SetUpPinCodePage>
 
   String get title => LKey.setSecurityQuestionDescription.tr();
 
+  VoidCallback? onTitleTap;
+
   @override
   void dispose() {
     tabController.dispose();
@@ -65,6 +67,7 @@ class SetUpPinCodePageState extends State<SetUpPinCodePage>
               SetUpQuestionWidget(
                 onQuestionAnswered: onQuestionAnswered,
                 title: title,
+                onTitleTap: onTitleTap,
               ),
               SetUpPinCodeWidget(
                 onPinCodeSet: onPinCodeSet,
@@ -105,9 +108,11 @@ class SetUpQuestionWidget extends StatefulWidget {
     super.key,
     required this.onQuestionAnswered,
     required this.title,
+    this.onTitleTap,
   });
 
   final String title;
+  final VoidCallback? onTitleTap;
 
   final Function(SecurityQuestionEntity question, String answer) onQuestionAnswered;
 
@@ -130,9 +135,12 @@ class _SetUpQuestionWidgetState extends State<SetUpQuestionWidget> with StateTem
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            widget.title,
-            style: theme.textTheme.headlineMedium,
+          InkWell(
+            onTap: widget.onTitleTap,
+            child: Text(
+              widget.title,
+              style: theme.textTheme.headlineMedium,
+            ),
           ),
           const SizedBox(height: 40),
           LText(LKey.securityQuestion, style: theme.textTheme.titleSmall),
@@ -160,7 +168,7 @@ class _SetUpQuestionWidgetState extends State<SetUpQuestionWidget> with StateTem
           const SizedBox(height: 8),
           TextField(
             decoration: InputDecoration(
-              hintText: LKey.enterPinCode.tr(),
+              hintText: LKey.answer.tr(),
             ),
             onChanged: (value) {
               setState(() {
@@ -169,7 +177,7 @@ class _SetUpQuestionWidgetState extends State<SetUpQuestionWidget> with StateTem
             },
           ),
           const SizedBox(height: 16),
-          ElevatedButton(
+          FilledButton(
             onPressed: isValid()
                 ? () {
                     widget.onQuestionAnswered(selectedQuestion!, answer);
@@ -238,7 +246,7 @@ class _SetUpPinCodeWidgetState extends State<SetUpPinCodeWidget> with StateTempl
                   // BackButton(),
                   // const SizedBox(width: 16),
                   Expanded(
-                    child: ElevatedButton(
+                    child: FilledButton(
                       onPressed: pin.length < maxPinLength
                           ? null
                           : () {
