@@ -25,6 +25,9 @@
   "enterCurrentPinCode": "Your current pin code",
   "enterNewPinCode": "Enter your new pin code",
   "update": "Update",
+  "other": "Other",
+  "all": "All",
+  "notFoundData": "Not found data",
   "message": {
     "invalidSecurityQuestion": "Security question is incorrect",
     "pinCodeSetSuccessfully": "Pin code set successfully"

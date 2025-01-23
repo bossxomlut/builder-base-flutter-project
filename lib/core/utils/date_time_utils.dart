@@ -42,6 +42,15 @@ extension DateTimeUtils on DateTime? {
     return DateFormat('dd/MM/yyyy').format(this!);
   }
 
+  int countDays(DateTime other) {
+    final difference = this!.difference(other);
+    return difference.inDays;
+  }
+
+  int get countToNow {
+    return countDays(DateTime.now());
+  }
+
   static DateTime now() {
     return DateTime.now();
 

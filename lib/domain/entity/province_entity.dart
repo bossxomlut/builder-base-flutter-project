@@ -92,6 +92,11 @@ class DistrictEntity implements GetId<int> {
 
   @override
   int? get getId => id;
+
+  @override
+  String toString() {
+    return 'DistrictEntity(id: $id, provinceId: $provinceId, name: $name)';
+  }
 }
 
 class WardEntity implements GetId<int> {

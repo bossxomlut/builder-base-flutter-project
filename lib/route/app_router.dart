@@ -1,5 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 
+import '../domain/index.dart';
+import '../presentation/land_certificate/cubit/land_certificate_list_cubit.dart';
 import 'app_router.gr.dart';
 
 export 'route_logger_observer.dart';
@@ -19,6 +21,7 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: ForgotPinCodeRoute.page),
         AutoRoute(page: UpdatePinCodeRoute.page),
         AutoRoute(page: AddLandCertificateRoute.page),
+        AutoRoute(page: LandCertificateListRoute.page),
       ];
 }
 
@@ -41,5 +44,33 @@ extension AppRouterX on AppRouter {
 
   void pushAndReplaceAll(PageRouteInfo route) {
     pushAndPopUntil(route, predicate: (r) => false);
+  }
+}
+
+extension LandCertificateListRouteX on AppRouter {
+  void goToCertificateGroupByProvince(ProvinceEntity province) {
+    push(LandCertificateListRoute(level: ProvinceLevel.province, province: province));
+  }
+
+  void goToCertificateGroupByDistrict(DistrictEntity district) {
+    push(LandCertificateListRoute(level: ProvinceLevel.district, district: district));
+  }
+
+  void goToCertificateGroupByWard(WardEntity ward) {
+    push(LandCertificateListRoute(level: ProvinceLevel.ward, ward: ward));
+  }
+
+  void goToCertificateGroupByAll() {
+    push(LandCertificateListRoute(level: ProvinceLevel.all));
+  }
+}
+
+extension LandCertificateRouteX on AppRouter {
+  void goToAddLandCertificate() {
+    push(AddLandCertificateRoute());
+  }
+
+  void goToViewLandCertificate(LandCertificateEntity landCertificate) {
+    push(AddLandCertificateRoute(initialLandCertificateEntity: landCertificate));
   }
 }

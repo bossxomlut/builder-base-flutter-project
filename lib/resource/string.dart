@@ -23,6 +23,11 @@ abstract class LKey {
   static const String enterCurrentPinCode = 'enterCurrentPinCode';
   static const String enterNewPinCode = 'enterNewPinCode';
   static const String update = 'update';
+  static const String certificate = 'certificate';
+  static const String certificates = 'certificates';
+  static const String other = 'other';
+  static const String all = 'all';
+  static const String notFoundData = 'notFoundData';
 
   //message
   static const String messageInvalidSecurityQuestion = 'message.invalidSecurityQuestion';

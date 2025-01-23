@@ -11,7 +11,9 @@ import '../utils/index.dart';
 
 @RoutePage()
 class AddLandCertificatePage extends StatefulWidget {
-  const AddLandCertificatePage({Key? key}) : super(key: key);
+  const AddLandCertificatePage({Key? key, this.initialLandCertificateEntity}) : super(key: key);
+
+  final LandCertificateEntity? initialLandCertificateEntity;
 
   @override
   State<AddLandCertificatePage> createState() => _AddLandCertificatePageState();
@@ -21,6 +23,16 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
   LandCertificateEntity landCertificateEntity = LandCertificateEntity(id: -1);
 
   final CreateLandCertificateUseCase _createLandCertificateUseCase = getIt.get<CreateLandCertificateUseCase>();
+
+  bool get haveInitData => widget.initialLandCertificateEntity != null;
+
+  @override
+  void initState() {
+    super.initState();
+    if (haveInitData) {
+      landCertificateEntity = widget.initialLandCertificateEntity!;
+    }
+  }
 
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {

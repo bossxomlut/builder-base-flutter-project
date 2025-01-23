@@ -15,6 +15,7 @@ dependencies:
   # A
   analyzer: any
   auto_route: any  # A powerful routing library, supports features like nested routes and route guards.
+  animation_list: ^3.1.0
 
   # C
   cupertino_icons: ^1.0.8  # A set of iOS-style icons for Flutter apps on iOS.
@@ -37,6 +38,7 @@ dependencies:
   flutter_screenutil: ^5.9.3  # Supports responsive design for multiple screen sizes.
 #  freezed_annotation: ^2.4.4  # Annotation support for the Freezed package to create immutable and sealed classes.
   flutter_secure_storage: ^9.2.2 #Flutter Secure Storage provides API to store data in secure storage.
+  flutter_slidable: ^3.1.2
 
   # G
   gap: ^3.0.1  # Provides spacing between widgets in Flutter layouts.

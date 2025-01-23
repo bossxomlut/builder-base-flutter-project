@@ -51,4 +51,18 @@ extension ThemeExtension on BuildContext {
 
 extension ThemeDataExtension on ThemeData {
   Color get borderColor => colorScheme.onSurface.withOpacity(0.12);
+
+  Color getWarningByCountDate(int dateCount) {
+    if (dateCount <= 0) {
+      return Colors.redAccent;
+    } else if (dateCount < 5) {
+      return Colors.orangeAccent;
+    } else if (dateCount < 15) {
+      return Colors.purple;
+    } else if (dateCount < 30) {
+      return Colors.green;
+    }
+
+    return Colors.transparent;
+  }
 }

@@ -95,6 +95,8 @@ class AddressEntity {
 
   String get combineId => ProvinceUtil.combineId(province?.id ?? -1, district?.id ?? -1, ward?.id ?? -1);
 
+  String get displayAddress => detail ?? combineProvinceName;
+
   AddressEntity copyWith({
     ProvinceEntity? province,
     DistrictEntity? district,

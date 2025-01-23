@@ -25,6 +25,9 @@
   "enterCurrentPinCode": "Nhập mã PIN hiện tại của bạn",
   "enterNewPinCode": "Nhập mã PIN mới của bạn",
   "update": "Cập nhật",
+  "other": "Khác",
+  "all": "Tất cả",
+  "notFoundData": "Không tìm thấy dữ liệu",
   "message": {
     "invalidSecurityQuestion": "Câu hỏi bảo mật không chính xác",
     "pinCodeSetSuccessfully": "Thiết lập mã PIN thành công"

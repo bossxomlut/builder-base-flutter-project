@@ -9,7 +9,6 @@ import '../../domain/index.dart';
 import '../../injection/injection.dart';
 import '../../resource/index.dart';
 import '../../route/app_router.dart';
-import '../../route/app_router.gr.dart';
 import 'home_page.dart';
 
 @RoutePage()
@@ -56,7 +55,7 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
       floatingActionButton: FloatingActionButton(
         child: Icon(LineIcons.plus),
         onPressed: () {
-          appRouter.push(const AddLandCertificateRoute());
+          appRouter.goToAddLandCertificate();
         },
       ),
       bottomNavigationBar: Container(
