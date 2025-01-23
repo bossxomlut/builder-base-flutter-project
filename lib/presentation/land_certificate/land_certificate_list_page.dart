@@ -1,6 +1,5 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:line_icons/line_icons.dart';
 
@@ -151,36 +150,48 @@ class _LandCertificateListPageState
 
   @override
   Widget buildBody(BuildContext context) {
-    return BlocListener<LandCertificateListCubit, LandCertificateListState>(
-      listener: (BuildContext context, state) {
-        isEmptyNotifier.value = state.list.isEmpty;
-
-        for (int i = 0; i < state.list.length; i++) {
-          _addItem(state.list[i]);
-        }
-      },
-      child: ValueListenableBuilder<bool>(
+    return Column(
+      children: [
+        ValueListenableBuilder<bool>(
           valueListenable: isEmptyNotifier,
           builder: (context, isEmpty, _) {
             if (isEmpty) {
               return EmptyLandCertificateWidget();
             }
+            return const SizedBox();
+          },
+        ),
+        Expanded(
+          child: AnimatedList.separated(
+            key: _listKey,
+            initialItemCount: _items.length,
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
+            itemBuilder: (context, index, animation) {
+              return _buildItem(_items[index], index, animation);
+            },
+            separatorBuilder: (context, index, _) {
+              return const SizedBox(height: 16.0);
+            },
+            removedSeparatorBuilder: (context, index, animation) {
+              return const SizedBox(height: 16.0);
+            },
+          ),
+        ),
+      ],
+    );
+  }
 
-            return AnimatedList.separated(
-              key: _listKey,
-              initialItemCount: _items.length,
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
-              itemBuilder: (context, index, animation) {
-                return _buildItem(_items[index], index, animation);
-              },
-              separatorBuilder: (context, index, _) {
-                return const SizedBox(height: 16.0);
-              },
-              removedSeparatorBuilder: (context, index, animation) {
-                return const SizedBox(height: 16.0);
-              },
-            );
-          }),
+  @override
+  void onStateChange(LandCertificateListState state) {
+    _items.clear();
+    _items.addAll(state.list);
+
+    isEmptyNotifier.value = _items.isEmpty;
+
+    _listKey.currentState?.insertAllItems(
+      0,
+      _items.length,
+      duration: _duration,
     );
   }
 }

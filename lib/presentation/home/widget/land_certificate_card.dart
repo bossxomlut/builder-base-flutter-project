@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../domain/entity/land_certificate_entity.dart';
+import '../../../core/index.dart';
+import '../../../domain/index.dart';
 import '../../../resource/index.dart';
+import '../../../route/app_router.dart';
 import '../../../widget/index.dart';
 import '../../land_certificate/widget/land_certificate_card.dart';
 
@@ -32,17 +34,31 @@ class ProvinceLandCertificateCard extends StatelessWidget {
                 Text('${pCertificates.certificates?.length ?? 0} ${LKey.certificates.tr()}'),
               ],
             ),
-            Gap(8.0),
+            Gap(16.0),
             Column(
               children: [
-                ...?pCertificates.certificates?.map(
+                ...?SplitListUtils.splitList<LandCertificateEntity>(pCertificates.certificates ?? [])?.map(
                   (certificate) => Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: LandCertificateCard(certificate),
                   ),
                 ),
               ],
-            )
+            ),
+            if ((pCertificates.certificates?.length ?? 0) > SplitListUtils.seeMoreCount)
+              Align(
+                alignment: Alignment.centerRight,
+                child: SeeMoreWidget(
+                  onTap: () {
+                    appRouter.goToCertificateGroupByProvince(
+                      ProvinceEntity(
+                        id: pCertificates.id ?? -1,
+                        name: pCertificates.name ?? '',
+                      ),
+                    );
+                  },
+                ),
+              ),
           ],
         ),
       ),

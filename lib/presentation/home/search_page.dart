@@ -5,6 +5,7 @@ import '../../domain/entity/index.dart';
 import '../../route/app_router.dart';
 import '../../widget/index.dart';
 import '../land_certificate/cubit/search_group_cubit.dart';
+import '../land_certificate/widget/land_certificate_card.dart';
 import '../utils/base_state.dart';
 
 class SearchPage extends StatefulWidget {
@@ -45,7 +46,11 @@ class _SearchPageState extends BaseState<SearchPage, SearchGroupCubit, SearchGro
         const Gap(20),
         Expanded(child: BlocBuilder<SearchGroupCubit, SearchGroupState>(
           builder: (BuildContext context, state) {
-            return ListView.builder(
+            if (state.list.isEmpty) {
+              return EmptyLandCertificateWidget();
+            }
+
+            return ListView.separated(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               itemCount: state.list.length,
               itemBuilder: (context, index) {
@@ -54,6 +59,7 @@ class _SearchPageState extends BaseState<SearchPage, SearchGroupCubit, SearchGro
                   countSearch: provinceCountEntity,
                 );
               },
+              separatorBuilder: (context, index) => const Gap(8),
             );
           },
         )),

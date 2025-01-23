@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 import '../../core/utils/parse_utils.dart';
 import '../../data/repository/isar_repository.dart';
 
@@ -59,7 +61,7 @@ class ProvinceEntity implements GetId<int> {
   int? get getId => id;
 }
 
-class DistrictEntity implements GetId<int> {
+class DistrictEntity extends Equatable implements GetId<int> {
   DistrictEntity({
     required this.id,
     required this.provinceId,
@@ -97,6 +99,13 @@ class DistrictEntity implements GetId<int> {
   String toString() {
     return 'DistrictEntity(id: $id, provinceId: $provinceId, name: $name)';
   }
+
+  @override
+  List<Object?> get props => [
+        id,
+        provinceId,
+        name,
+      ];
 }
 
 class WardEntity implements GetId<int> {
