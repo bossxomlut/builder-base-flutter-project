@@ -54,16 +54,28 @@ class _ViewLandCertificatePageState extends State<ViewLandCertificatePage> with 
                       onChanged: (String value) {},
                     ),
                   ),
-                  const Gap(16),
-                  // AddCard(
-                  //   title: LKey.sectionsLandCertificateImage.tr(),
-                  //   child: UploadImagePlaceholder(
-                  //     title: LKey.fieldsLandCertificateImageTitle.tr(),
-                  //     onChanged: (value) {
-                  //       // Update files if necessary
-                  //     },
-                  //   ),
-                  // ),
+                  if (landCertificateEntity.files.isNotNullAndEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: AddCard(
+                        title: LKey.sectionsLandCertificateImage.tr(),
+                        child: Column(
+                          children: [
+                            ...?landCertificateEntity.files?.map(
+                              (file) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 8),
+                                  child: UploadImagePlaceholder(
+                                    title: file.name,
+                                    filePath: file.path,
+                                  ),
+                                );
+                              },
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                   const Gap(16),
                   AddCard(
                     title: LKey.sectionsAddress.tr(),

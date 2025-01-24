@@ -49,5 +49,7 @@
     <array>
     	<string>en</string>
     </array>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Used to demonstrate file picker plugin</string>
 </dict>
 </plist>

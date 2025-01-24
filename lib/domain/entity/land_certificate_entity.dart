@@ -26,7 +26,7 @@ class LandCertificateEntity extends GetId<int> {
   final int id;
 
   final String? name;
-  final List? files;
+  final List<AppFile>? files;
   final AddressEntity? address;
   final DateTime? purchaseDate;
   final double? purchasePrice;

@@ -9,7 +9,7 @@ part 'land_certificate_model.g.dart';
 class LandCertificateModel {
   Id id = Isar.autoIncrement;
   String? name;
-  List<String>? files;
+  List<FileModel>? files;
   String? combineAddressId;
   String? combineAddressName;
   String? detailAddress;
@@ -63,7 +63,7 @@ class LandCertificateMapping extends Mapping<LandCertificateEntity, LandCertific
     return LandCertificateEntity(
       id: input.id,
       name: input.name ?? '',
-      files: input.files,
+      files: input.files?.map((e) => AttachmentModelToEntityMapping().from(e)).toList(),
       mapNumber: input.mapNumber,
       area: input.area,
       useType: input.useType,
@@ -94,7 +94,7 @@ class LandCertificateModelMapping extends Mapping<LandCertificateModel, LandCert
   LandCertificateModel from(LandCertificateEntity item) {
     return LandCertificateModel()
       ..name = item.name
-      ..files = []
+      ..files = item.files?.map((e) => AttachmentEntityToModelMapping().from(e)).toList()
       ..combineAddressId = (item.address ?? AddressEntity.empty()).combineId
       ..combineAddressName = (item.address ?? AddressEntity.empty()).combineProvinceName
       ..detailAddress = item.address?.detail
@@ -113,5 +113,30 @@ class LandCertificateModelMapping extends Mapping<LandCertificateModel, LandCert
       ..taxDeadlineTime = item.taxDeadlineTime
       ..taxRenewalTime = item.taxRenewalTime
       ..note = item.note;
+  }
+}
+
+@embedded
+class FileModel {
+  final String? path;
+  final String? name;
+
+  FileModel({
+    this.path,
+    this.name,
+  });
+}
+
+class AttachmentEntityToModelMapping extends Mapping<FileModel, AppFile> {
+  @override
+  FileModel from(AppFile input) {
+    return FileModel(path: input.path, name: input.name);
+  }
+}
+
+class AttachmentModelToEntityMapping extends Mapping<AppFile, FileModel> {
+  @override
+  AppFile from(FileModel input) {
+    return AppFile(path: input.path ?? '', name: input.name ?? '');
   }
 }

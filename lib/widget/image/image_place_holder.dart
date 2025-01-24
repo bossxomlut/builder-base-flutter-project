@@ -1,78 +1,75 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../../../../widget/index.dart';
+import '../../domain/index.dart';
 import '../../resource/index.dart';
-import 'image.dart';
 
 class UploadImagePlaceholder extends StatelessWidget {
-  const UploadImagePlaceholder({super.key, required this.title, this.filePath, this.onChanged});
+  const UploadImagePlaceholder({super.key, required this.title, this.filePath, this.onChanged, this.onRemove});
   final String title;
   final String? filePath;
-  final ValueChanged<String?>? onChanged;
+  final ValueChanged<List<AppFile>?>? onChanged;
+  final VoidCallback? onRemove;
 
   @override
   Widget build(BuildContext context) {
-    final height = 80.0;
+    final height = 120.0;
     final theme = context.appTheme;
     if (filePath != null) {
-      return DottedBorder(
-        color: Color(0x1AFFFFFF),
-        radius: Radius.circular(8),
-        dashPattern: const [6, 6],
-        strokeCap: StrokeCap.butt,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                ClipRRect(
-                  child: AppImage.file(
-                    url: filePath!,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: GestureDetector(
-                    onTap: () {
-                      onChanged?.call(null);
-                    },
-                    child: Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: Color(0x66000000),
-                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(4)),
-                      ),
-                      child: Icon(
-                        Icons.close,
-                        color: Color(0xFFEBEBEB),
-                        size: 16,
-                      ),
+      return Container(
+        height: height,
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: theme.borderColor,
+            width: 1,
+          ),
+        ),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            ClipRRect(
+              child: AppImage.file(
+                url: filePath!,
+                fit: BoxFit.cover,
+                height: height,
+              ),
+            ),
+            if (onRemove != null)
+              Positioned(
+                right: 0,
+                top: 0,
+                child: GestureDetector(
+                  onTap: onRemove,
+                  child: Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      color: Color(0x66000000),
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(4)),
+                    ),
+                    child: Icon(
+                      Icons.close,
+                      color: Color(0xFFEBEBEB),
+                      size: 16,
                     ),
                   ),
                 ),
-              ],
-            ),
-          ),
+              ),
+          ],
         ),
       );
     }
 
-    return GestureDetector(
+    return InkWell(
       onTap: () async {
-        final ImagePicker picker = ImagePicker();
-        final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-        if (image != null) {
-          onChanged?.call(image.path);
-        }
+        AppFilePicker(
+          allowMultiple: true,
+        ).opeFilePicker().then((appFiles) {
+          onChanged?.call(appFiles);
+        });
       },
       child: DottedBorder(
         color: theme.borderColor,

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../core/utils/date_time_utils.dart';
-import '../../core/utils/string_utils.dart';
+import '../../core/index.dart';
 import '../../domain/index.dart';
 import '../../injection/injection.dart';
 import '../../resource/index.dart';
-import '../../widget/image/image_place_holder.dart';
 import '../../widget/index.dart';
 import '../../widget/toast.dart';
 import '../province/search_province_page.dart';
@@ -64,6 +62,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
     DateTime? taxDeadlineTime,
     String? note,
     AddressEntity? address,
+    List<AppFile>? files,
   }) {
     setState(() {
       landCertificateEntity = LandCertificateEntity(
@@ -84,7 +83,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
         taxDeadlineTime: taxDeadlineTime ?? landCertificateEntity.taxDeadlineTime,
         note: note ?? landCertificateEntity.note,
         address: address ?? landCertificateEntity.address, // Không thay đổi địa chỉ
-        files: landCertificateEntity.files, // Không thay đổi files
+        files: files ?? landCertificateEntity.files, // Không thay đổi files
       );
     });
   }
@@ -158,11 +157,33 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                   Gap(16),
                   AddCard(
                     title: LKey.sectionsLandCertificateImage.tr(),
-                    child: UploadImagePlaceholder(
-                      title: LKey.fieldsLandCertificateImageTitle.tr(),
-                      onChanged: (value) {
-                        // Update files if necessary
-                      },
+                    child: Column(
+                      children: [
+                        UploadImagePlaceholder(
+                          title: LKey.fieldsLandCertificateImageTitle.tr(),
+                          onChanged: (appFiles) {
+                            if (appFiles != null) {
+                              _updateLandCertificateEntity(files: [...?landCertificateEntity.files, ...appFiles]);
+                            }
+                          },
+                        ),
+                        Gap(8),
+                        if (landCertificateEntity.files.isNotNullAndEmpty)
+                          ...?landCertificateEntity.files?.map(
+                            (file) {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: UploadImagePlaceholder(
+                                  title: file.name,
+                                  filePath: file.path,
+                                  onRemove: () {
+                                    _updateLandCertificateEntity(files: landCertificateEntity.files?..remove(file));
+                                  },
+                                ),
+                              );
+                            },
+                          )
+                      ],
                     ),
                   ),
                   Gap(16),
