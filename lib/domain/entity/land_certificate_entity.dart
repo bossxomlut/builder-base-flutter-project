@@ -1,75 +1,12 @@
 import '../../data/repository/isar_repository.dart';
 import '../index.dart';
 
-class LandCertificateEntity extends GetId<int> {
-  LandCertificateEntity({
-    required this.id,
-    this.name,
-    this.files,
-    this.address,
-    this.purchaseDate,
-    this.purchasePrice,
-    this.saleDate,
-    this.salePrice,
-    this.note,
-    this.number,
-    this.mapNumber,
-    this.area,
-    this.useType,
-    this.purpose,
-    this.useTime,
-    this.residentialArea,
-    this.perennialTreeArea,
-    this.taxDeadlineTime,
-    this.taxRenewalTime,
-  });
-  final int id;
+part 'land_certificate_entity.freezed.dart';
 
-  final String? name;
-  final List<AppFile>? files;
-  final AddressEntity? address;
-  final DateTime? purchaseDate;
-  final double? purchasePrice;
-  final DateTime? saleDate;
-  final double? salePrice;
-
-  //Thửa đất số
-  final int? number;
-
-  //Bản đồ số
-  final int? mapNumber;
-
-  //Diện tích
-  final double? area;
-
-  //Hình thức sử dụng
-  final String? useType;
-
-  //Mục đích sử dụng
-  final String? purpose;
-
-  //Thời gian sử dụng
-  final DateTime? useTime;
-
-  //Đất ở
-  final String? residentialArea;
-
-  //Cây lâu năm
-  final String? perennialTreeArea;
-
-  //Thời điểm đóng thuế
-  final DateTime? taxDeadlineTime;
-
-  //Thời điểm gia hạn thuế
-  final DateTime? taxRenewalTime;
-
-  final String? note;
-
-  @override
-  int? get getId => id;
-
-  LandCertificateEntity copyWith({
-    int? id,
+@freezed
+class LandCertificateEntity with _$LandCertificateEntity implements GetId<int> {
+  factory LandCertificateEntity({
+    @Default(-1) int id,
     String? name,
     List<AppFile>? files,
     AddressEntity? address,
@@ -88,9 +25,34 @@ class LandCertificateEntity extends GetId<int> {
     DateTime? taxDeadlineTime,
     DateTime? taxRenewalTime,
     String? note,
+  }) = _LandCertificateEntity;
+
+  const LandCertificateEntity._();
+
+  @override
+  int? get getId => id;
+
+  LandCertificateEntity copyWith2({
+    String? name,
+    double? area,
+    int? mapNumber,
+    int? number,
+    String? useType,
+    String? purpose,
+    String? residentialArea,
+    String? perennialTreeArea,
+    double? purchasePrice,
+    DateTime? purchaseDate,
+    double? salePrice,
+    DateTime? saleDate,
+    DateTime? taxRenewalTime,
+    DateTime? taxDeadlineTime,
+    String? note,
+    AddressEntity? address,
+    List<AppFile>? files,
   }) {
     return LandCertificateEntity(
-      id: id ?? this.id,
+      id: id,
       name: name ?? this.name,
       files: files ?? this.files,
       address: address ?? this.address,
@@ -112,6 +74,141 @@ class LandCertificateEntity extends GetId<int> {
     );
   }
 }
+
+// class LandCertificateEntity implements GetId<int> {
+//   LandCertificateEntity({
+//     required this.id,
+//     this.name,
+//     this.files,
+//     this.address,
+//     this.purchaseDate,
+//     this.purchasePrice,
+//     this.saleDate,
+//     this.salePrice,
+//     this.note,
+//     this.number,
+//     this.mapNumber,
+//     this.area,
+//     this.useType,
+//     this.purpose,
+//     this.useTime,
+//     this.residentialArea,
+//     this.perennialTreeArea,
+//     this.taxDeadlineTime,
+//     this.taxRenewalTime,
+//   });
+//   final int id;
+//
+//   final String? name;
+//   final List<AppFile>? files;
+//   final AddressEntity? address;
+//   final DateTime? purchaseDate;
+//   final double? purchasePrice;
+//   final DateTime? saleDate;
+//   final double? salePrice;
+//
+//   //Thửa đất số
+//   final int? number;
+//
+//   //Bản đồ số
+//   final int? mapNumber;
+//
+//   //Diện tích
+//   final double? area;
+//
+//   //Hình thức sử dụng
+//   final String? useType;
+//
+//   //Mục đích sử dụng
+//   final String? purpose;
+//
+//   //Thời gian sử dụng
+//   final DateTime? useTime;
+//
+//   //Đất ở
+//   final String? residentialArea;
+//
+//   //Cây lâu năm
+//   final String? perennialTreeArea;
+//
+//   //Thời điểm đóng thuế
+//   final DateTime? taxDeadlineTime;
+//
+//   //Thời điểm gia hạn thuế
+//   final DateTime? taxRenewalTime;
+//
+//   final String? note;
+//
+//   @override
+//   int? get getId => id;
+//
+//   // LandCertificateEntity copyWith({
+//   //   int? id,
+//   //   String? name,
+//   //   List<AppFile>? files,
+//   //   AddressEntity? address,
+//   //   DateTime? purchaseDate,
+//   //   double? purchasePrice,
+//   //   DateTime? saleDate,
+//   //   double? salePrice,
+//   //   int? number,
+//   //   int? mapNumber,
+//   //   double? area,
+//   //   String? useType,
+//   //   String? purpose,
+//   //   DateTime? useTime,
+//   //   String? residentialArea,
+//   //   String? perennialTreeArea,
+//   //   DateTime? taxDeadlineTime,
+//   //   DateTime? taxRenewalTime,
+//   //   String? note,
+//   // }) {
+//   //   return LandCertificateEntity(
+//   //     id: id ?? this.id,
+//   //     name: name ?? this.name,
+//   //     files: files ?? this.files,
+//   //     address: address ?? this.address,
+//   //     purchaseDate: purchaseDate ?? this.purchaseDate,
+//   //     purchasePrice: purchasePrice ?? this.purchasePrice,
+//   //     saleDate: saleDate ?? this.saleDate,
+//   //     salePrice: salePrice ?? this.salePrice,
+//   //     number: number ?? this.number,
+//   //     mapNumber: mapNumber ?? this.mapNumber,
+//   //     area: area ?? this.area,
+//   //     useType: useType ?? this.useType,
+//   //     purpose: purpose ?? this.purpose,
+//   //     useTime: useTime ?? this.useTime,
+//   //     residentialArea: residentialArea ?? this.residentialArea,
+//   //     perennialTreeArea: perennialTreeArea ?? this.perennialTreeArea,
+//   //     taxDeadlineTime: taxDeadlineTime ?? this.taxDeadlineTime,
+//   //     taxRenewalTime: taxRenewalTime ?? this.taxRenewalTime,
+//   //     note: note ?? this.note,
+//   //   );
+//   // }
+//   //
+//   // @override
+//   // List<Object?> get props => [
+//   //       id,
+//   //       // name,
+//   //       // files,
+//   //       // address,
+//   //       // purchaseDate,
+//   //       // purchasePrice,
+//   //       // saleDate,
+//   //       // salePrice,
+//   //       // number,
+//   //       // mapNumber,
+//   //       // area,
+//   //       // useType,
+//   //       // purpose,
+//   //       // useTime,
+//   //       // residentialArea,
+//   //       // perennialTreeArea,
+//   //       // taxDeadlineTime,
+//   //       // taxRenewalTime,
+//   //       // note,
+//   //     ];
+// }
 
 extension LandCertificateEntityX on LandCertificateEntity {
   bool get isInValid =>

@@ -15,9 +15,28 @@ enum ProvinceLevel {
 
 @injectable
 class LandCertificateListCubit extends Cubit<LandCertificateListState> {
-  LandCertificateListCubit(this._landCertificateRepository) : super(LandCertificateListState.initial()) {}
+  LandCertificateListCubit(
+    this._landCertificateRepository,
+    this._landCertificateObserverData,
+  ) : super(LandCertificateListState.initial());
 
   final LandCertificateRepository _landCertificateRepository;
+
+  final LandCertificateObserverData _landCertificateObserverData;
+
+  void startListen() {
+    _landCertificateObserverData.listener(
+      (void value) {
+        onSearch(state.keyword);
+      },
+    );
+  }
+
+  @override
+  Future<void> close() {
+    _landCertificateObserverData.cancelListen();
+    return super.close();
+  }
 
   void setLevel(
     ProvinceLevel level, {
@@ -35,7 +54,8 @@ class LandCertificateListCubit extends Cubit<LandCertificateListState> {
     );
   }
 
-  void search(String keyword) {
+  void onSearch(String keyword) {
+    emit(state.copyWith(keyword: keyword));
     try {
       switch (state.level) {
         case ProvinceLevel.province:
@@ -58,12 +78,15 @@ class LandCertificateListCubit extends Cubit<LandCertificateListState> {
   }
 
   void remove(LandCertificateEntity item) {
+    print('item: ${item}');
+
     _landCertificateRepository.delete(item);
   }
 }
 
 class LandCertificateListState extends Equatable {
   LandCertificateListState({
+    required this.keyword,
     required this.level,
     required this.list,
     this.province,
@@ -73,11 +96,13 @@ class LandCertificateListState extends Equatable {
 
   factory LandCertificateListState.initial() {
     return LandCertificateListState(
+      keyword: '',
       level: ProvinceLevel.all,
       list: [],
     );
   }
 
+  final String keyword;
   final ProvinceLevel level;
   final ProvinceEntity? province;
   final DistrictEntity? district;
@@ -94,6 +119,7 @@ class LandCertificateListState extends Equatable {
       ];
 
   LandCertificateListState copyWith({
+    String? keyword,
     ProvinceLevel? level,
     ProvinceEntity? province,
     DistrictEntity? district,
@@ -101,6 +127,7 @@ class LandCertificateListState extends Equatable {
     List<LandCertificateEntity>? list,
   }) {
     return LandCertificateListState(
+      keyword: keyword ?? this.keyword,
       level: level ?? this.level,
       province: province ?? this.province,
       district: district ?? this.district,

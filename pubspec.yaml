@@ -36,7 +36,7 @@ dependencies:
   flutter_svg: ^2.0.10+1
   flutter_bloc: ^8.1.6  # State management using the Bloc pattern for Flutter applications.
   flutter_screenutil: ^5.9.3  # Supports responsive design for multiple screen sizes.
-#  freezed_annotation: ^2.4.4  # Annotation support for the Freezed package to create immutable and sealed classes.
+  freezed_annotation: any  # Annotation support for the Freezed package to create immutable and sealed classes.
   flutter_secure_storage: ^9.2.2 #Flutter Secure Storage provides API to store data in secure storage.
   flutter_slidable: ^3.1.2
 
@@ -92,7 +92,7 @@ dev_dependencies:
   build_runner: any  # A build system for Dart projects, allowing you to run code generation and other build tasks.
 
   # F
-#  freezed: ^2.5.7  # A package that simplifies the creation of immutable classes and unions/sealed classes in Dart.
+  freezed: any # A package that simplifies the creation of immutable classes and unions/sealed classes in Dart.
 
   # I
   injectable_generator: any  # A code generator for injectable that simplifies dependency injection in Dart applications.

@@ -44,7 +44,7 @@ class LandCertificateRepositoryImpl extends LandCertificateRepository
 
   @override
   LandCertificateModel updateNewItem(LandCertificateEntity item) {
-    return createNewItem(item)..id = item.id;
+    return createNewItem(item)..id = item.id!;
   }
 
   @override

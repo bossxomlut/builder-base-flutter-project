@@ -64,7 +64,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
     AddressEntity? address,
     List<AppFile>? files,
   }) {
-    landCertificateEntity = landCertificateEntity.copyWith(
+    landCertificateEntity = landCertificateEntity.copyWith2(
       name: name,
       area: area,
       mapNumber: mapNumber,
