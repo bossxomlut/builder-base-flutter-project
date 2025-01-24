@@ -9,6 +9,7 @@ export 'dialog.dart';
 export 'file_picker.dart';
 export 'image/image.dart';
 export 'image/image_place_holder.dart';
+export 'keyboard_utils.dart';
 export 'loading_widget.dart';
 export 'localization_text.dart';
 export 'processing_widget.dart';

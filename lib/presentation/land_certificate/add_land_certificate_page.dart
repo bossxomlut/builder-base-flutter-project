@@ -83,6 +83,8 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
       address: address,
       files: files,
     );
+
+    setState(() {});
   }
 
   void onSave() {
@@ -120,6 +122,9 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
     }
 
     //
+
+    // _createLandCertificateUseCase.execute(landCertificateEntity);
+    // return;
     ProcessingWidget(
       execute: () => Future.sync(() async {
         await Future.delayed(const Duration(seconds: 1));
@@ -304,15 +309,14 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                           label: LKey.fieldsPurchaseDate.tr(),
                           value: landCertificateEntity.purchaseDate.date,
                           onTap: () async {
-                            final selectedDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2100),
+                            AppShowDatePicker(
+                              context,
+                              (selectedDate) {
+                                if (selectedDate != null) {
+                                  _updateLandCertificateEntity(purchaseDate: selectedDate);
+                                }
+                              },
                             );
-                            if (selectedDate != null) {
-                              _updateLandCertificateEntity(purchaseDate: selectedDate);
-                            }
                           },
                           trailing: Icon(Icons.calendar_today_outlined),
                         ),
@@ -334,15 +338,14 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                           label: LKey.fieldsSaleDate.tr(),
                           value: landCertificateEntity.saleDate.date,
                           onTap: () async {
-                            final selectedDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2100),
+                            AppShowDatePicker(
+                              context,
+                              (selectedDate) {
+                                if (selectedDate != null) {
+                                  _updateLandCertificateEntity(saleDate: selectedDate);
+                                }
+                              },
                             );
-                            if (selectedDate != null) {
-                              _updateLandCertificateEntity(saleDate: selectedDate);
-                            }
                           },
                           trailing: Icon(Icons.calendar_today_outlined),
                         ),
@@ -423,15 +426,14 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                           label: LKey.fieldsTaxRenewalTime.tr(),
                           value: landCertificateEntity.taxRenewalTime.date,
                           onTap: () async {
-                            final selectedDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2100),
+                            AppShowDatePicker(
+                              context,
+                              (selectedDate) {
+                                if (selectedDate != null) {
+                                  _updateLandCertificateEntity(taxRenewalTime: selectedDate);
+                                }
+                              },
                             );
-                            if (selectedDate != null) {
-                              _updateLandCertificateEntity(taxRenewalTime: selectedDate);
-                            }
                           },
                           trailing: Icon(Icons.calendar_today_outlined),
                         ),
@@ -440,15 +442,14 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                           label: LKey.fieldsTaxPaymentDeadline.tr(),
                           value: landCertificateEntity.taxDeadlineTime.date,
                           onTap: () async {
-                            final selectedDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2100),
+                            AppShowDatePicker(
+                              context,
+                              (selectedDate) {
+                                if (selectedDate != null) {
+                                  _updateLandCertificateEntity(taxDeadlineTime: selectedDate);
+                                }
+                              },
                             );
-                            if (selectedDate != null) {
-                              _updateLandCertificateEntity(taxDeadlineTime: selectedDate);
-                            }
                           },
                           trailing: Icon(Icons.calendar_today_outlined),
                         ),
@@ -520,4 +521,15 @@ class AddCard extends StatelessWidget {
       ),
     );
   }
+}
+
+void AppShowDatePicker(BuildContext context, ValueChanged<DateTime?> onChanged) async {
+  context.hideKeyboard();
+
+  showDatePicker(
+    context: context,
+    initialDate: DateTime.now(),
+    firstDate: DateTime(2000),
+    lastDate: DateTime(2100),
+  ).then(onChanged);
 }

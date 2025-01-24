@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'index.dart';
+
 mixin ShowBottomSheet<T> on Widget {
   Future<T?> show(BuildContext context) {
+    context.hideKeyboard();
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,

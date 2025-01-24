@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../resource/index.dart';
+import 'index.dart';
 
 mixin ShowDialog<T> on Widget {
   String? get routeName => 'AppDialog';
 
   Future<T?> show(BuildContext context, {bool barrierDismissible = false}) {
+    context.hideKeyboard();
     final theme = context.appTheme;
     return showDialog(
       context: context,
