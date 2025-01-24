@@ -24,6 +24,11 @@ class CreateLandCertificateUseCase {
       }
     }
 
-    await _landCertificateRepository.create(landCertificate.copyWith(files: files));
+    final lastedCertificate = landCertificate.copyWith(files: files);
+    if (landCertificate.id != -1) {
+      await _landCertificateRepository.update(lastedCertificate);
+    } else {
+      await _landCertificateRepository.create(lastedCertificate);
+    }
   }
 }

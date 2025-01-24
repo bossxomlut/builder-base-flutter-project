@@ -53,6 +53,7 @@
   "securityCode": "Security code",
   "addLandCertificatePage": {
     "addLandCertificate": "Add Land Certificate",
+    "editLandCertificate": "Edit Land Certificate",
     "viewLandCertificate": "Land Certificate",
     "sections": {
       "landInfo": "Land Information",

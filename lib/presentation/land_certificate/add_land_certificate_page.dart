@@ -32,16 +32,16 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
 
   @override
   void initState() {
-    super.initState();
     if (haveInitData) {
       landCertificateEntity = widget.initialLandCertificateEntity!;
     }
+    super.initState();
   }
 
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
     return CustomAppBar(
-      title: LKey.addLandCertificate.tr(),
+      title: haveInitData ? LKey.editLandCertificate.tr() : LKey.addLandCertificate.tr(),
     );
   }
 
@@ -64,28 +64,25 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
     AddressEntity? address,
     List<AppFile>? files,
   }) {
-    setState(() {
-      landCertificateEntity = LandCertificateEntity(
-        id: landCertificateEntity.id,
-        name: name ?? landCertificateEntity.name,
-        area: area ?? landCertificateEntity.area,
-        mapNumber: mapNumber ?? landCertificateEntity.mapNumber,
-        number: number ?? landCertificateEntity.number,
-        useType: useType ?? landCertificateEntity.useType,
-        purpose: purpose ?? landCertificateEntity.purpose,
-        residentialArea: residentialArea ?? landCertificateEntity.residentialArea,
-        perennialTreeArea: perennialTreeArea ?? landCertificateEntity.perennialTreeArea,
-        purchasePrice: purchasePrice ?? landCertificateEntity.purchasePrice,
-        purchaseDate: purchaseDate ?? landCertificateEntity.purchaseDate,
-        salePrice: salePrice ?? landCertificateEntity.salePrice,
-        saleDate: saleDate ?? landCertificateEntity.saleDate,
-        taxRenewalTime: taxRenewalTime ?? landCertificateEntity.taxRenewalTime,
-        taxDeadlineTime: taxDeadlineTime ?? landCertificateEntity.taxDeadlineTime,
-        note: note ?? landCertificateEntity.note,
-        address: address ?? landCertificateEntity.address, // Không thay đổi địa chỉ
-        files: files ?? landCertificateEntity.files, // Không thay đổi files
-      );
-    });
+    landCertificateEntity = landCertificateEntity.copyWith(
+      name: name,
+      area: area,
+      mapNumber: mapNumber,
+      number: number,
+      useType: useType,
+      purpose: purpose,
+      residentialArea: residentialArea,
+      perennialTreeArea: perennialTreeArea,
+      purchasePrice: purchasePrice,
+      purchaseDate: purchaseDate,
+      salePrice: salePrice,
+      saleDate: saleDate,
+      taxRenewalTime: taxRenewalTime,
+      taxDeadlineTime: taxDeadlineTime,
+      note: note,
+      address: address,
+      files: files,
+    );
   }
 
   void onSave() {
@@ -150,8 +147,9 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                     key: nameKey,
                     title: LKey.sectionsLandInfo.tr(),
                     child: CustomTextField(
-                      onChanged: (value) => _updateLandCertificateEntity(name: value),
+                      initialValue: landCertificateEntity.name,
                       hint: LKey.fieldsNameDescription.tr(),
+                      onChanged: (value) => _updateLandCertificateEntity(name: value),
                     ),
                   ),
                   Gap(16),
@@ -281,6 +279,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                         ),
                         Gap(16),
                         CustomTextField(
+                          initialValue: landCertificateEntity.address?.detail,
                           onChanged: (value) {
                             final currentAddress = landCertificateEntity.address;
                             final updatedAddress = AddressEntity(
@@ -319,6 +318,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                         ),
                         Gap(16),
                         CustomTextField(
+                          initialValue: landCertificateEntity.purchasePrice?.toString(),
                           onChanged: (value) => _updateLandCertificateEntity(purchasePrice: double.tryParse(value)),
                           hint: LKey.fieldsPurchasePrice.tr(),
                         ),
@@ -348,6 +348,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                         ),
                         Gap(16),
                         CustomTextField(
+                          initialValue: landCertificateEntity.salePrice?.toString(),
                           onChanged: (value) => _updateLandCertificateEntity(salePrice: double.tryParse(value)),
                           hint: LKey.fieldsSalePrice.tr(),
                         ),
@@ -360,26 +361,31 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                     child: Column(
                       children: [
                         CustomTextField(
+                          initialValue: landCertificateEntity.number?.toString(),
                           onChanged: (value) => _updateLandCertificateEntity(number: int.tryParse(value)),
                           hint: LKey.fieldsLandPlotNumber.tr(),
                         ),
                         Gap(16),
                         CustomTextField(
+                          initialValue: landCertificateEntity.mapNumber?.toString(),
                           onChanged: (value) => _updateLandCertificateEntity(mapNumber: int.tryParse(value)),
                           hint: LKey.fieldsMapNumber.tr(),
                         ),
                         Gap(16),
                         CustomTextField(
+                          initialValue: landCertificateEntity.area?.toString(),
                           onChanged: (value) => _updateLandCertificateEntity(area: double.tryParse(value)),
                           hint: LKey.fieldsAreaSize.tr(),
                         ),
                         Gap(16),
                         CustomTextField(
+                          initialValue: landCertificateEntity.useType,
                           onChanged: (value) => _updateLandCertificateEntity(useType: value),
                           hint: LKey.fieldsUsageForm.tr(),
                         ),
                         Gap(16),
                         CustomTextField(
+                          initialValue: landCertificateEntity.purpose,
                           onChanged: (value) => _updateLandCertificateEntity(purpose: value),
                           hint: LKey.fieldsUsagePurpose.tr(),
                         ),
@@ -394,11 +400,13 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                     child: Column(
                       children: [
                         CustomTextField(
+                          initialValue: landCertificateEntity.residentialArea,
                           onChanged: (value) => _updateLandCertificateEntity(residentialArea: value),
                           hint: LKey.fieldsResidentialLand.tr(),
                         ),
                         Gap(16),
                         CustomTextField(
+                          initialValue: landCertificateEntity.perennialTreeArea,
                           onChanged: (value) => _updateLandCertificateEntity(perennialTreeArea: value),
                           hint: LKey.fieldsPerennialTrees.tr(),
                         ),
@@ -453,6 +461,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                     child: Column(
                       children: [
                         CustomTextField(
+                          initialValue: landCertificateEntity.note,
                           onChanged: (value) => _updateLandCertificateEntity(note: value),
                           hint: LKey.fieldsDetails.tr(),
                         ),

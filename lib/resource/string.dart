@@ -64,6 +64,7 @@ abstract class LKey {
   //Add Land Certificate
 
   static const String addLandCertificate = '$addLandCertificatePage.addLandCertificate';
+  static const String editLandCertificate = '$addLandCertificatePage.editLandCertificate';
   static const String viewLandCertificate = '$addLandCertificatePage.viewLandCertificate';
 
   static const String sectionsLandInfo = '$addLandCertificatePage.sections.landInfo';

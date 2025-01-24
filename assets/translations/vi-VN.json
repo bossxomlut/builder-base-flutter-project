@@ -53,6 +53,7 @@
   "securityCode": "Mã bảo mật",
   "addLandCertificatePage": {
     "addLandCertificate": "Thêm mảnh đất",
+    "editLandCertificate": "Chỉnh sửa mảnh đất",
     "viewLandCertificate": "Sổ đỏ",
     "sections": {
       "landInfo": "Thông tin đất",
