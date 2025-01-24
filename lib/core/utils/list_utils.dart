@@ -10,3 +10,13 @@ class SplitListUtils {
     return list.sublist(0, maxLength);
   }
 }
+
+extension ListUtils on List<dynamic>? {
+  bool get isNullOrEmpty {
+    return this == null || this!.isEmpty;
+  }
+
+  bool get isNotNullAndEmpty {
+    return !isNullOrEmpty;
+  }
+}

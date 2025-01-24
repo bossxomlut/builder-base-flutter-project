@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../../core/utils/date_time_utils.dart';
+import '../../core/utils/string_utils.dart';
 import '../../domain/index.dart';
 import '../../injection/injection.dart';
 import '../../resource/index.dart';
 import '../../widget/image/image_place_holder.dart';
 import '../../widget/index.dart';
+import '../../widget/toast.dart';
 import '../province/search_province_page.dart';
 import '../utils/index.dart';
 
@@ -26,6 +28,10 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
 
   bool get haveInitData => widget.initialLandCertificateEntity != null;
 
+  final GlobalKey nameKey = GlobalKey();
+  final GlobalKey addressKey = GlobalKey();
+  final GlobalKey taxKey = GlobalKey();
+
   @override
   void initState() {
     super.initState();
@@ -37,7 +43,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
     return CustomAppBar(
-      title: LKey.appBarTitle.tr(),
+      title: LKey.addLandCertificate.tr(),
     );
   }
 
@@ -84,7 +90,50 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
   }
 
   void onSave() {
-    _createLandCertificateUseCase.execute(landCertificateEntity);
+    bool isInvalid = landCertificateEntity.isInValid;
+
+    if (isInvalid) {
+      final Duration d = const Duration(milliseconds: 300);
+      if (landCertificateEntity.name.isNullOrEmpty) {
+        showError(message: 'Tên không được để trống');
+        //scroll to this key
+
+        try {
+          Scrollable.ensureVisible(nameKey.currentContext!, duration: d);
+        } catch (e) {}
+        return;
+      }
+
+      if (landCertificateEntity.address?.isInValid ?? true) {
+        showError(message: 'Địa chỉ không được để trống');
+        try {
+          Scrollable.ensureVisible(addressKey.currentContext!, duration: d);
+        } catch (e) {}
+        return;
+      }
+
+      if (landCertificateEntity.taxDeadlineTime == null) {
+        showError(message: 'Thời điểm đóng thuế không được để trống');
+        try {
+          Scrollable.ensureVisible(taxKey.currentContext!, duration: d);
+        } catch (e) {}
+        return;
+      }
+
+      return;
+    }
+
+    //
+    ProcessingWidget(
+      execute: () => Future.sync(() async {
+        await Future.delayed(const Duration(seconds: 1));
+        _createLandCertificateUseCase.execute(landCertificateEntity);
+      }),
+      onCompleted: () {
+        Navigator.of(context).pop();
+      },
+      messageSuccessDescription: LKey.messageAddLandCertificateSuccessfully.tr(),
+    ).show(context);
   }
 
   @override
@@ -99,6 +148,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
               child: Column(
                 children: <Widget>[
                   AddCard(
+                    key: nameKey,
                     title: LKey.sectionsLandInfo.tr(),
                     child: CustomTextField(
                       onChanged: (value) => _updateLandCertificateEntity(name: value),
@@ -117,6 +167,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                   ),
                   Gap(16),
                   AddCard(
+                    key: addressKey,
                     title: LKey.sectionsAddress.tr(),
                     child: Column(
                       children: [
@@ -335,6 +386,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                   ),
                   Gap(16),
                   AddCard(
+                    key: taxKey,
                     title: LKey.sectionsTax.tr(),
                     child: Column(
                       children: [

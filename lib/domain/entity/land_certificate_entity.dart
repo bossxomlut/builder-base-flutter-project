@@ -69,6 +69,11 @@ class LandCertificateEntity extends GetId<int> {
   int? get getId => id;
 }
 
+extension LandCertificateEntityX on LandCertificateEntity {
+  bool get isInValid =>
+      name == null || (address?.isInValid ?? true) || taxDeadlineTime == null || taxRenewalTime == null;
+}
+
 class AddressEntity {
   AddressEntity({
     required this.province,
@@ -110,6 +115,10 @@ class AddressEntity {
       detail: detail ?? this.detail,
     );
   }
+}
+
+extension AddressEntityX on AddressEntity {
+  bool get isInValid => province == null && detail == null;
 }
 
 class ProvinceLandCertificateEntity {

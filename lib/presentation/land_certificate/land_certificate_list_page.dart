@@ -1,7 +1,6 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../../domain/index.dart';
 import '../../resource/index.dart';
@@ -99,11 +98,18 @@ class _LandCertificateListPageState
           children: [
             SlidableAction(
               onPressed: (BuildContext context) {
-                _removeItem(index);
+                AppDialog(
+                  title: LKey.delete.tr(),
+                  description: LKey.messageDeleteItemConfirmDescription.tr(),
+                  onConfirm: () {
+                    _removeItem(index);
+                  },
+                  onCancel: () {},
+                ).show(context);
               },
               backgroundColor: Theme.of(context).colorScheme.errorContainer,
               icon: LineIcons.trash,
-              label: 'Delete',
+              label: LKey.delete.tr(),
             ),
           ],
         ),

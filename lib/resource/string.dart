@@ -1,5 +1,7 @@
 export 'package:easy_localization/easy_localization.dart';
 
+String get nullPlaceHolder => '---';
+
 abstract class LKey {
   static const String answer = 'answer';
   static const String darkMode = 'darkMode';
@@ -13,11 +15,13 @@ abstract class LKey {
   static const String logout = 'logout';
   static const String next = 'next';
   static const String search = 'search';
+  static const String searchByProvince = 'searchByProvince';
   static const String securityQuestion = 'securityQuestion';
   static const String setSecurityQuestionDescription = 'setSecurityQuestionDescription';
   static const String setUpPinCode = 'setUpPinCode';
   static const String settings = 'settings';
   static const String success = 'success';
+  static const String processing = 'processing';
   static const String updatePinCode = 'updatePinCode';
   static const String wrongPinCode = 'wrongPinCode';
   static const String enterCurrentPinCode = 'enterCurrentPinCode';
@@ -28,10 +32,20 @@ abstract class LKey {
   static const String other = 'other';
   static const String all = 'all';
   static const String notFoundData = 'notFoundData';
+  static const String ok = 'ok';
+  static const String yes = 'yes';
+  static const String cancel = 'cancel';
+  static const String tryAgain = 'tryAgain';
+  static const String delete = 'delete';
+  //
 
   //message
   static const String messageInvalidSecurityQuestion = 'message.invalidSecurityQuestion';
   static const String messagePinCodeSetSuccessfully = 'message.pinCodeSetSuccessfully';
+  static const String messageAddLandCertificateSuccessfully = 'message.addLandCertificateSuccessfully';
+  static const String messageHaveAnErrorDescription = 'message.haveAnErrorDescription';
+  static const String messageProcessingDescription = 'message.processingDescription';
+  static const String messageDeleteItemConfirmDescription = 'message.deleteItemConfirmDescription';
 
   //language
   static const String english = 'lang.en';
@@ -49,7 +63,8 @@ abstract class LKey {
 
   //Add Land Certificate
 
-  static const String appBarTitle = '$addLandCertificatePage.appBarTitle';
+  static const String addLandCertificate = '$addLandCertificatePage.addLandCertificate';
+  static const String viewLandCertificate = '$addLandCertificatePage.viewLandCertificate';
 
   static const String sectionsLandInfo = '$addLandCertificatePage.sections.landInfo';
   static const String sectionsLandCertificateImage = '$addLandCertificatePage.sections.landCertificateImage';

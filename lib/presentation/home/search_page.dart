@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/entity/index.dart';
+import '../../resource/index.dart';
 import '../../route/app_router.dart';
 import '../../widget/index.dart';
 import '../land_certificate/cubit/search_group_cubit.dart';
@@ -34,7 +35,7 @@ class _SearchPageState extends BaseState<SearchPage, SearchGroupCubit, SearchGro
               cubit.search(value);
             },
             decoration: InputDecoration(
-              hintText: 'Search by province',
+              hintText: LKey.searchByProvince.tr(),
               prefixIcon: Icon(Icons.search),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -82,7 +83,8 @@ class CountSearchCard extends StatelessWidget {
         childrenPadding: const EdgeInsets.all(16),
         title: ListTile(
           title: Text('${countSearch.name}'),
-          trailing: Text('${countSearch.total} certificates'),
+          trailing:
+              Text('${countSearch.total} ${countSearch.total == 1 ? LKey.certificate.tr() : LKey.certificates.tr()}'),
         ),
         children: [
           for (var district in countSearch.districts)
@@ -92,15 +94,14 @@ class CountSearchCard extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(8)),
               ),
               title: Text('${district.name}'),
-              trailing: Text('${district.total} certificates'),
+              trailing:
+                  Text('${district.total} ${countSearch.total == 1 ? LKey.certificate.tr() : LKey.certificates.tr()}'),
               onTap: () {
                 final districtEntity = DistrictEntity(
                   id: district.id,
                   provinceId: countSearch.id,
                   name: district.name,
                 );
-
-                print('districtEntity: $districtEntity');
 
                 appRouter.goToCertificateGroupByDistrict(
                   districtEntity,

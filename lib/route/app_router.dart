@@ -21,6 +21,7 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: ForgotPinCodeRoute.page),
         AutoRoute(page: UpdatePinCodeRoute.page),
         AutoRoute(page: AddLandCertificateRoute.page),
+        AutoRoute(page: ViewLandCertificateRoute.page),
         AutoRoute(page: LandCertificateListRoute.page),
       ];
 }
@@ -71,6 +72,14 @@ extension LandCertificateRouteX on AppRouter {
   }
 
   void goToViewLandCertificate(LandCertificateEntity landCertificate) {
-    push(AddLandCertificateRoute(initialLandCertificateEntity: landCertificate));
+    push(ViewLandCertificateRoute(initialLandCertificateEntity: landCertificate));
+  }
+
+  void goToEditLandCertificate(LandCertificateEntity landCertificate, {bool isReplace = true}) {
+    if (isReplace) {
+      replace(AddLandCertificateRoute(initialLandCertificateEntity: landCertificate));
+    } else {
+      push(AddLandCertificateRoute(initialLandCertificateEntity: landCertificate));
+    }
   }
 }

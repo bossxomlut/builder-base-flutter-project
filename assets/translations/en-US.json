@@ -28,9 +28,21 @@
   "other": "Other",
   "all": "All",
   "notFoundData": "Not found data",
+  "searchByProvince": "Search by province",
+  "ok": "OK",
+  "yes": "Yes",
+  "tryAgain": "Try again",
+  "cancel": "Cancel",
+  "certificate": "Certificate",
+  "certificates": "Certificates",
+  "delete": "Delete",
   "message": {
     "invalidSecurityQuestion": "Security question is incorrect",
-    "pinCodeSetSuccessfully": "Pin code set successfully"
+    "pinCodeSetSuccessfully": "Pin code set successfully",
+    "addLandCertificateSuccessfully":  "Add land certificate successfully",
+    "haveAnErrorDescription":  "Have an error, please try again later",
+    "processingDescription": "It's processing, please wait a moment",
+    "deleteItemConfirmDescription": "Are you sure you want to delete this item?"
   },
   "question": {
     "whatIsYourFavoriteColor": "What is your favorite color?",
@@ -40,7 +52,8 @@
   "pinCodeEncryptDescription": "Please copy the security code and send to the support team to retrieve your pin code",
   "securityCode": "Security code",
   "addLandCertificatePage": {
-    "appBarTitle": "Add Land Certificate",
+    "addLandCertificate": "Add Land Certificate",
+    "viewLandCertificate": "Land Certificate",
     "sections": {
       "landInfo": "Land Information",
       "landCertificateImage": "Land Certificate Image",

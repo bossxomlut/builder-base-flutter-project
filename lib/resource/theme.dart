@@ -65,4 +65,8 @@ extension ThemeDataExtension on ThemeData {
 
     return Colors.transparent;
   }
+
+  Color get successColor {
+    return Colors.greenAccent;
+  }
 }

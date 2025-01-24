@@ -32,6 +32,7 @@ mixin StateTemplate<T extends StatefulWidget> on State<T> {
         backgroundColor: backgroundColor,
         appBar: buildAppBar(context),
         body: buildBody(context),
+        floatingActionButton: buildFloatingActionButton(context),
       );
     } else {
       return buildBody(context);
@@ -43,6 +44,8 @@ mixin StateTemplate<T extends StatefulWidget> on State<T> {
   Widget buildBody(BuildContext context) {
     return const Placeholder();
   }
+
+  Widget? buildFloatingActionButton(BuildContext context) => null;
 }
 
 mixin LoadingState<T extends StatefulWidget> on State<T> {
