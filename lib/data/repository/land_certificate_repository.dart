@@ -73,6 +73,22 @@ class LandCertificateRepositoryImpl extends LandCertificateRepository
   }
 }
 
+@Injectable(as: LandCertificateObserverData)
+class LandCertificateObserverDataImpl extends LandCertificateObserverData {
+  final Isar _isar = Isar.getInstance()!;
+
+  @override
+  void listener(Function(void value) callback) {
+    if (subscription == null) {
+      setSubscription(
+        _isar.landCertificateModels.watchLazy(fireImmediately: false).listen(callback),
+      );
+    } else {
+      //todo:
+    }
+  }
+}
+
 @Injectable(as: ProvinceLandCertificateRepository)
 class ProvinceLandCertificateRepositoryImpl extends ProvinceLandCertificateRepository {
   final Isar _isar = Isar.getInstance()!;

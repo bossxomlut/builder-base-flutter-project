@@ -15,7 +15,7 @@ enum ProvinceLevel {
 
 @injectable
 class LandCertificateListCubit extends Cubit<LandCertificateListState> {
-  LandCertificateListCubit(this._landCertificateRepository) : super(LandCertificateListState.initial());
+  LandCertificateListCubit(this._landCertificateRepository) : super(LandCertificateListState.initial()) {}
 
   final LandCertificateRepository _landCertificateRepository;
 

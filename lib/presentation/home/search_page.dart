@@ -78,6 +78,7 @@ class CountSearchCard extends StatelessWidget {
     final theme = Theme.of(context);
     return Card(
       child: ExpansionTile(
+        key: ValueKey(countSearch.id),
         shape: const RoundedRectangleBorder(),
         backgroundColor: theme.cardTheme.color,
         childrenPadding: const EdgeInsets.all(16),

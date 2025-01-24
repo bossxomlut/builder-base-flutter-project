@@ -1,3 +1,4 @@
+import '../../data/model/observer_data.dart';
 import '../index.dart';
 
 abstract class LandCertificateRepository
@@ -9,6 +10,9 @@ abstract class LandCertificateRepository
   Future<List<LandCertificateEntity>> searchByDistrict(DistrictEntity district, String keyword);
   Future<List<LandCertificateEntity>> searchByWard(WardEntity ward, String keyword);
 }
+
+//listen have any change in database
+abstract class LandCertificateObserverData extends SingleStreamObserverData<void> {}
 
 abstract class ProvinceLandCertificateRepository
     implements GetListRepository<ProvinceLandCertificateEntity>, SearchRepository<ProvinceLandCertificateEntity> {}

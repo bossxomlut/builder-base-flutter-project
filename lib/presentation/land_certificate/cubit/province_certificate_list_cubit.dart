@@ -10,11 +10,29 @@ import '../../../domain/index.dart';
 
 @injectable
 class ProvinceLandCertificateListCubit extends Cubit<CertificateListState> {
-  ProvinceLandCertificateListCubit({
-    required this.certificateRepository,
-  }) : super(CertificateListState.initial());
+  ProvinceLandCertificateListCubit(
+    this.certificateRepository,
+    this._landCertificateObserverData,
+  ) : super(CertificateListState.initial()) {
+    startListen();
+  }
 
   final ProvinceLandCertificateRepository certificateRepository;
+  final LandCertificateObserverData _landCertificateObserverData;
+
+  void startListen() {
+    _landCertificateObserverData.listener(
+      (void value) {
+        onSearch('');
+      },
+    );
+  }
+
+  @override
+  Future<void> close() {
+    _landCertificateObserverData.cancelListen();
+    return super.close();
+  }
 
   void onSearch(String query) async {
     final list = await certificateRepository.search(query);

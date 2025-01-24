@@ -6,9 +6,26 @@ import '../../../domain/index.dart';
 
 @injectable
 class SearchGroupCubit extends Cubit<SearchGroupState> {
-  SearchGroupCubit(this.repository) : super(SearchGroupState());
+  SearchGroupCubit(this.repository, this._landCertificateObserverData) : super(SearchGroupState()) {
+    startListen();
+  }
 
   final SearchGroupCertificateRepository repository;
+  final LandCertificateObserverData _landCertificateObserverData;
+
+  void startListen() {
+    _landCertificateObserverData.listener(
+      (void value) {
+        search(state.query);
+      },
+    );
+  }
+
+  @override
+  Future<void> close() {
+    _landCertificateObserverData.cancelListen();
+    return super.close();
+  }
 
   void search(String query) {
     repository.search(query).then((list) {
