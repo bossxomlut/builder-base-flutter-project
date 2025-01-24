@@ -67,6 +67,50 @@ class LandCertificateEntity extends GetId<int> {
 
   @override
   int? get getId => id;
+
+  LandCertificateEntity copyWith({
+    int? id,
+    String? name,
+    List<AppFile>? files,
+    AddressEntity? address,
+    DateTime? purchaseDate,
+    double? purchasePrice,
+    DateTime? saleDate,
+    double? salePrice,
+    int? number,
+    int? mapNumber,
+    double? area,
+    String? useType,
+    String? purpose,
+    DateTime? useTime,
+    String? residentialArea,
+    String? perennialTreeArea,
+    DateTime? taxDeadlineTime,
+    DateTime? taxRenewalTime,
+    String? note,
+  }) {
+    return LandCertificateEntity(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      files: files ?? this.files,
+      address: address ?? this.address,
+      purchaseDate: purchaseDate ?? this.purchaseDate,
+      purchasePrice: purchasePrice ?? this.purchasePrice,
+      saleDate: saleDate ?? this.saleDate,
+      salePrice: salePrice ?? this.salePrice,
+      number: number ?? this.number,
+      mapNumber: mapNumber ?? this.mapNumber,
+      area: area ?? this.area,
+      useType: useType ?? this.useType,
+      purpose: purpose ?? this.purpose,
+      useTime: useTime ?? this.useTime,
+      residentialArea: residentialArea ?? this.residentialArea,
+      perennialTreeArea: perennialTreeArea ?? this.perennialTreeArea,
+      taxDeadlineTime: taxDeadlineTime ?? this.taxDeadlineTime,
+      taxRenewalTime: taxRenewalTime ?? this.taxRenewalTime,
+      note: note ?? this.note,
+    );
+  }
 }
 
 extension LandCertificateEntityX on LandCertificateEntity {

@@ -59,20 +59,19 @@ class _ViewLandCertificatePageState extends State<ViewLandCertificatePage> with 
                       padding: const EdgeInsets.only(top: 16),
                       child: AddCard(
                         title: LKey.sectionsLandCertificateImage.tr(),
-                        child: Column(
-                          children: [
-                            ...?landCertificateEntity.files?.map(
-                              (file) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(top: 8),
-                                  child: UploadImagePlaceholder(
-                                    title: file.name,
-                                    filePath: file.path,
-                                  ),
-                                );
-                              },
-                            )
-                          ],
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (BuildContext context, int index) {
+                            final file = landCertificateEntity.files![index];
+                            return UploadImagePlaceholder(
+                              title: file.name,
+                              filePath: file.path,
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 8),
+                          itemCount: landCertificateEntity.files!.length,
                         ),
                       ),
                     ),

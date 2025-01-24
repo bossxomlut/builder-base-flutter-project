@@ -38,6 +38,16 @@ class AppFile extends Equatable {
         name,
         path,
       ];
+
+  AppFile copyWith({
+    String? name,
+    String? path,
+  }) {
+    return AppFile(
+      name: name ?? this.name,
+      path: path ?? this.path,
+    );
+  }
 }
 
 class UnknownFileTypeException implements Exception {}
