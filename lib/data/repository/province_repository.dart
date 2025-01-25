@@ -48,6 +48,13 @@ class ProvinceRepositoryImpl extends ProvinceRepository with IsarCrudRepository<
   ProvinceModel updateNewItem(ProvinceEntity item) {
     return createNewItem(item)..id = item.id;
   }
+
+  @override
+  Future<void> clearAll() {
+    return isar.writeTxn(() async {
+      await collection.clear();
+    });
+  }
 }
 
 @Injectable(as: DistrictRepository)
@@ -111,6 +118,13 @@ class DistrictRepositoryImpl extends DistrictRepository with IsarCrudRepository<
       });
     });
   }
+
+  @override
+  Future<void> clearAll() {
+    return isar.writeTxn(() async {
+      await collection.clear();
+    });
+  }
 }
 
 @Injectable(as: WardRepository)
@@ -172,6 +186,13 @@ class WardRepositoryImpl extends WardRepository with IsarCrudRepository<WardEnti
           .then((collections) {
         return collections.map(getItemFromCollection).toList();
       });
+    });
+  }
+
+  @override
+  Future<void> clearAll() {
+    return isar.writeTxn(() async {
+      await collection.clear();
     });
   }
 }

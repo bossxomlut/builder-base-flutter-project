@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:sample_app/presentation/home/search_page.dart';
 import 'package:sample_app/presentation/home/settings_page.dart';
 
@@ -115,5 +116,68 @@ class _InitMain extends _MainPageState with LoadingState {
         },
       );
     });
+  }
+
+  @override
+  Widget buildLoading(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return ColoredBox(
+      color: theme.dialogTheme.barrierColor ?? Colors.black.withOpacity(0.5),
+      child: Padding(
+        padding: const EdgeInsets.all(40.0),
+        child: Center(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AspectRatio(
+                  aspectRatio: 2 / 1,
+                  child: ColoredBox(
+                    color: theme.colorScheme.onPrimaryContainer,
+                    child: Center(
+                      child: LoadingAnimationWidget.fourRotatingDots(
+                        color: theme.colorScheme.primary,
+                        size: 60,
+                      ),
+                    ),
+                  ),
+                ),
+                AspectRatio(
+                  aspectRatio: 2 / 1,
+                  child: ColoredBox(
+                    color: theme.colorScheme.onSecondary,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          LText(
+                            LKey.processing,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                          Gap(2),
+                          LText(
+                            LKey.messageProcessingDescription,
+                            style: theme.textTheme.bodyMedium,
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -20,6 +20,7 @@
   "setUpPinCode": "Thiết lập mã PIN",
   "settings": "Cài đặt",
   "success": "Thành công",
+  "processing": "Đang xử lý",
   "updatePinCode": "Cập nhật mã PIN",
   "wrongPinCode": "Mã PIN không đúng",
   "enterCurrentPinCode": "Nhập mã PIN hiện tại của bạn",

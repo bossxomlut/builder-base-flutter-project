@@ -30,6 +30,10 @@ class CheckInitialProvinceDataUseCase extends FutureUseCase<void, void> {
       return;
     }
 
+    await _wardRepository.clearAll();
+    await _districtRepository.clearAll();
+    await _provinceRepository.clearAll();
+
     //load data from json file
 
     final provinceData = await loadListJsonFile('assets/vietnam-provinces.json');

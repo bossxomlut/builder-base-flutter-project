@@ -73,10 +73,14 @@ mixin LoadingState<T extends StatefulWidget> on State<T> {
         ValueListenableBuilder<bool>(
           valueListenable: _loadingNotifier,
           builder: (_, bool loading, __) {
-            return loading ? const LoadingWidget() : const SizedBox.shrink();
+            return loading ? buildLoading(context) : const SizedBox.shrink();
           },
         ),
       ],
     );
+  }
+
+  Widget buildLoading(BuildContext context) {
+    return const LoadingWidget();
   }
 }
