@@ -15,12 +15,9 @@ mixin ShowDialog<T> on Widget {
       routeSettings: RouteSettings(name: routeName),
       barrierDismissible: barrierDismissible,
       builder: (BuildContext context) {
-        return Material(
-          color: Colors.transparent,
-          child: Padding(
-            padding: const EdgeInsets.all(40),
-            child: this,
-          ),
+        return Padding(
+          padding: const EdgeInsets.all(40),
+          child: this,
         );
       },
     );

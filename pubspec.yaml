@@ -71,6 +71,8 @@ dependencies:
   # S
   smooth_page_indicator: ^1.2.0+3
   shared_preferences: ^2.3.2
+  screenshot: ^3.0.0
+  share_plus: ^10.1.4
 
   # U
   url_launcher: ^6.3.1

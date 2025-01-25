@@ -1,3 +1,4 @@
+import '../../core/utils/string_utils.dart';
 import '../../data/repository/isar_repository.dart';
 import '../index.dart';
 
@@ -241,7 +242,7 @@ class AddressEntity {
 
   String get combineId => ProvinceUtil.combineId(province?.id ?? -1, district?.id ?? -1, ward?.id ?? -1);
 
-  String get displayAddress => detail ?? combineProvinceName;
+  String get displayAddress => (detail.isNotNullOrEmpty) ? detail! : combineProvinceName;
 
   AddressEntity copyWith({
     ProvinceEntity? province,

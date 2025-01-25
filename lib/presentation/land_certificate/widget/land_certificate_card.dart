@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../../../core/utils/date_time_utils.dart';
 import '../../../domain/index.dart';
 import '../../../resource/index.dart';
 import '../../../route/app_router.dart';
 import '../../../widget/index.dart';
+import 'preview_land_certificate_widget.dart';
 
 class LandCertificateCard extends StatelessWidget {
   const LandCertificateCard(this.certificate, {super.key, this.backgroundColor});
@@ -41,7 +41,9 @@ class LandCertificateCard extends StatelessWidget {
                   ),
                   DeadlineDateStatusWidget(deadlineDate: certificate.taxDeadlineTime),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      PreviewLandCertificateWidget(landCertificate: certificate).show(context);
+                    },
                     icon: Icon(
                       LineIcons.alternateShareSquare,
                       color: context.appTheme.colorScheme.tertiary,
