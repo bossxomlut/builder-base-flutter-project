@@ -42,7 +42,11 @@ class LandCertificateCard extends StatelessWidget {
                   DeadlineDateStatusWidget(deadlineDate: certificate.taxDeadlineTime),
                   IconButton(
                     onPressed: () {
-                      PreviewLandCertificateWidget(landCertificate: certificate).show(context);
+                      // PreviewLandCertificateWidget(landCertificate: certificate).show(context);
+
+                      renderAndShareImage(
+                        certificate,
+                      );
                     },
                     icon: Icon(
                       LineIcons.alternateShareSquare,
@@ -76,7 +80,7 @@ class LandCertificateCard extends StatelessWidget {
                   Expanded(
                     child: InfoWidget(
                       title: LKey.fieldsPurchasePrice.tr(),
-                      value: certificate.purchasePrice.toString(),
+                      value: certificate.purchasePrice?.toString() ?? '---',
                     ),
                   ),
                   Expanded(
