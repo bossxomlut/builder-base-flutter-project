@@ -32,7 +32,7 @@
   "searchByProvince": "Tìm tên thành phố",
   "ok": "Xong",
   "yes": "Có",
-  "tryAgain":  "Thử lại",
+  "tryAgain": "Thử lại",
   "cancel": "Hủy",
   "certificate": "Sổ đỏ",
   "certificates": "Sổ đỏ",
@@ -43,14 +43,16 @@
     "addLandCertificateSuccessfully": "Thêm sổ đỏ thành công",
     "haveAnErrorDescription": "Có lỗi xảy ra, vui lòng thử lại sau",
     "processingDescription": "Đang xử lý dữ liệu bạn chờ chút nhé",
-    "deleteItemConfirmDescription": "Bạn có chắc chắn muốn xóa mục này không?"
+    "deleteItemConfirmDescription": "Bạn có chắc chắn muốn xóa mục này không?",
+    "pinCodeUpdatedSuccessfully": "Cập nhật mã PIN thành công",
+    "incorrectPinCode": "Mã PIN không chính xác"
   },
   "question": {
     "whatIsYourFavoriteColor": "Màu yêu thích của bạn là gì?",
     "whatIsYourFavoriteFood": "Món ăn yêu thích của bạn là gì?",
     "whatIsYourFavoriteMovie": "Bộ phim yêu thích của bạn là gì?"
   },
-  "pinCodeEncryptDescription":  "Vui lòng sao chép mã bảo mật và gửi cho nhóm hỗ trợ để lấy lại mã PIN của bạn",
+  "pinCodeEncryptDescription": "Vui lòng sao chép mã bảo mật và gửi cho nhóm hỗ trợ để lấy lại mã PIN của bạn",
   "securityCode": "Mã bảo mật",
   "addLandCertificatePage": {
     "addLandCertificate": "Thêm mảnh đất",

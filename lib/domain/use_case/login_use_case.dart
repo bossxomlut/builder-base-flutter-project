@@ -2,6 +2,7 @@ import 'package:injectable/injectable.dart';
 
 import '../../core/index.dart';
 import '../../core/utils/encrypt_utils.dart';
+import '../../resource/index.dart';
 import '../../route/app_router.dart';
 import '../../widget/toast.dart';
 import '../entity/index.dart';
@@ -87,10 +88,10 @@ class UpdatePinCodeUseCase extends FutureUseCase<void, UpdatePinCodeParamEntity>
       input.newPin,
     )
         .then((_) {
-      showSuccess(message: 'Pin code has been updated');
+      showSuccess(message: LKey.messagePinCodeUpdatedSuccessfully.tr());
       appRouter.goHome();
     }).catchError((error) {
-      showError(message: 'Your pin code is incorrect');
+      showError(message: LKey.messageIncorrectPinCode.tr());
     });
   }
 }

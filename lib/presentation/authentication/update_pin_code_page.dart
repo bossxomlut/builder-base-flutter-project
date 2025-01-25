@@ -32,8 +32,8 @@ class _UpdatePinCodePageState extends State<UpdatePinCodePage>
 
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
-    return const CustomAppBar(
-      title: 'Update pin code',
+    return CustomAppBar(
+      title: LKey.updatePinCode.tr(),
     );
   }
 

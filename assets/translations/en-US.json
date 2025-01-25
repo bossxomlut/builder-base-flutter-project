@@ -40,10 +40,12 @@
   "message": {
     "invalidSecurityQuestion": "Security question is incorrect",
     "pinCodeSetSuccessfully": "Pin code set successfully",
-    "addLandCertificateSuccessfully":  "Add land certificate successfully",
-    "haveAnErrorDescription":  "Have an error, please try again later",
+    "addLandCertificateSuccessfully": "Add land certificate successfully",
+    "haveAnErrorDescription": "Have an error, please try again later",
     "processingDescription": "It's processing, please wait a moment",
-    "deleteItemConfirmDescription": "Are you sure you want to delete this item?"
+    "deleteItemConfirmDescription": "Are you sure you want to delete this item?",
+    "pinCodeUpdatedSuccessfully": "Pin code updated successfully",
+    "incorrectPinCode": "Incorrect pin code"
   },
   "question": {
     "whatIsYourFavoriteColor": "What is your favorite color?",

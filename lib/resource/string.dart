@@ -46,6 +46,8 @@ abstract class LKey {
   static const String messageHaveAnErrorDescription = 'message.haveAnErrorDescription';
   static const String messageProcessingDescription = 'message.processingDescription';
   static const String messageDeleteItemConfirmDescription = 'message.deleteItemConfirmDescription';
+  static const String messagePinCodeUpdatedSuccessfully = 'message.pinCodeUpdatedSuccessfully';
+  static const String messageIncorrectPinCode = 'message.incorrectPinCode';
 
   //language
   static const String english = 'lang.en';
