@@ -1,8 +1,9 @@
+import 'dart:developer';
+
 import 'package:injectable/injectable.dart';
 
 import '../../core/index.dart';
 import '../../core/persistence/simple_key_value_storage.dart';
-import '../../core/utils/load_file_utils.dart';
 import '../index.dart';
 
 @injectable
@@ -33,7 +34,7 @@ class CheckInitialProvinceDataUseCase extends FutureUseCase<void, void> {
 
     final provinceData = await loadListJsonFile('assets/vietnam-provinces.json');
 
-    print('provinceData: $provinceData');
+    log('provinceData: $provinceData');
 
     for (final province in provinceData) {
       //create provice
@@ -61,7 +62,7 @@ class CheckInitialProvinceDataUseCase extends FutureUseCase<void, void> {
         }
       }
 
-      print('province: $province');
+      log('province: $province');
     }
 
     //save to database

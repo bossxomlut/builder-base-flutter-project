@@ -1,7 +1,5 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:sample_app/presentation/home/search_page.dart';
 import 'package:sample_app/presentation/home/settings_page.dart';
 
@@ -9,6 +7,8 @@ import '../../domain/index.dart';
 import '../../injection/injection.dart';
 import '../../resource/index.dart';
 import '../../route/app_router.dart';
+import '../../widget/index.dart';
+import '../utils/index.dart';
 import 'home_page.dart';
 
 @RoutePage()
@@ -16,20 +16,11 @@ class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
   @override
-  _MainPageState createState() => _MainPageState();
+  _MainPageState createState() => _InitMain();
 }
 
 class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin {
   late final TabController _tabController = TabController(length: 3, vsync: this);
-
-  @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      getIt.get<CheckInitialProvinceDataUseCase>().execute(null);
-    });
-  }
 
   @override
   void dispose() {
@@ -108,5 +99,21 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
         ),
       ),
     );
+  }
+}
+
+class _InitMain extends _MainPageState with LoadingState {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      showLoading();
+      getIt.get<CheckInitialProvinceDataUseCase>().execute(null).whenComplete(
+        () {
+          hideLoading();
+        },
+      );
+    });
   }
 }

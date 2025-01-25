@@ -180,7 +180,9 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                                   title: file.name,
                                   filePath: file.path,
                                   onRemove: () {
-                                    _updateLandCertificateEntity(files: landCertificateEntity.files?..remove(file));
+                                    final List<AppFile> list = [...?landCertificateEntity.files];
+                                    list.remove(file);
+                                    _updateLandCertificateEntity(files: list);
                                   },
                                 ),
                               );

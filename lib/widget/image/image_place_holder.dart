@@ -41,8 +41,10 @@ class UploadImagePlaceholder extends StatelessWidget {
               Positioned(
                 right: 0,
                 top: 0,
-                child: GestureDetector(
-                  onTap: onRemove,
+                child: InkWell(
+                  onTap: () {
+                    onRemove?.call();
+                  },
                   child: Container(
                     width: 20,
                     height: 20,

@@ -46,6 +46,7 @@ class LandCertificateEntity with _$LandCertificateEntity implements GetId<int> {
     DateTime? purchaseDate,
     double? salePrice,
     DateTime? saleDate,
+    DateTime? useTime,
     DateTime? taxRenewalTime,
     DateTime? taxDeadlineTime,
     String? note,

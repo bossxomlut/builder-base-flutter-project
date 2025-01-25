@@ -130,64 +130,67 @@ class _SetUpQuestionWidgetState extends State<SetUpQuestionWidget> with StateTem
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          InkWell(
-            onTap: widget.onTitleTap,
-            child: Text(
-              widget.title,
-              style: theme.textTheme.headlineMedium,
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            InkWell(
+              onTap: widget.onTitleTap,
+              child: Text(
+                widget.title,
+                style: theme.textTheme.headlineMedium,
+              ),
             ),
-          ),
-          const SizedBox(height: 40),
-          LText(LKey.securityQuestion, style: theme.textTheme.titleSmall),
-          const SizedBox(height: 8),
-          ButtonTheme(
-            alignedDropdown: true,
-            child: DropdownButton<SecurityQuestionEntity>(
-              items: questions.map((SecurityQuestionEntity question) {
-                return DropdownMenuItem<SecurityQuestionEntity>(
-                  value: question,
-                  child: Text(question.question),
-                );
-              }).toList(),
+            const SizedBox(height: 40),
+            LText(LKey.securityQuestion, style: theme.textTheme.titleSmall),
+            const SizedBox(height: 8),
+            ButtonTheme(
+              alignedDropdown: true,
+              child: DropdownButton<SecurityQuestionEntity>(
+                items: questions.map((SecurityQuestionEntity question) {
+                  return DropdownMenuItem<SecurityQuestionEntity>(
+                    value: question,
+                    child: Text(question.question),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedQuestion = value;
+                  });
+                },
+                value: selectedQuestion,
+                isExpanded: true,
+              ),
+            ),
+            const SizedBox(height: 16),
+            LText(LKey.answer, style: theme.textTheme.titleSmall),
+            const SizedBox(height: 8),
+            TextField(
+              decoration: InputDecoration(
+                hintText: LKey.answer.tr(),
+              ),
               onChanged: (value) {
                 setState(() {
-                  selectedQuestion = value;
+                  answer = value;
                 });
               },
-              value: selectedQuestion,
-              isExpanded: true,
             ),
-          ),
-          const SizedBox(height: 16),
-          LText(LKey.answer, style: theme.textTheme.titleSmall),
-          const SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              hintText: LKey.answer.tr(),
+            const SizedBox(height: 16),
+            FilledButton(
+              onPressed: isValid()
+                  ? () {
+                      context.hideKeyboard();
+                      widget.onQuestionAnswered(selectedQuestion!, answer);
+                    }
+                  : null,
+              child: const LText(
+                LKey.next,
+              ),
             ),
-            onChanged: (value) {
-              setState(() {
-                answer = value;
-              });
-            },
-          ),
-          const SizedBox(height: 16),
-          FilledButton(
-            onPressed: isValid()
-                ? () {
-                    widget.onQuestionAnswered(selectedQuestion!, answer);
-                  }
-                : null,
-            child: const LText(
-              LKey.next,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
