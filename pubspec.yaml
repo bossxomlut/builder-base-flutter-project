@@ -45,6 +45,10 @@ dependencies:
   get_it: ^7.2.0  # Service locator for Flutter and Dart, helps with dependency injection.
   google_fonts: ^6.2.1
   google_nav_bar: ^5.0.7
+  extension_google_sign_in_as_googleapis_auth: ^2.0.12
+  googleapis: ^13.2.0
+  
+  csv: ^6.0.0
 
   # I
   injectable: ^2.4.4  # Simplifies dependency registration with GetIt using code generation.
