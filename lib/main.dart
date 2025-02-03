@@ -51,11 +51,10 @@ void main() async {
       DevicePreview(
         builder: (BuildContext context) => EasyLocalization(
           supportedLocales: const <Locale>[
-            Locale('en', 'US'),
-            Locale('de', 'DE'),
+            Locale('vi', 'VN'),
           ],
           path: 'assets/translations', // <-- change the path of the translation files
-          fallbackLocale: const Locale('en', 'US'), child: const MyApp(),
+          fallbackLocale: const Locale('vi', 'VN'), child: const MyApp(),
         ),
       ),
     );
@@ -63,7 +62,6 @@ void main() async {
     runApp(
       EasyLocalization(
         supportedLocales: const <Locale>[
-          Locale('en', 'US'),
           Locale('vi', 'VN'),
         ],
         path: 'assets/translations', // <-- change the path of the translation files
