@@ -8,6 +8,7 @@ part 'land_certificate_entity.freezed.dart';
 class LandCertificateEntity with _$LandCertificateEntity implements GetId<int> {
   factory LandCertificateEntity({
     @Default(-1) int id,
+    String? cerId,
     String? name,
     List<AppFile>? files,
     ProvinceEntity? province,

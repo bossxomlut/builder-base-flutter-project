@@ -31,7 +31,7 @@ abstract class ProvinceUtil {
   }
 }
 
-class ProvinceEntity implements GetId<int> {
+class ProvinceEntity extends Equatable implements GetId<int> {
   ProvinceEntity({
     required this.id,
     required this.name,
@@ -59,6 +59,9 @@ class ProvinceEntity implements GetId<int> {
 
   @override
   int? get getId => id;
+
+  @override
+  List<Object?> get props => [id, name];
 }
 
 class DistrictEntity extends Equatable implements GetId<int> {

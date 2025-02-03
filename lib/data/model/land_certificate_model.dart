@@ -1,6 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:isar/isar.dart';
 
+import '../../core/index.dart';
 import '../../domain/index.dart';
 import 'mapping_data.dart';
 
@@ -9,6 +10,7 @@ part 'land_certificate_model.g.dart';
 @collection
 class LandCertificateModel {
   Id id = Isar.autoIncrement;
+  String? cerId;
   String? name;
   List<FileModel>? files;
   String? province;
@@ -51,6 +53,9 @@ class LandCertificateModel {
   DateTime? taxRenewalTime;
 
   String? note;
+
+  //Thời điểm cập nhật
+  DateTime? updatedAt;
 }
 
 @injectable
@@ -100,10 +105,12 @@ class LandCertificateMapping extends FutureMapping<LandCertificateEntity, LandCe
   }
 }
 
+@injectable
 class LandCertificateModelMapping extends Mapping<LandCertificateModel, LandCertificateEntity> {
   @override
   LandCertificateModel from(LandCertificateEntity item) {
     return LandCertificateModel()
+      ..cerId = item.cerId
       ..name = item.name
       ..files = item.files?.map((e) => AttachmentEntityToModelMapping().from(e)).toList()
       ..province = item.province?.name
@@ -150,5 +157,68 @@ class AttachmentModelToEntityMapping extends Mapping<AppFile, FileModel> {
   @override
   AppFile from(FileModel input) {
     return AppFile(path: input.path ?? '', name: input.name ?? '');
+  }
+}
+
+@injectable
+class MappingToRow extends Mapping<List<dynamic>, LandCertificateModel> {
+  @override
+  List from(LandCertificateModel input) {
+    return [
+      input.cerId,
+      input.name,
+      input.province,
+      input.district,
+      input.ward,
+      input.detailAddress,
+      input.purchaseDate,
+      input.purchasePrice,
+      input.saleDate,
+      input.salePrice,
+      input.number,
+      input.mapNumber,
+      input.area,
+      input.useType,
+      input.purpose,
+      input.useTime,
+      input.residentialArea,
+      input.perennialTreeArea,
+      input.taxDeadlineTime,
+      input.taxRenewalTime,
+      input.note,
+      input.files,
+      input.updatedAt,
+    ];
+  }
+}
+
+@injectable
+class MappingRowToModel extends Mapping<LandCertificateModel, List<dynamic>> {
+  @override
+  LandCertificateModel from(List input) {
+    return LandCertificateModel()
+      ..cerId = input[0].toString()
+      ..name = input[1].toString()
+      ..province = input[2].toString()
+      ..district = input[3].toString()
+      ..ward = input[4].toString()
+      ..detailAddress = input[5].toString()
+      ..purchaseDate = input[6].toString().parseDateTime()
+      ..purchasePrice = input[7].toString().parseDouble()
+      ..saleDate = input[8].toString().parseDateTime()
+      ..salePrice = input[9].toString().parseDouble()
+      ..number = input[10].toString().parseInt()
+      ..mapNumber = input[11].toString().parseInt()
+      ..area = input[12].toString().parseDouble()
+      ..useType = input[13].toString()
+      ..purpose = input[14].toString()
+      ..useTime = input[15].toString().parseDateTime()
+      ..residentialArea = input[16].toString()
+      ..perennialTreeArea = input[17].toString()
+      ..taxDeadlineTime = input[18].toString().parseDateTime()
+      ..taxRenewalTime = input[19].toString().parseDateTime()
+      ..note = input[20].toString()
+      ..files = []
+      ..updatedAt = input[22].toString().parseDateTime();
   }
 }
