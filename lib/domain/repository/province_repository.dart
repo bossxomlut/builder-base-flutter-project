@@ -10,6 +10,7 @@ abstract class ProvinceRepository
         CrudRepository<ProvinceEntity, int>,
         GetListRepository<ProvinceEntity>,
         SearchRepository<ProvinceEntity>,
+        GetOneByNameRepository<ProvinceEntity>,
         ClearAll {}
 
 abstract class DistrictRepository
@@ -17,12 +18,18 @@ abstract class DistrictRepository
         CrudRepository<DistrictEntity, int>,
         GetListRepository<DistrictEntity>,
         SearchRepository<DistrictEntity>,
+        GetOneByNameRepository<DistrictEntity>,
         ClearAll {
   Future<List<DistrictEntity>> searchByProvince(ProvinceEntity province, String keyword);
 }
 
 abstract class WardRepository
-    implements CrudRepository<WardEntity, int>, GetListRepository<WardEntity>, SearchRepository<WardEntity>, ClearAll {
+    implements
+        CrudRepository<WardEntity, int>,
+        GetListRepository<WardEntity>,
+        SearchRepository<WardEntity>,
+        GetOneByNameRepository<WardEntity>,
+        ClearAll {
   Future<List<WardEntity>> searchByDistrict(DistrictEntity district, String keyword);
 }
 

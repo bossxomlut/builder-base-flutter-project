@@ -15,6 +15,10 @@ abstract class SearchRepository<T> {
   Future<List<T>> search(String keyword);
 }
 
+abstract class GetOneByNameRepository<T> {
+  Future<T?> getOneByName(String name);
+}
+
 abstract class GetListRepository<T> {
   Future<List<T>> getAll();
 }

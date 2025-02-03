@@ -1,6 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:isar/isar.dart';
 
+import '../../core/index.dart';
 import '../../domain/index.dart';
 import '../../resource/index.dart';
 import '../model/land_certificate_model.dart';
@@ -10,7 +11,10 @@ import 'isar_repository.dart';
 @Injectable(as: LandCertificateRepository)
 class LandCertificateRepositoryImpl extends LandCertificateRepository
     with IsarCrudRepository<LandCertificateEntity, LandCertificateModel> {
+  LandCertificateRepositoryImpl(this._landCertificateMapping);
+
   final Isar _isar = Isar.getInstance()!;
+  final LandCertificateMapping _landCertificateMapping;
 
   @override
   IsarCollection<LandCertificateModel> get collection => _isar.landCertificateModels;
@@ -23,13 +27,13 @@ class LandCertificateRepositoryImpl extends LandCertificateRepository
   @override
   Future<List<LandCertificateEntity>> getAll() {
     return collection.where().findAll().then((collections) {
-      return collections.map(getItemFromCollection).toList();
+      return mapListAsync(collections, getItemFromCollection);
     });
   }
 
   @override
-  LandCertificateEntity getItemFromCollection(LandCertificateModel collection) {
-    return LandCertificateMapping().from(collection);
+  Future<LandCertificateEntity> getItemFromCollection(LandCertificateModel collection) {
+    return _landCertificateMapping.from(collection);
   }
 
   @override
@@ -38,7 +42,7 @@ class LandCertificateRepositoryImpl extends LandCertificateRepository
   @override
   Future<List<LandCertificateEntity>> search(String keyword) {
     return collection.where().filter().nameContains(keyword).findAll().then((collections) {
-      return collections.map(getItemFromCollection).toList();
+      return mapListAsync(collections, getItemFromCollection);
     });
   }
 
@@ -49,26 +53,22 @@ class LandCertificateRepositoryImpl extends LandCertificateRepository
 
   @override
   Future<List<LandCertificateEntity>> searchByDistrict(DistrictEntity district, String keyword) {
-    return collection
-        .filter()
-        .combineAddressIdStartsWith('${district.provinceId}_${district.id}_')
-        .findAll()
-        .then((collections) {
-      return collections.map(getItemFromCollection).toList();
+    return collection.filter().districtEqualTo(district.name).findAll().then((collections) {
+      return mapListAsync(collections, getItemFromCollection);
     });
   }
 
   @override
   Future<List<LandCertificateEntity>> searchByProvince(ProvinceEntity province, String keyword) {
-    return collection.filter().combineAddressIdStartsWith('${province.id}_').findAll().then((collections) {
-      return collections.map(getItemFromCollection).toList();
+    return collection.filter().provinceEqualTo(province.name).findAll().then((collections) {
+      return mapListAsync(collections, getItemFromCollection);
     });
   }
 
   @override
   Future<List<LandCertificateEntity>> searchByWard(WardEntity ward, String keyword) {
-    return collection.filter().combineAddressIdEndsWith('_${ward.districtId}_${ward.id}').findAll().then((collections) {
-      return collections.map(getItemFromCollection).toList();
+    return collection.filter().wardEqualTo(ward.name).findAll().then((collections) {
+      return mapListAsync(collections, getItemFromCollection);
     });
   }
 }
@@ -91,11 +91,15 @@ class LandCertificateObserverDataImpl extends LandCertificateObserverData {
 
 @Injectable(as: ProvinceLandCertificateRepository)
 class ProvinceLandCertificateRepositoryImpl extends ProvinceLandCertificateRepository {
+  ProvinceLandCertificateRepositoryImpl(this._landCertificateMapping);
+
   final Isar _isar = Isar.getInstance()!;
 
   IsarCollection<LandCertificateModel> get lCollection => _isar.landCertificateModels;
 
   IsarCollection<ProvinceModel> get pCollection => _isar.provinceModels;
+
+  final LandCertificateMapping _landCertificateMapping;
 
   @override
   Future<List<ProvinceLandCertificateEntity>> getAll() async {
@@ -105,26 +109,27 @@ class ProvinceLandCertificateRepositoryImpl extends ProvinceLandCertificateRepos
 
     for (var province in provinces) {
       final List<LandCertificateModel> landCertificates =
-          lCollection.where().filter().combineAddressIdStartsWith(province.id.toString() + '_').findAllSync();
+          lCollection.where().filter().provinceEqualTo(province.name).findAllSync();
       if (landCertificates.isEmpty) continue;
 
       result.add(
         ProvinceLandCertificateEntity(
           id: province.id,
           name: province.name,
-          certificates: landCertificates.map((e) => LandCertificateRepositoryImpl().getItemFromCollection(e)).toList(),
+          certificates: await mapListAsync(landCertificates, (e) => _landCertificateMapping.from(e)),
+          // certificates: landCertificates.map((e) => LandCertificateRepositoryImpl().getItemFromCollection(e)).toList(),
         ),
       );
     }
 
     final List<LandCertificateModel> landCertificates =
-        lCollection.where().filter().combineAddressIdIsNull().or().combineAddressIdStartsWith('-1').findAllSync();
+        lCollection.where().filter().provinceIsNull().and().districtIsNull().and().wardIsNull().findAllSync();
     if (landCertificates.isNotEmpty) {
       result.add(
         ProvinceLandCertificateEntity(
           id: -1,
           name: LKey.other.tr(),
-          certificates: landCertificates.map(LandCertificateMapping().from).toList(),
+          certificates: await mapListAsync(landCertificates, (e) => _landCertificateMapping.from(e)),
         ),
       );
     }
@@ -140,10 +145,14 @@ class ProvinceLandCertificateRepositoryImpl extends ProvinceLandCertificateRepos
 
 @Injectable(as: SearchGroupCertificateRepository)
 class SearchGroupCertificateRepositoryImpl extends SearchGroupCertificateRepository {
+  SearchGroupCertificateRepositoryImpl(this._districtRepository);
+
   final Isar _isar = Isar.getInstance()!;
   IsarCollection<ProvinceModel> get pCollection => _isar.provinceModels;
 
   IsarCollection<LandCertificateModel> get lCollection => _isar.landCertificateModels;
+
+  final DistrictRepository _districtRepository;
 
   @override
   Future<List<ProvinceCountEntity>> getAll() async {
@@ -173,7 +182,7 @@ class SearchGroupCertificateRepositoryImpl extends SearchGroupCertificateReposit
     List<ProvinceCountEntity> result = [];
 
     for (var province in provinces) {
-      final lands = lCollection.where().filter().combineAddressIdStartsWith(province.id.toString() + '_').findAllSync();
+      final lands = lCollection.where().filter().provinceEqualTo(province.name).findAllSync();
       final count = lands.length;
 
       if (count == 0) continue;
@@ -181,25 +190,28 @@ class SearchGroupCertificateRepositoryImpl extends SearchGroupCertificateReposit
       Map<DistrictEntity, DistrictCountEntity> districtMap = {};
 
       for (var land in lands) {
-        final combineId = land.combineAddressId;
-        List<int> addressIds = ProvinceUtil.getIds(combineId ?? '');
-        List<String> addressNames = ProvinceUtil.getNames(land.combineAddressName ?? '');
+        // final combineId = land.combineAddressId;
+        // List<int> addressIds = ProvinceUtil.getIds(combineId ?? '');
+        // List<String> addressNames = ProvinceUtil.getNames(land.combineAddressName ?? '');
+        //
+        // final districtId = addressIds.elementAt(1);
+        // final districtName = addressNames.elementAt(1);
 
-        final districtId = addressIds.elementAt(1);
-        final districtName = addressNames.elementAt(1);
-
-        final district = DistrictEntity(
-          id: districtId,
-          provinceId: province.id,
-          name: districtId == -1 ? LKey.other.tr() : districtName,
-        );
+        final districtName = land.district;
+        final DistrictEntity district =
+            (districtName.isNotNullOrEmpty ? await _districtRepository.getOneByName(districtName!) : null) ??
+                DistrictEntity(
+                  id: -1,
+                  provinceId: province.id,
+                  name: LKey.other.tr(),
+                );
 
         if (districtMap.containsKey(district)) {
           districtMap[district] = districtMap[district]!.copyWith(total: districtMap[district]!.total + 1);
         } else {
           districtMap[district] = DistrictCountEntity(
-            id: districtId,
-            name: districtId == -1 ? LKey.other.tr() : districtName,
+            id: district.id,
+            name: district.name,
             total: 1,
           );
         }

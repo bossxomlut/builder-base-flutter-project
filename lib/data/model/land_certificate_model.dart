@@ -1,6 +1,7 @@
+import 'package:injectable/injectable.dart';
 import 'package:isar/isar.dart';
 
-import '../../domain/entity/index.dart';
+import '../../domain/index.dart';
 import 'mapping_data.dart';
 
 part 'land_certificate_model.g.dart';
@@ -10,8 +11,9 @@ class LandCertificateModel {
   Id id = Isar.autoIncrement;
   String? name;
   List<FileModel>? files;
-  String? combineAddressId;
-  String? combineAddressName;
+  String? province;
+  String? district;
+  String? ward;
   String? detailAddress;
   DateTime? purchaseDate;
   double? purchasePrice;
@@ -51,14 +53,25 @@ class LandCertificateModel {
   String? note;
 }
 
-class LandCertificateMapping extends Mapping<LandCertificateEntity, LandCertificateModel> {
+@injectable
+class LandCertificateMapping extends FutureMapping<LandCertificateEntity, LandCertificateModel> {
+  LandCertificateMapping(
+      {required ProvinceRepository provinceRepository,
+      required DistrictRepository districtRepository,
+      required WardRepository wardRepository})
+      : _provinceRepository = provinceRepository,
+        _districtRepository = districtRepository,
+        _wardRepository = wardRepository;
+
+  final ProvinceRepository _provinceRepository;
+  final DistrictRepository _districtRepository;
+  final WardRepository _wardRepository;
+
   @override
-  LandCertificateEntity from(LandCertificateModel input) {
-    final combineId = input.combineAddressId;
-
-    List<int> addressIds = ProvinceUtil.getIds(combineId ?? '');
-
-    List<String> names = ProvinceUtil.getNames(input.combineAddressName ?? '');
+  Future<LandCertificateEntity> from(LandCertificateModel input) async {
+    final ProvinceEntity? province = await _provinceRepository.getOneByName(input.province ?? '');
+    final DistrictEntity? district = await _districtRepository.getOneByName(input.district ?? '');
+    final WardEntity? ward = await _wardRepository.getOneByName(input.ward ?? '');
 
     return LandCertificateEntity(
       id: input.id,
@@ -79,12 +92,10 @@ class LandCertificateMapping extends Mapping<LandCertificateEntity, LandCertific
       salePrice: input.salePrice,
       number: input.number,
       note: input.note,
-      address: AddressEntity(
-        province: ProvinceEntity(id: addressIds[0], name: names[0]),
-        district: DistrictEntity(id: addressIds[1], provinceId: addressIds[0], name: names[1]),
-        ward: WardEntity(id: addressIds[2], districtId: addressIds[1], name: names[2]),
-        detail: input.detailAddress,
-      ),
+      province: province,
+      district: district,
+      ward: ward,
+      detailAddress: input.detailAddress,
     );
   }
 }
@@ -95,9 +106,10 @@ class LandCertificateModelMapping extends Mapping<LandCertificateModel, LandCert
     return LandCertificateModel()
       ..name = item.name
       ..files = item.files?.map((e) => AttachmentEntityToModelMapping().from(e)).toList()
-      ..combineAddressId = (item.address ?? AddressEntity.empty()).combineId
-      ..combineAddressName = (item.address ?? AddressEntity.empty()).combineProvinceName
-      ..detailAddress = item.address?.detail
+      ..province = item.province?.name
+      ..district = item.district?.name
+      ..ward = item.ward?.name
+      ..detailAddress = item.detailAddress
       ..purchaseDate = item.purchaseDate
       ..purchasePrice = item.purchasePrice
       ..saleDate = item.saleDate

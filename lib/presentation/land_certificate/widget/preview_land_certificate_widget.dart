@@ -357,7 +357,7 @@ class LandCertificatePainter extends CustomPainter {
     drawSectionTitle('1. Thửa đất:');
     drawDetailRow('a) Thửa đất số:', landCertificate.number?.toString() ?? '');
     drawDetailRow('   Tờ bản đồ số:', landCertificate.mapNumber?.toString() ?? '');
-    drawDetailRow('b) Địa chỉ:', landCertificate.address?.displayAddress ?? '---');
+    drawDetailRow('b) Địa chỉ:', landCertificate.displayAddress ?? '---');
     drawDetailRow('c) Diện tích:', landCertificate.area?.toString() ?? '');
     drawDetailRow('   Trong đó: Diện tích được cấp:', '');
     drawDetailRow('   Không được cấp:', '');

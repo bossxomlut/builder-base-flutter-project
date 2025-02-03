@@ -86,7 +86,7 @@ class LandCertificateCard extends StatelessWidget {
                   Expanded(
                     child: InfoWidget(
                       title: LKey.fieldsSpecificAddress.tr(),
-                      value: certificate.address?.displayAddress ?? '---',
+                      value: certificate?.displayAddress ?? '---',
                     ),
                   ),
                 ],

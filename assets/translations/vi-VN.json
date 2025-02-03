@@ -38,6 +38,7 @@
   "certificates": "Sổ đỏ",
   "delete": "Xóa",
   "message": {
+    "notFoundData": "Không tìm thấy dữ liệu",
     "invalidSecurityQuestion": "Câu hỏi bảo mật không chính xác",
     "pinCodeSetSuccessfully": "Thiết lập mã PIN thành công",
     "addLandCertificateSuccessfully": "Thêm sổ đỏ thành công",

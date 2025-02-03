@@ -15,15 +15,13 @@ mixin IsarCrudRepository<T extends GetId<int>, C> on CrudRepository<T, int> {
 
   C updateNewItem(T item);
 
-  T getItemFromCollection(C collection);
+  Future<T> getItemFromCollection(C collection);
 
   @override
   Future<T> create(T item) {
     final C nItem = createNewItem(item);
 
-    return isar.writeTxn(() async {
-      return collection.put(nItem).then((id) => getItemFromCollection(nItem));
-    });
+    return isar.writeTxn(() => collection.put(nItem)).then((id) => getItemFromCollection(nItem));
   }
 
   @override

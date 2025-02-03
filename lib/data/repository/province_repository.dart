@@ -1,6 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:isar/isar.dart';
 
+import '../../core/index.dart';
 import '../../domain/index.dart';
 import '../model/province_model.dart';
 import 'isar_repository.dart';
@@ -16,7 +17,7 @@ class ProvinceRepositoryImpl extends ProvinceRepository with IsarCrudRepository<
   IsarCollection<ProvinceModel> get collection => isar.provinceModels;
 
   @override
-  ProvinceEntity getItemFromCollection(ProvinceModel collection) {
+  Future<ProvinceEntity> getItemFromCollection(ProvinceModel collection) async {
     return ProvinceEntity(
       id: collection.id,
       name: collection.name ?? '',
@@ -30,16 +31,18 @@ class ProvinceRepositoryImpl extends ProvinceRepository with IsarCrudRepository<
 
   @override
   Future<List<ProvinceEntity>> getAll() {
-    return collection.where().findAll().then((collections) {
-      return collections.map(getItemFromCollection).toList();
+    return isar.txn(() async {
+      return collection.where().findAll().then((collections) {
+        return mapListAsync(collections, getItemFromCollection);
+      });
     });
   }
 
   @override
   Future<List<ProvinceEntity>> search(String keyword) {
-    return isar.writeTxn(() async {
+    return isar.txn(() async {
       return collection.where().filter().nameContains(keyword).findAll().then((collections) {
-        return collections.map(getItemFromCollection).toList();
+        return mapListAsync(collections, getItemFromCollection);
       });
     });
   }
@@ -53,6 +56,15 @@ class ProvinceRepositoryImpl extends ProvinceRepository with IsarCrudRepository<
   Future<void> clearAll() {
     return isar.writeTxn(() async {
       await collection.clear();
+    });
+  }
+
+  @override
+  Future<ProvinceEntity> getOneByName(String name) {
+    return isar.txn(() async {
+      return collection.where().filter().nameEqualTo(name).findFirst().then((collection) {
+        return getItemFromCollection(collection!);
+      });
     });
   }
 }
@@ -74,12 +86,12 @@ class DistrictRepositoryImpl extends DistrictRepository with IsarCrudRepository<
   @override
   Future<List<DistrictEntity>> getAll() {
     return collection.where().findAll().then((collections) {
-      return collections.map(getItemFromCollection).toList();
+      return mapListAsync(collections, getItemFromCollection);
     });
   }
 
   @override
-  DistrictEntity getItemFromCollection(DistrictModel collection) {
+  Future<DistrictEntity> getItemFromCollection(DistrictModel collection) async {
     return DistrictEntity(
       id: collection.id,
       provinceId: collection.provinceId ?? -1,
@@ -92,9 +104,9 @@ class DistrictRepositoryImpl extends DistrictRepository with IsarCrudRepository<
 
   @override
   Future<List<DistrictEntity>> search(String keyword) {
-    return isar.writeTxn(() async {
+    return isar.txn(() async {
       return collection.where().filter().nameContains(keyword).findAll().then((collections) {
-        return collections.map(getItemFromCollection).toList();
+        return mapListAsync(collections, getItemFromCollection);
       });
     });
   }
@@ -106,7 +118,7 @@ class DistrictRepositoryImpl extends DistrictRepository with IsarCrudRepository<
 
   @override
   Future<List<DistrictEntity>> searchByProvince(ProvinceEntity province, String keyword) {
-    return isar.writeTxn(() async {
+    return isar.txn(() async {
       return collection
           .where()
           .filter()
@@ -114,7 +126,7 @@ class DistrictRepositoryImpl extends DistrictRepository with IsarCrudRepository<
           .nameContains(keyword)
           .findAll()
           .then((collections) {
-        return collections.map(getItemFromCollection).toList();
+        return mapListAsync(collections, getItemFromCollection);
       });
     });
   }
@@ -123,6 +135,15 @@ class DistrictRepositoryImpl extends DistrictRepository with IsarCrudRepository<
   Future<void> clearAll() {
     return isar.writeTxn(() async {
       await collection.clear();
+    });
+  }
+
+  @override
+  Future<DistrictEntity> getOneByName(String name) {
+    return isar.txn(() async {
+      return collection.where().filter().nameEqualTo(name).findFirst().then((collection) {
+        return getItemFromCollection(collection!);
+      });
     });
   }
 }
@@ -144,12 +165,12 @@ class WardRepositoryImpl extends WardRepository with IsarCrudRepository<WardEnti
   @override
   Future<List<WardEntity>> getAll() {
     return collection.where().findAll().then((collections) {
-      return collections.map(getItemFromCollection).toList();
+      return mapListAsync(collections, getItemFromCollection);
     });
   }
 
   @override
-  WardEntity getItemFromCollection(WardModel collection) {
+  Future<WardEntity> getItemFromCollection(WardModel collection) async {
     return WardEntity(
       id: collection.id,
       districtId: collection.districtId ?? -1,
@@ -162,9 +183,9 @@ class WardRepositoryImpl extends WardRepository with IsarCrudRepository<WardEnti
 
   @override
   Future<List<WardEntity>> search(String keyword) {
-    return isar.writeTxn(() async {
+    return isar.txn(() async {
       return collection.where().filter().nameContains(keyword).findAll().then((collections) {
-        return collections.map(getItemFromCollection).toList();
+        return mapListAsync(collections, getItemFromCollection);
       });
     });
   }
@@ -176,7 +197,7 @@ class WardRepositoryImpl extends WardRepository with IsarCrudRepository<WardEnti
 
   @override
   Future<List<WardEntity>> searchByDistrict(DistrictEntity district, String keyword) {
-    return isar.writeTxn(() async {
+    return isar.txn(() async {
       return collection
           .where()
           .filter()
@@ -184,7 +205,7 @@ class WardRepositoryImpl extends WardRepository with IsarCrudRepository<WardEnti
           .nameContains(keyword)
           .findAll()
           .then((collections) {
-        return collections.map(getItemFromCollection).toList();
+        return mapListAsync(collections, getItemFromCollection);
       });
     });
   }
@@ -193,6 +214,15 @@ class WardRepositoryImpl extends WardRepository with IsarCrudRepository<WardEnti
   Future<void> clearAll() {
     return isar.writeTxn(() async {
       await collection.clear();
+    });
+  }
+
+  @override
+  Future<WardEntity> getOneByName(String name) {
+    return isar.txn(() async {
+      return collection.where().filter().nameEqualTo(name).findFirst().then((collection) {
+        return getItemFromCollection(collection!);
+      });
     });
   }
 }
@@ -215,12 +245,12 @@ class FlatProvinceRepositoryImpl extends FlatProvinceRepository
   @override
   Future<List<FlatProvinceEntity>> getAll() {
     return collection.where().findAll().then((collections) {
-      return collections.map(getItemFromCollection).toList();
+      return mapListAsync(collections, getItemFromCollection);
     });
   }
 
   @override
-  FlatProvinceEntity getItemFromCollection(FlatProvinceModel collection) {
+  Future<FlatProvinceEntity> getItemFromCollection(FlatProvinceModel collection) async {
     return FlatProvinceEntity(
       id: collection.id,
       combineId: collection.combineId ?? '',
@@ -233,9 +263,9 @@ class FlatProvinceRepositoryImpl extends FlatProvinceRepository
 
   @override
   Future<List<FlatProvinceEntity>> search(String keyword) {
-    return isar.writeTxn(() async {
+    return isar.txn(() async {
       return collection.where().filter().fullNameContains(keyword).findAll().then((collections) {
-        return collections.map(getItemFromCollection).toList();
+        return mapListAsync(collections, getItemFromCollection);
       });
     });
   }

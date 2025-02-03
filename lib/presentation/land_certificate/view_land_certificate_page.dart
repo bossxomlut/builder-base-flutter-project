@@ -82,27 +82,27 @@ class _ViewLandCertificatePageState extends State<ViewLandCertificatePage> with 
                       children: [
                         OutlineField(
                           label: LKey.fieldsProvinceCity.tr(),
-                          value: landCertificateEntity.address?.province?.name,
+                          value: landCertificateEntity.province?.name,
                           onTap: () {},
                         ),
                         const Gap(16),
                         OutlineField(
                           label: LKey.fieldsDistrict.tr(),
-                          value: landCertificateEntity.address?.district?.name,
-                          isDisabled: landCertificateEntity.address?.province == null,
+                          value: landCertificateEntity.district?.name,
+                          isDisabled: landCertificateEntity.province == null,
                           onTap: () {},
                         ),
                         const Gap(16),
                         OutlineField(
                           label: LKey.fieldsWard.tr(),
-                          value: landCertificateEntity.address?.ward?.name,
-                          isDisabled: landCertificateEntity.address?.district == null,
+                          value: landCertificateEntity.ward?.name,
+                          isDisabled: landCertificateEntity.district == null,
                           onTap: () {},
                         ),
                         const Gap(16),
                         CustomTextField(
                           isReadOnly: true,
-                          initialValue: landCertificateEntity.address?.detail ?? nullPlaceHolder,
+                          initialValue: landCertificateEntity.detailAddress ?? nullPlaceHolder,
                           onChanged: (value) {},
                           label: LKey.fieldsSpecificAddress.tr(),
                         ),

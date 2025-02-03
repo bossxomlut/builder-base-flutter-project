@@ -10,7 +10,10 @@ class LandCertificateEntity with _$LandCertificateEntity implements GetId<int> {
     @Default(-1) int id,
     String? name,
     List<AppFile>? files,
-    AddressEntity? address,
+    ProvinceEntity? province,
+    DistrictEntity? district,
+    WardEntity? ward,
+    String? detailAddress,
     DateTime? purchaseDate,
     double? purchasePrice,
     DateTime? saleDate,
@@ -50,14 +53,20 @@ class LandCertificateEntity with _$LandCertificateEntity implements GetId<int> {
     DateTime? taxRenewalTime,
     DateTime? taxDeadlineTime,
     String? note,
-    AddressEntity? address,
+    ProvinceEntity? province,
+    DistrictEntity? district,
+    WardEntity? ward,
+    String? detailAddress,
     List<AppFile>? files,
   }) {
     return LandCertificateEntity(
       id: id,
       name: name ?? this.name,
       files: files ?? this.files,
-      address: address ?? this.address,
+      province: province ?? this.province,
+      district: district ?? this.district,
+      ward: ward ?? this.ward,
+      detailAddress: detailAddress ?? this.detailAddress,
       purchaseDate: purchaseDate ?? this.purchaseDate,
       purchasePrice: purchasePrice ?? this.purchasePrice,
       saleDate: saleDate ?? this.saleDate,
@@ -74,6 +83,10 @@ class LandCertificateEntity with _$LandCertificateEntity implements GetId<int> {
       taxRenewalTime: taxRenewalTime ?? this.taxRenewalTime,
       note: note ?? this.note,
     );
+  }
+
+  String get displayAddress {
+    return detailAddress ?? ProvinceUtil.fullName(province?.name ?? '', district?.name ?? '', ward?.name ?? '');
   }
 }
 
@@ -213,8 +226,7 @@ class LandCertificateEntity with _$LandCertificateEntity implements GetId<int> {
 // }
 
 extension LandCertificateEntityX on LandCertificateEntity {
-  bool get isInValid =>
-      name == null || (address?.isInValid ?? true) || taxDeadlineTime == null || taxRenewalTime == null;
+  bool get isInValid => name == null || district == null || taxDeadlineTime == null || taxRenewalTime == null;
 }
 
 class AddressEntity {

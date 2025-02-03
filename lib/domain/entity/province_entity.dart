@@ -220,4 +220,10 @@ class ProvinceSearchEntity {
         return ProvinceUtil.getIds(id).last;
     }
   }
+
+  ProvinceEntity get province => ProvinceEntity(id: provinceId, name: name);
+
+  DistrictEntity get district => DistrictEntity(id: districtId, provinceId: provinceId, name: name);
+
+  WardEntity get ward => WardEntity(id: wardId, districtId: districtId, name: name);
 }

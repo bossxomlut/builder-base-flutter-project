@@ -61,8 +61,12 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
     DateTime? taxRenewalTime,
     DateTime? taxDeadlineTime,
     String? note,
-    AddressEntity? address,
     List<AppFile>? files,
+    ProvinceEntity? province,
+    DistrictEntity? district,
+    WardEntity? ward,
+    String? detailAddress,
+    DateTime? useTime,
   }) {
     landCertificateEntity = landCertificateEntity.copyWith2(
       name: name,
@@ -80,8 +84,12 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
       taxRenewalTime: taxRenewalTime,
       taxDeadlineTime: taxDeadlineTime,
       note: note,
-      address: address,
       files: files,
+      province: province,
+      district: district,
+      ward: ward,
+      detailAddress: detailAddress,
+      useTime: useTime,
     );
 
     setState(() {});
@@ -102,7 +110,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
         return;
       }
 
-      if (landCertificateEntity.address?.isInValid ?? true) {
+      if (landCertificateEntity.province == null || landCertificateEntity.detailAddress == null) {
         showError(message: 'Địa chỉ không được để trống');
         try {
           Scrollable.ensureVisible(addressKey.currentContext!, duration: d);
@@ -199,24 +207,17 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                       children: [
                         OutlineField(
                           label: LKey.fieldsProvinceCity.tr(),
-                          value: landCertificateEntity.address?.province?.name,
+                          value: landCertificateEntity.province?.name,
                           onTap: () {
                             SearchProvincePage.searchProvince().show(context).then((value) {
                               // Update address if needed
                               if (value != null) {
-                                final currentAddress = landCertificateEntity.address ?? AddressEntity.empty();
-
-                                if (currentAddress.province?.id == value.provinceId) {
-                                  return;
-                                }
-
-                                final updatedAddress = AddressEntity.empty().copyWith(
-                                  province: ProvinceEntity(
-                                    id: value.provinceId,
-                                    name: value.name,
-                                  ),
+                                landCertificateEntity = landCertificateEntity.copyWith(
+                                  province: value.province,
+                                  district: null,
+                                  ward: null,
                                 );
-                                _updateLandCertificateEntity(address: updatedAddress);
+                                setState(() {});
                               }
                             });
                           },
@@ -224,32 +225,21 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                         Gap(16),
                         OutlineField(
                           label: LKey.fieldsDistrict.tr(),
-                          value: landCertificateEntity.address?.district?.name,
-                          isDisabled: landCertificateEntity.address?.province == null,
+                          value: landCertificateEntity.district?.name,
+                          isDisabled: landCertificateEntity.province == null,
                           onTap: () {
                             // Similar to province
 
                             SearchProvincePage.searchDistrict(
-                              selectedProvince: landCertificateEntity.address?.province,
+                              selectedProvince: landCertificateEntity.province,
                             ).show(context).then((value) {
                               // Update address if needed
                               if (value != null) {
-                                final currentAddress = landCertificateEntity.address ?? AddressEntity.empty();
-
-                                if (currentAddress.district?.id == value.districtId) {
-                                  return;
-                                }
-
-                                final updatedAddress = AddressEntity.empty().copyWith(
-                                  province: currentAddress.province,
-                                  district: DistrictEntity(
-                                    id: value.districtId,
-                                    provinceId: value.provinceId,
-                                    name: value.name,
-                                  ),
+                                landCertificateEntity = landCertificateEntity.copyWith(
+                                  district: value.district,
                                   ward: null,
                                 );
-                                _updateLandCertificateEntity(address: updatedAddress);
+                                setState(() {});
                               }
                             });
                           },
@@ -257,45 +247,28 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                         Gap(16),
                         OutlineField(
                           label: LKey.fieldsWard.tr(),
-                          value: landCertificateEntity.address?.ward?.name,
-                          isDisabled: landCertificateEntity.address?.district == null,
+                          value: landCertificateEntity.ward?.name,
+                          isDisabled: landCertificateEntity.district == null,
                           onTap: () {
                             // Similar to province
                             SearchProvincePage.searchWard(
-                              selectedDistrict: landCertificateEntity.address?.district,
+                              selectedDistrict: landCertificateEntity.district,
                             ).show(context).then((value) {
                               // Update address if needed
                               if (value != null) {
-                                final currentAddress = landCertificateEntity.address ?? AddressEntity.empty();
-
-                                if (currentAddress.ward?.id == value.wardId) {
-                                  return;
-                                }
-
-                                final updatedAddress = currentAddress.copyWith(
-                                  ward: WardEntity(
-                                    id: value.wardId,
-                                    districtId: value.districtId,
-                                    name: value.name,
-                                  ),
+                                landCertificateEntity = landCertificateEntity.copyWith(
+                                  ward: value.ward,
                                 );
-                                _updateLandCertificateEntity(address: updatedAddress);
+                                setState(() {});
                               }
                             });
                           },
                         ),
                         Gap(16),
                         CustomTextField(
-                          initialValue: landCertificateEntity.address?.detail,
+                          initialValue: landCertificateEntity?.detailAddress,
                           onChanged: (value) {
-                            final currentAddress = landCertificateEntity.address;
-                            final updatedAddress = AddressEntity(
-                              province: currentAddress?.province,
-                              district: currentAddress?.district,
-                              ward: currentAddress?.ward,
-                              detail: value,
-                            );
-                            _updateLandCertificateEntity(address: updatedAddress);
+                            _updateLandCertificateEntity(detailAddress: value);
                           },
                           hint: LKey.fieldsSpecificAddress.tr(),
                         ),
