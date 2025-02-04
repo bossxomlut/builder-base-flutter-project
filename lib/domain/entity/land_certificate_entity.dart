@@ -10,7 +10,7 @@ class LandCertificateEntity with _$LandCertificateEntity implements GetId<int> {
     @Default(-1) int id,
     String? cerId,
     String? name,
-    List<AppFile>? files,
+    List<String>? files,
     ProvinceEntity? province,
     DistrictEntity? district,
     WardEntity? ward,
@@ -58,7 +58,7 @@ class LandCertificateEntity with _$LandCertificateEntity implements GetId<int> {
     DistrictEntity? district,
     WardEntity? ward,
     String? detailAddress,
-    List<AppFile>? files,
+    List<String>? files,
   }) {
     return LandCertificateEntity(
       id: id,

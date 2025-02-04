@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:injectable/injectable.dart';
 
-import '../../core/persistence/file_storage.dart';
 import '../index.dart';
 
 @injectable
@@ -12,19 +9,20 @@ class CreateLandCertificateUseCase {
   CreateLandCertificateUseCase(this._landCertificateRepository);
 
   Future<void> execute(LandCertificateEntity landCertificate) async {
-    List<AppFile> files = [];
+    List<String> files = [];
+    //
+    // for (AppFile file in [...?landCertificate.files]) {
+    //   final isLocalFile = await isInternalPath(file.path);
+    //   if (isLocalFile) {
+    //     files.add(file);
+    //   } else {
+    //     final localPath = await saveFileToLocalDirectory(File(file.path));
+    //     files.add(file.copyWith(path: localPath));
+    //   }
+    // }
 
-    for (AppFile file in [...?landCertificate.files]) {
-      final isLocalFile = await isInternalPath(file.path);
-      if (isLocalFile) {
-        files.add(file);
-      } else {
-        final localPath = await saveFileToLocalDirectory(File(file.path));
-        files.add(file.copyWith(path: localPath));
-      }
-    }
-
-    final lastedCertificate = landCertificate.copyWith(files: files);
+    final lastedCertificate = landCertificate;
+    // final lastedCertificate = landCertificate.copyWith(files: files);
     if (landCertificate.id != -1) {
       await _landCertificateRepository.update(lastedCertificate);
     } else {

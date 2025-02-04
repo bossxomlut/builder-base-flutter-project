@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
@@ -22,4 +23,23 @@ Future<File> createFile(String fileName) async {
   final filePath = await getFilePath(fileName);
   final file = File(filePath);
   return file.create();
+}
+
+/// 📌 Chuyển đổi ảnh thành chuỗi Base64
+Future<String> convertImageToBase64(String imagePath) async {
+  File imageFile = File(imagePath);
+
+  if (!await imageFile.exists()) {
+    throw Exception("⚠️ File không tồn tại!");
+  }
+
+  List<int> imageBytes = await imageFile.readAsBytes();
+  return base64Encode(imageBytes);
+}
+
+/// 📌 Chuyển đổi chuỗi Base64 thành file ảnh
+Future<void> convertBase64ToImage(String base64String, String outputPath) async {
+  List<int> imageBytes = base64Decode(base64String);
+  File outputFile = File(outputPath);
+  await outputFile.writeAsBytes(imageBytes);
 }

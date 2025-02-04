@@ -65,9 +65,8 @@ class _ViewLandCertificatePageState extends State<ViewLandCertificatePage> with 
                           padding: EdgeInsets.zero,
                           itemBuilder: (BuildContext context, int index) {
                             final file = landCertificateEntity.files![index];
-                            return UploadImagePlaceholder(
-                              title: file.name,
-                              filePath: file.path,
+                            return Base64ImagePlaceholder(
+                              data: file,
                             );
                           },
                           separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 8),

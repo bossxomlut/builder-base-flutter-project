@@ -12,7 +12,7 @@ class LandCertificateModel {
   Id id = Isar.autoIncrement;
   String? cerId;
   String? name;
-  List<FileModel>? files;
+  List<String>? files;
   String? province;
   String? district;
   String? ward;
@@ -74,15 +74,17 @@ class LandCertificateMapping extends FutureMapping<LandCertificateEntity, LandCe
 
   @override
   Future<LandCertificateEntity> from(LandCertificateModel input) async {
-    final ProvinceEntity? province = await _provinceRepository.getOneByName(input.province ?? '');
-    final DistrictEntity? district = await _districtRepository.getOneByName(input.district ?? '');
-    final WardEntity? ward = await _wardRepository.getOneByName(input.ward ?? '');
+    final ProvinceEntity? province =
+        input.province.isNullOrEmpty ? null : await _provinceRepository.getOneByName(input.province ?? '');
+    final DistrictEntity? district =
+        input.district.isNullOrEmpty ? null : await _districtRepository.getOneByName(input.district ?? '');
+    final WardEntity? ward = input.ward.isNullOrEmpty ? null : await _wardRepository.getOneByName(input.ward ?? '');
 
     return LandCertificateEntity(
       id: input.id,
       cerId: input.cerId,
       name: input.name ?? '',
-      files: input.files?.map((e) => AttachmentModelToEntityMapping().from(e)).toList(),
+      files: input.files,
       mapNumber: input.mapNumber,
       area: input.area,
       useType: input.useType,
@@ -113,7 +115,7 @@ class LandCertificateModelMapping extends Mapping<LandCertificateModel, LandCert
     return LandCertificateModel()
       ..cerId = item.cerId
       ..name = item.name
-      ..files = item.files?.map((e) => AttachmentEntityToModelMapping().from(e)).toList()
+      ..files = item.files
       ..province = item.province?.name
       ..district = item.district?.name
       ..ward = item.ward?.name
@@ -165,30 +167,31 @@ class AttachmentModelToEntityMapping extends Mapping<AppFile, FileModel> {
 class MappingToRow extends Mapping<List<dynamic>, LandCertificateModel> {
   @override
   List from(LandCertificateModel input) {
+    String combinedBase64 = (input.files ?? []).join("|||");
     return [
-      input.cerId,
-      input.name,
-      input.province,
-      input.district,
-      input.ward,
-      input.detailAddress,
-      input.purchaseDate,
-      input.purchasePrice,
-      input.saleDate,
-      input.salePrice,
-      input.number,
-      input.mapNumber,
-      input.area,
-      input.useType,
-      input.purpose,
-      input.useTime,
-      input.residentialArea,
-      input.perennialTreeArea,
-      input.taxDeadlineTime,
-      input.taxRenewalTime,
-      input.note,
-      input.files,
-      input.updatedAt,
+      input.cerId ?? '',
+      input.name ?? '',
+      input.province ?? '',
+      input.district ?? '',
+      input.ward ?? '',
+      input.detailAddress ?? '',
+      input.purchaseDate ?? '',
+      input.purchasePrice ?? '',
+      input.saleDate ?? '',
+      input.salePrice ?? '',
+      input.number ?? '',
+      input.mapNumber ?? '',
+      input.area ?? '',
+      input.useType ?? '',
+      input.purpose ?? '',
+      input.useTime ?? '',
+      input.residentialArea ?? '',
+      input.perennialTreeArea ?? '',
+      input.taxDeadlineTime ?? '',
+      input.taxRenewalTime ?? '',
+      input.note ?? '',
+      combinedBase64,
+      input.updatedAt ?? '',
     ];
   }
 }
@@ -198,28 +201,28 @@ class MappingRowToModel extends Mapping<LandCertificateModel, List<dynamic>> {
   @override
   LandCertificateModel from(List input) {
     return LandCertificateModel()
-      ..cerId = input[0].toString()
-      ..name = input[1].toString()
-      ..province = input[2].toString()
-      ..district = input[3].toString()
-      ..ward = input[4].toString()
-      ..detailAddress = input[5].toString()
-      ..purchaseDate = input[6].toString().parseDateTime()
-      ..purchasePrice = input[7].toString().parseDouble()
-      ..saleDate = input[8].toString().parseDateTime()
-      ..salePrice = input[9].toString().parseDouble()
-      ..number = input[10].toString().parseInt()
-      ..mapNumber = input[11].toString().parseInt()
-      ..area = input[12].toString().parseDouble()
-      ..useType = input[13].toString()
-      ..purpose = input[14].toString()
-      ..useTime = input[15].toString().parseDateTime()
-      ..residentialArea = input[16].toString()
-      ..perennialTreeArea = input[17].toString()
-      ..taxDeadlineTime = input[18].toString().parseDateTime()
-      ..taxRenewalTime = input[19].toString().parseDateTime()
-      ..note = input[20].toString()
-      ..files = []
-      ..updatedAt = input[22].toString().parseDateTime();
+      ..cerId = input[0]?.toString() ?? ''
+      ..name = input[1]?.toString() ?? ''
+      ..province = input[2]?.toString() ?? ''
+      ..district = input[3]?.toString() ?? ''
+      ..ward = input[4]?.toString() ?? ''
+      ..detailAddress = input[5]?.toString() ?? ''
+      ..purchaseDate = input[6]?.toString().parseDateTime() ?? DateTime(0)
+      ..purchasePrice = input[7]?.toString().parseDouble() ?? 0.0
+      ..saleDate = input[8]?.toString().parseDateTime() ?? DateTime(0)
+      ..salePrice = input[9]?.toString().parseDouble() ?? 0.0
+      ..number = input[10]?.toString().parseInt() ?? 0
+      ..mapNumber = input[11]?.toString().parseInt() ?? 0
+      ..area = input[12]?.toString().parseDouble() ?? 0.0
+      ..useType = input[13]?.toString() ?? ''
+      ..purpose = input[14]?.toString() ?? ''
+      ..useTime = input[15]?.toString().parseDateTime() ?? DateTime(0)
+      ..residentialArea = input[16]?.toString() ?? ''
+      ..perennialTreeArea = input[17]?.toString() ?? ''
+      ..taxDeadlineTime = input[18]?.toString().parseDateTime() ?? DateTime(0)
+      ..taxRenewalTime = input[19]?.toString().parseDateTime() ?? DateTime(0)
+      ..note = input[20]?.toString() ?? ''
+      ..files = input[21]?.toString().split("|||") ?? []
+      ..updatedAt = input[22]?.toString().parseDateTime() ?? DateTime(0);
   }
 }

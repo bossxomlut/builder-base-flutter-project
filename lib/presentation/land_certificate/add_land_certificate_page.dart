@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/index.dart';
+import '../../core/utils/file_utils.dart';
 import '../../domain/index.dart';
 import '../../injection/injection.dart';
 import '../../resource/index.dart';
@@ -61,7 +62,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
     DateTime? taxRenewalTime,
     DateTime? taxDeadlineTime,
     String? note,
-    List<AppFile>? files,
+    List<String>? files,
     ProvinceEntity? province,
     DistrictEntity? district,
     WardEntity? ward,
@@ -172,9 +173,14 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                       children: [
                         UploadImagePlaceholder(
                           title: LKey.fieldsLandCertificateImageTitle.tr(),
-                          onChanged: (appFiles) {
+                          onChanged: (appFiles) async {
                             if (appFiles != null) {
-                              _updateLandCertificateEntity(files: [...?landCertificateEntity.files, ...appFiles]);
+                              List<String> base64s = await mapListAsync(
+                                appFiles!,
+                                (p0) => convertImageToBase64(p0.path),
+                              );
+
+                              _updateLandCertificateEntity(files: [...?landCertificateEntity.files, ...base64s]);
                             }
                           },
                         ),
@@ -184,13 +190,12 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                             (file) {
                               return Padding(
                                 padding: const EdgeInsets.only(top: 8),
-                                child: UploadImagePlaceholder(
-                                  title: file.name,
-                                  filePath: file.path,
+                                child: Base64ImagePlaceholder(
+                                  data: file,
                                   onRemove: () {
-                                    final List<AppFile> list = [...?landCertificateEntity.files];
-                                    list.remove(file);
-                                    _updateLandCertificateEntity(files: list);
+                                    // final List<AppFile> list = [...?landCertificateEntity.files];
+                                    // list.remove(file);
+                                    // _updateLandCertificateEntity(files: list);
                                   },
                                 ),
                               );

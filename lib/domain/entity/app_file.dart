@@ -50,6 +50,12 @@ class AppFile extends Equatable {
   }
 }
 
+class Base64File extends AppFile {
+  Base64File(this.base64) : super(name: '', path: '');
+
+  final String base64;
+}
+
 class UnknownFileTypeException implements Exception {}
 
 extension FileExtention on FileSystemEntity {

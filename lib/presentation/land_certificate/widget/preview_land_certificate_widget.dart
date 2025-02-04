@@ -298,7 +298,8 @@ class LandCertificatePainter extends CustomPainter {
 
   LandCertificatePainter({required this.landCertificate});
 
-  List<String> get filePaths => landCertificate.files?.map((AppFile e) => e.path).toList() ?? [];
+  List<String> get filePaths => [];
+  // List<String> get filePaths => landCertificate.files?.map((AppFile e) => e.path).toList() ?? [];
 
   List<ui.Image> images = [];
 
