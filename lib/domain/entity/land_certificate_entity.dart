@@ -228,7 +228,8 @@ class LandCertificateEntity with _$LandCertificateEntity implements GetId<int> {
 // }
 
 extension LandCertificateEntityX on LandCertificateEntity {
-  bool get isInValid => name == null || district == null || taxDeadlineTime == null || taxRenewalTime == null;
+  bool get isInValid =>
+      name == null || (province == null && detailAddress == null) || taxDeadlineTime == null || taxRenewalTime == null;
 }
 
 class AddressEntity {

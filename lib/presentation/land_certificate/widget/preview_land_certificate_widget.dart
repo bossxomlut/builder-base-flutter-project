@@ -412,7 +412,7 @@ Future<void> renderAndShareImage(LandCertificateEntity landCertificate) async {
     },
   );
 
-  await Share.shareXFiles(xFiles, text: 'Here is the land certificate.');
+  await Share.shareXFiles(xFiles, text: 'Sổ đỏ: ${landCertificate.name}');
 
   return;
   try {

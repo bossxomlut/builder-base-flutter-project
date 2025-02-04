@@ -111,23 +111,29 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
         return;
       }
 
-      if (landCertificateEntity.province == null || landCertificateEntity.detailAddress == null) {
-        showError(message: 'Địa chỉ không được để trống');
+      if (landCertificateEntity.province == null && landCertificateEntity.detailAddress == null) {
+        showError(message: 'Địa chỉ Thành phố hoặc địa chỉ cụ thể không được để trống');
         try {
           Scrollable.ensureVisible(addressKey.currentContext!, duration: d);
         } catch (e) {}
         return;
       }
 
-      if (landCertificateEntity.taxDeadlineTime == null) {
-        showError(message: 'Thời điểm đóng thuế không được để trống');
+      if (landCertificateEntity.taxRenewalTime == null) {
+        showError(message: 'Thời điểm gia hạn đất không được để trống');
         try {
           Scrollable.ensureVisible(taxKey.currentContext!, duration: d);
         } catch (e) {}
         return;
       }
 
-      return;
+      if (landCertificateEntity.taxDeadlineTime == null) {
+        showError(message: 'Thời hạn đóng thuế không được để trống');
+        try {
+          Scrollable.ensureVisible(taxKey.currentContext!, duration: d);
+        } catch (e) {}
+        return;
+      }
     }
 
     //
@@ -162,7 +168,8 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                     title: LKey.sectionsLandInfo.tr(),
                     child: CustomTextField(
                       initialValue: landCertificateEntity.name,
-                      hint: LKey.fieldsNameDescription.tr(),
+                      isRequired: true,
+                      label: LKey.fieldsNameDescription.tr(),
                       onChanged: (value) => _updateLandCertificateEntity(name: value),
                     ),
                   ),
@@ -193,9 +200,9 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                                 child: Base64ImagePlaceholder(
                                   data: file,
                                   onRemove: () {
-                                    // final List<AppFile> list = [...?landCertificateEntity.files];
-                                    // list.remove(file);
-                                    // _updateLandCertificateEntity(files: list);
+                                    final List<String> list = [...?landCertificateEntity.files];
+                                    list.remove(file);
+                                    _updateLandCertificateEntity(files: list);
                                   },
                                 ),
                               );
@@ -211,7 +218,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                     child: Column(
                       children: [
                         OutlineField(
-                          label: LKey.fieldsProvinceCity.tr(),
+                          label: LKey.fieldsProvinceCity.tr() + '*',
                           value: landCertificateEntity.province?.name,
                           onTap: () {
                             SearchProvincePage.searchProvince().show(context).then((value) {
@@ -275,7 +282,8 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                           onChanged: (value) {
                             _updateLandCertificateEntity(detailAddress: value);
                           },
-                          hint: LKey.fieldsSpecificAddress.tr(),
+                          label: LKey.fieldsSpecificAddress.tr(),
+                          isRequired: true,
                         ),
                       ],
                     ),
@@ -403,7 +411,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                     child: Column(
                       children: [
                         OutlineField(
-                          label: LKey.fieldsTaxRenewalTime.tr(),
+                          label: LKey.fieldsTaxRenewalTime.tr() + '*',
                           value: landCertificateEntity.taxRenewalTime.date,
                           onTap: () async {
                             AppShowDatePicker(
@@ -419,7 +427,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                         ),
                         Gap(16),
                         OutlineField(
-                          label: LKey.fieldsTaxPaymentDeadline.tr(),
+                          label: LKey.fieldsTaxPaymentDeadline.tr() + '*',
                           value: landCertificateEntity.taxDeadlineTime.date,
                           onTap: () async {
                             AppShowDatePicker(

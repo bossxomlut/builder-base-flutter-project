@@ -200,6 +200,7 @@ class MappingToRow extends Mapping<List<dynamic>, LandCertificateModel> {
 class MappingRowToModel extends Mapping<LandCertificateModel, List<dynamic>> {
   @override
   LandCertificateModel from(List input) {
+    final files = input[21].toString().isEmpty ? null : input[21]?.toString().split("|||");
     return LandCertificateModel()
       ..cerId = input[0]?.toString() ?? ''
       ..name = input[1]?.toString() ?? ''
@@ -222,7 +223,7 @@ class MappingRowToModel extends Mapping<LandCertificateModel, List<dynamic>> {
       ..taxDeadlineTime = input[18]?.toString().parseDateTime() ?? DateTime(0)
       ..taxRenewalTime = input[19]?.toString().parseDateTime() ?? DateTime(0)
       ..note = input[20]?.toString() ?? ''
-      ..files = input[21]?.toString().split("|||") ?? []
+      ..files = files
       ..updatedAt = input[22]?.toString().parseDateTime() ?? DateTime(0);
   }
 }

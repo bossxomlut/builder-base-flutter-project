@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/utils/date_time_utils.dart';
+import '../../../core/utils/list_utils.dart';
 import '../../../domain/index.dart';
 import '../../../resource/index.dart';
 import '../../../route/app_router.dart';
@@ -40,19 +41,20 @@ class LandCertificateCard extends StatelessWidget {
                     ),
                   ),
                   DeadlineDateStatusWidget(deadlineDate: certificate.taxDeadlineTime),
-                  IconButton(
-                    onPressed: () {
-                      // PreviewLandCertificateWidget(landCertificate: certificate).show(context);
+                  if (certificate.files.isNotNullAndEmpty)
+                    IconButton(
+                      onPressed: () {
+                        // PreviewLandCertificateWidget(landCertificate: certificate).show(context);
 
-                      renderAndShareImage(
-                        certificate,
-                      );
-                    },
-                    icon: Icon(
-                      LineIcons.alternateShareSquare,
-                      color: context.appTheme.colorScheme.tertiary,
+                        renderAndShareImage(
+                          certificate,
+                        );
+                      },
+                      icon: Icon(
+                        LineIcons.alternateShareSquare,
+                        color: context.appTheme.colorScheme.tertiary,
+                      ),
                     ),
-                  ),
                 ],
               ),
               Gap(18.0),
