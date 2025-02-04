@@ -6,6 +6,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../core/utils/date_time_utils.dart';
+import '../../../core/utils/file_utils.dart';
+import '../../../core/utils/list_utils.dart';
 import '../../../domain/entity/index.dart';
 
 // class PreviewLandCertificateWidget extends StatefulWidget with ShowDialog {
@@ -399,6 +401,20 @@ class LandCertificatePainter extends CustomPainter {
 }
 
 Future<void> renderAndShareImage(LandCertificateEntity landCertificate) async {
+  final files = landCertificate.files ?? [];
+
+  //file to xFile
+  int index = 0;
+  final xFiles = await mapListAsync(
+    files,
+    (p0) {
+      return convertBase64ToXFile(p0, fileName: '${landCertificate.name}_${index++}.png');
+    },
+  );
+
+  await Share.shareXFiles(xFiles, text: 'Here is the land certificate.');
+
+  return;
   try {
     // Create PictureRecorder
     final recorder = ui.PictureRecorder();
