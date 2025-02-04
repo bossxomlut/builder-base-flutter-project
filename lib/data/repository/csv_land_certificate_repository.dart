@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:injectable/injectable.dart';
-import 'package:isar/isar.dart';
 
 import '../../core/index.dart';
 import '../../core/persistence/csv_storage.dart';
@@ -9,7 +8,6 @@ import '../../core/utils/id_utils.dart';
 import '../../domain/index.dart';
 import '../../resource/index.dart';
 import '../model/land_certificate_model.dart';
-import '../model/province_model.dart';
 
 abstract class StorageInformation {
   static const String fileName = 'sổ_đỏ.csv';
@@ -56,13 +54,14 @@ class SimpleNotifier {
 
 @Injectable(as: LandCertificateRepository)
 class LandCertificateRepositoryCSVImpl extends LandCertificateRepository {
-  LandCertificateRepositoryCSVImpl(
-      this._landCertificateMapping, this._certificateModelMapping, this._mappingToRow, this._notifier);
+  LandCertificateRepositoryCSVImpl(this._landCertificateMapping, this._certificateModelMapping, this._mappingToRow,
+      this._notifier, this._mappingRowToModel);
 
   final LandCertificateMapping _landCertificateMapping;
   final LandCertificateModelMapping _certificateModelMapping;
   final MappingToRow _mappingToRow;
   final SimpleNotifier _notifier;
+  final MappingRowToModel _mappingRowToModel;
 
   @override
   Future<LandCertificateEntity> create(LandCertificateEntity item) async {
@@ -80,12 +79,24 @@ class LandCertificateRepositoryCSVImpl extends LandCertificateRepository {
 
   @override
   Future<bool> delete(LandCertificateEntity item) async {
+    final existsItemIndex = await findIndexByCerId(item.cerId!);
+
+    if (existsItemIndex == -1) {
+      return false;
+    }
+
+    await deleteCsvRecord(StorageInformation.fileName, existsItemIndex);
+
+    _notifier.notify();
     return true;
   }
 
   @override
   Future<List<LandCertificateEntity>> getAll() async {
-    return [];
+    final rows = await readCsvFile(StorageInformation.fileName);
+    final List<LandCertificateModel> certificates = rows.sublist(1).map((e) => _mappingRowToModel.from(e)).toList();
+
+    return mapListAsync(certificates, _landCertificateMapping.from);
   }
 
   @override
@@ -101,27 +112,68 @@ class LandCertificateRepositoryCSVImpl extends LandCertificateRepository {
   }
 
   @override
-  Future<List<LandCertificateEntity>> searchByDistrict(DistrictEntity district, String keyword) {
-    // TODO: implement searchByDistrict
-    throw UnimplementedError();
+  Future<List<LandCertificateEntity>> searchByDistrict(DistrictEntity district, String keyword) async {
+    final rows = await getAll();
+
+    return rows.where((element) => element.district?.name == district.name).toList();
   }
 
   @override
-  Future<List<LandCertificateEntity>> searchByProvince(ProvinceEntity province, String keyword) {
-    // TODO: implement searchByProvince
-    throw UnimplementedError();
+  Future<List<LandCertificateEntity>> searchByProvince(ProvinceEntity province, String keyword) async {
+    final rows = await getAll();
+
+    return rows.where((element) => element.province?.name == province.name).toList();
   }
 
   @override
-  Future<List<LandCertificateEntity>> searchByWard(WardEntity ward, String keyword) {
-    // TODO: implement searchByWard
-    throw UnimplementedError();
+  Future<List<LandCertificateEntity>> searchByWard(WardEntity ward, String keyword) async {
+    final rows = await getAll();
+
+    return rows.where((element) => element.ward?.name == ward.name).toList();
   }
 
   @override
-  Future<LandCertificateEntity> update(LandCertificateEntity item) {
-    // TODO: implement update
-    throw UnimplementedError();
+  Future<LandCertificateEntity> update(LandCertificateEntity item) async {
+    try {
+      final existsItemIndex = await findIndexByCerId(item.cerId!);
+
+      if (existsItemIndex == -1) {
+        throw NotFoundException();
+      }
+
+      final LandCertificateModel model = _certificateModelMapping.from(item)..updatedAt = DateTime.now();
+
+      //find index of exists ite
+
+      await updateCsvRecord(
+        StorageInformation.fileName,
+        existsItemIndex,
+        _mappingToRow.from(model),
+      );
+    } catch (e) {
+      throw NotFoundException();
+    }
+
+    _notifier.notify();
+
+    return item;
+  }
+
+  @override
+  Future<LandCertificateEntity> readByCerId(String cerId) async {
+    final rows = await readCsvFile(StorageInformation.fileName);
+    final List<LandCertificateModel> certificates = rows.sublist(1).map((e) => _mappingRowToModel.from(e)).toList();
+
+    final model = certificates.firstWhere((element) => element.cerId == cerId);
+    return _landCertificateMapping.from(model);
+  }
+
+  @override
+  Future<int> findIndexByCerId(String cerId) async {
+    final rows = await readCsvFile(StorageInformation.fileName);
+    final List<LandCertificateModel> certificates = rows.sublist(1).map((e) => _mappingRowToModel.from(e)).toList();
+    final index = certificates.indexWhere((element) => element.cerId == cerId);
+    return index == -1 ? -1 : index + 1;
   }
 }
 
@@ -148,44 +200,47 @@ class ProvinceLandCertificateRepositoryImpl extends ProvinceLandCertificateRepos
 
   @override
   Future<List<ProvinceLandCertificateEntity>> getAll() async {
-    final rows = await readCsvFile(StorageInformation.fileName);
-    final List<LandCertificateModel> certificates = rows.sublist(1).map((e) => _mappingRowToModel.from(e)).toList();
+    try {
+      final rows = await readCsvFile(StorageInformation.fileName);
+      final List<LandCertificateModel> certificates = rows.sublist(1).map((e) => _mappingRowToModel.from(e)).toList();
 
-    print('certificates: $certificates');
 
-    List<ProvinceLandCertificateEntity> result = [];
-    Map<ProvinceEntity, List<LandCertificateEntity>> map = {};
+      List<ProvinceLandCertificateEntity> result = [];
+      Map<ProvinceEntity, List<LandCertificateEntity>> map = {};
 
-    for (var cer in certificates) {
-      final provinceName = cer.province;
-      print('provinceName: $provinceName');
+      for (var cer in certificates) {
+        final provinceName = cer.province;
+        print('provinceName: $provinceName');
 
-      final provinceEntity =
-          (provinceName.isNotNullOrEmpty ? await _provinceRepository.getOneByName(provinceName!) : null) ??
-              ProvinceEntity(
-                id: -1,
-                name: LKey.other.tr(),
-              );
-      final cerEntity = await _landCertificateMapping.from(cer);
+        final provinceEntity =
+            (provinceName.isNotNullOrEmpty ? await _provinceRepository.getOneByName(provinceName!) : null) ??
+                ProvinceEntity(
+                  id: -1,
+                  name: LKey.other.tr(),
+                );
+        final cerEntity = await _landCertificateMapping.from(cer);
 
-      if (map.containsKey(provinceEntity)) {
-        map[provinceEntity]!.add(cerEntity);
-      } else {
-        map[provinceEntity] = [cerEntity];
+        if (map.containsKey(provinceEntity)) {
+          map[provinceEntity]!.add(cerEntity);
+        } else {
+          map[provinceEntity] = [cerEntity];
+        }
       }
-    }
 
-    for (var entry in map.entries) {
-      result.add(
-        ProvinceLandCertificateEntity(
-          id: entry.key.id,
-          name: entry.key.name ?? '',
-          certificates: entry.value,
-        ),
-      );
-    }
+      for (var entry in map.entries) {
+        result.add(
+          ProvinceLandCertificateEntity(
+            id: entry.key.id,
+            name: entry.key.name ?? '',
+            certificates: entry.value,
+          ),
+        );
+      }
 
-    return result;
+      return result;
+    } catch (e) {
+      return [];
+    }
   }
 
   @override
@@ -196,88 +251,78 @@ class ProvinceLandCertificateRepositoryImpl extends ProvinceLandCertificateRepos
 
 @Injectable(as: SearchGroupCertificateRepository)
 class SearchGroupCertificateRepositoryImpl extends SearchGroupCertificateRepository {
-  SearchGroupCertificateRepositoryImpl(this._districtRepository);
-
-  final Isar _isar = Isar.getInstance()!;
-  IsarCollection<ProvinceModel> get pCollection => _isar.provinceModels;
-
-  IsarCollection<LandCertificateModel> get lCollection => _isar.landCertificateModels;
+  SearchGroupCertificateRepositoryImpl(this._districtRepository, this._landCertificateRepository);
 
   final DistrictRepository _districtRepository;
+  final LandCertificateRepository _landCertificateRepository;
 
   @override
   Future<List<ProvinceCountEntity>> getAll() async {
-    final List<ProvinceModel> provinces = pCollection.where().findAllSync();
-    provinces.addAll([
-      ProvinceModel()
-        ..id = -1
-        ..name = LKey.other.tr(),
-    ]);
+    final allRows = await _landCertificateRepository.getAll();
 
-    return _get(provinces);
+    Map<ProvinceEntity, int> map = {};
+    Map<ProvinceEntity, List<DistrictCountEntity>> districtMap = {};
+
+    for (var row in allRows) {
+      final province = row.province ??
+          ProvinceEntity(
+            id: -1,
+            name: LKey.other.tr(),
+          );
+
+      final district = row.district ??
+          DistrictEntity(
+            id: -1,
+            provinceId: province.id,
+            name: LKey.other.tr(),
+          );
+
+      if (map.containsKey(province)) {
+        map[province] = map[province]! + 1;
+        //set district count
+        final set = districtMap[province]!;
+        final index = set.indexWhere((element) => element.id == district.id);
+        if (index != -1) {
+          set[index] = set[index].copyWith(total: set[index].total + 1);
+        } else {
+          set.add(
+            DistrictCountEntity(
+              id: district.id,
+              name: district.name,
+              total: 1,
+            ),
+          );
+        }
+      } else {
+        map[province] = 1;
+        districtMap[province] = [
+          DistrictCountEntity(
+            id: district.id,
+            name: district.name,
+            total: 1,
+          ),
+        ];
+      }
+    }
+
+    return map.entries
+        .map((e) => ProvinceCountEntity(
+              id: e.key.id,
+              name: e.key.name,
+              total: e.value,
+              districts: districtMap[e.key] ?? [],
+            ))
+        .toList();
   }
 
   @override
   Future<List<ProvinceCountEntity>> search(String keyword) {
-    if (keyword.isEmpty) {
-      return getAll();
-    }
-
-    final List<ProvinceModel> provinces = pCollection.filter().nameContains(keyword).findAllSync();
-
-    return _get(provinces);
-  }
-
-  @override
-  Future<List<ProvinceCountEntity>> _get(List<ProvinceModel> provinces) async {
-    List<ProvinceCountEntity> result = [];
-
-    for (var province in provinces) {
-      final lands = lCollection.where().filter().provinceEqualTo(province.name).findAllSync();
-      final count = lands.length;
-
-      if (count == 0) continue;
-
-      Map<DistrictEntity, DistrictCountEntity> districtMap = {};
-
-      for (var land in lands) {
-        // final combineId = land.combineAddressId;
-        // List<int> addressIds = ProvinceUtil.getIds(combineId ?? '');
-        // List<String> addressNames = ProvinceUtil.getNames(land.combineAddressName ?? '');
-        //
-        // final districtId = addressIds.elementAt(1);
-        // final districtName = addressNames.elementAt(1);
-
-        final districtName = land.district;
-        final DistrictEntity district =
-            (districtName.isNotNullOrEmpty ? await _districtRepository.getOneByName(districtName!) : null) ??
-                DistrictEntity(
-                  id: -1,
-                  provinceId: province.id,
-                  name: LKey.other.tr(),
-                );
-
-        if (districtMap.containsKey(district)) {
-          districtMap[district] = districtMap[district]!.copyWith(total: districtMap[district]!.total + 1);
-        } else {
-          districtMap[district] = DistrictCountEntity(
-            id: district.id,
-            name: district.name,
-            total: 1,
-          );
-        }
-      }
-
-      result.add(
-        ProvinceCountEntity(
-          id: province.id,
-          name: province.name ?? '',
-          total: count,
-          districts: districtMap.values.toList(),
-        ),
-      );
-    }
-
-    return result;
+    return getAll().then(
+      (value) => value
+          .where(
+            (element) => element.name!.contains(keyword),
+          )
+          .toList(),
+    );
   }
 }

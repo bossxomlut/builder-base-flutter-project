@@ -80,6 +80,7 @@ class LandCertificateMapping extends FutureMapping<LandCertificateEntity, LandCe
 
     return LandCertificateEntity(
       id: input.id,
+      cerId: input.cerId,
       name: input.name ?? '',
       files: input.files?.map((e) => AttachmentModelToEntityMapping().from(e)).toList(),
       mapNumber: input.mapNumber,

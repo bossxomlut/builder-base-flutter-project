@@ -9,6 +9,8 @@ abstract class LandCertificateRepository
   Future<List<LandCertificateEntity>> searchByProvince(ProvinceEntity province, String keyword);
   Future<List<LandCertificateEntity>> searchByDistrict(DistrictEntity district, String keyword);
   Future<List<LandCertificateEntity>> searchByWard(WardEntity ward, String keyword);
+  Future<LandCertificateEntity> readByCerId(String cerId);
+  Future<int> findIndexByCerId(String cerId);
 }
 
 //listen have any change in database

@@ -3,9 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../domain/index.dart';
+import '../../utils/index.dart';
 
 @injectable
-class SearchGroupCubit extends Cubit<SearchGroupState> {
+class SearchGroupCubit extends Cubit<SearchGroupState> with SafeEmit<SearchGroupState> {
   SearchGroupCubit(this.repository, this._landCertificateObserverData) : super(SearchGroupState()) {
     startListen();
   }

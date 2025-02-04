@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../domain/index.dart';
+import '../../utils/cubit_utils.dart';
 
 enum ProvinceLevel {
   province,
@@ -14,7 +15,7 @@ enum ProvinceLevel {
 }
 
 @injectable
-class LandCertificateListCubit extends Cubit<LandCertificateListState> {
+class LandCertificateListCubit extends Cubit<LandCertificateListState> with SafeEmit<LandCertificateListState> {
   LandCertificateListCubit(
     this._landCertificateRepository,
     this._landCertificateObserverData,

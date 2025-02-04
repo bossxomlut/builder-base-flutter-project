@@ -62,6 +62,7 @@ class LandCertificateEntity with _$LandCertificateEntity implements GetId<int> {
   }) {
     return LandCertificateEntity(
       id: id,
+      cerId: cerId,
       name: name ?? this.name,
       files: files ?? this.files,
       province: province ?? this.province,

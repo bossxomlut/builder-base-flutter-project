@@ -3,13 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../domain/index.dart';
+import '../../utils/cubit_utils.dart';
 
 /*
 * Use for listing land certificates group by province
 * */
 
 @injectable
-class ProvinceLandCertificateListCubit extends Cubit<CertificateListState> {
+class ProvinceLandCertificateListCubit extends Cubit<CertificateListState> with SafeEmit<CertificateListState> {
   ProvinceLandCertificateListCubit(
     this.certificateRepository,
     this._landCertificateObserverData,

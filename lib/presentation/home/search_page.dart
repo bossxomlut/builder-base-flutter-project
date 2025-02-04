@@ -88,27 +88,58 @@ class CountSearchCard extends StatelessWidget {
               Text('${countSearch.total} ${countSearch.total == 1 ? LKey.certificate.tr() : LKey.certificates.tr()}'),
         ),
         children: [
-          for (var district in countSearch.districts)
-            ListTile(
-              tileColor: theme.colorScheme.surface,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-              ),
-              title: Text('${district.name}'),
-              trailing:
-                  Text('${district.total} ${countSearch.total == 1 ? LKey.certificate.tr() : LKey.certificates.tr()}'),
-              onTap: () {
-                final districtEntity = DistrictEntity(
-                  id: district.id,
-                  provinceId: countSearch.id,
-                  name: district.name,
-                );
+          ListView.separated(
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (BuildContext context, int index) {
+              final district = countSearch.districts[index];
+              return ListTile(
+                tileColor: theme.colorScheme.surface,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+                title: Text('${district.name}'),
+                trailing: Text(
+                    '${district.total} ${countSearch.total == 1 ? LKey.certificate.tr() : LKey.certificates.tr()}'),
+                onTap: () {
+                  final districtEntity = DistrictEntity(
+                    id: district.id,
+                    provinceId: countSearch.id,
+                    name: district.name,
+                  );
 
-                appRouter.goToCertificateGroupByDistrict(
-                  districtEntity,
-                );
-              },
-            ),
+                  appRouter.goToCertificateGroupByDistrict(
+                    districtEntity,
+                  );
+                },
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 8),
+            itemCount: countSearch.districts.length,
+          )
+
+          // for (var district in countSearch.districts)
+          //   ListTile(
+          //     tileColor: theme.colorScheme.surface,
+          //     shape: const RoundedRectangleBorder(
+          //       borderRadius: BorderRadius.all(Radius.circular(8)),
+          //     ),
+          //     title: Text('${district.name}'),
+          //     trailing:
+          //         Text('${district.total} ${countSearch.total == 1 ? LKey.certificate.tr() : LKey.certificates.tr()}'),
+          //     onTap: () {
+          //       final districtEntity = DistrictEntity(
+          //         id: district.id,
+          //         provinceId: countSearch.id,
+          //         name: district.name,
+          //       );
+          //
+          //       appRouter.goToCertificateGroupByDistrict(
+          //         districtEntity,
+          //       );
+          //     },
+          //   ),
         ],
       ),
     );
