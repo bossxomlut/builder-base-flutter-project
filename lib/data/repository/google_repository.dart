@@ -48,8 +48,14 @@ class GoogleRepositoryImpl extends GoogleRepository {
   }
 
   @override
-  Future<bool> get isLogin {
-    return _googleSignIn.isSignedIn();
+  Future<bool> get isLogin async {
+    final isLogin = await _googleSignIn.isSignedIn();
+    if (isLogin) {
+      if (_googleSignIn.currentUser == null) {
+        await _googleSignIn.signInSilently();
+      }
+    }
+    return isLogin;
   }
 }
 
