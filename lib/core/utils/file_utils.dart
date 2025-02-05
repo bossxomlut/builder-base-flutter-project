@@ -60,3 +60,9 @@ Future<XFile> convertBase64ToXFile(String base64String, {String fileName = "temp
 
   return XFile(imageFile.path); // Trả về `XFile`
 }
+
+DateTime getModifiedTime(File file) {
+  final stat = FileStat.statSync(file.path);
+
+  return stat.modified;
+}

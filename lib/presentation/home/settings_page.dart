@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../domain/index.dart';
 import '../../domain/use_case/app_login_use_case.dart';
+import '../../domain/use_case/sync_data_use_case.dart';
 import '../../injection/injection.dart';
 import '../../resource/index.dart';
 import '../../route/app_router.dart';
@@ -60,6 +61,27 @@ class _SettingsPageState extends State<SettingsPage> with StateTemplate<Settings
         //   padding: EdgeInsets.symmetric(horizontal: 20),
         //   child: AppDivider(),
         // ),
+        ListTile(
+          title: const Text('Đồng bộ dữ liệu'),
+          leading: const Icon(LineIcons.syncIcon),
+          onTap: () {
+            ProcessingWidget(
+              execute: () => Future.sync(() async {
+                await Future.delayed(const Duration(seconds: 1));
+                // await getIt.get<UploadDataUseCase>().execute(null);
+                await getIt.get<SyncDataUseCase>().execute(null);
+              }),
+              onCompleted: () {
+                // Navigator.of(context).pop();
+              },
+              messageSuccessDescription: 'Đồng bộ dữ liệu thành công',
+            ).show(context);
+          },
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: AppDivider(),
+        ),
         ListTile(
           title: const LText(LKey.darkMode),
           leading: const Icon(LineIcons.moonAlt),

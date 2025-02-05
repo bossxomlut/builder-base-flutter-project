@@ -14,4 +14,8 @@ abstract class GoogleRepository {
 
 abstract class DriveRepository {
   Future<void> uploadFile(File file);
+
+  Future<File> getFile();
+
+  Future<DateTime?> getLastModifiedTime();
 }

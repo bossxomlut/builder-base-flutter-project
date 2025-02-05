@@ -14,6 +14,10 @@ Future<List<List<dynamic>>> readCsvFile(String fileName) async {
     return [];
   }
 
+  return readCsvRow(file);
+}
+
+Future<List<List<dynamic>>> readCsvRow(File file) async {
   final contents = await file.readAsString();
   List<List<dynamic>> rows = const CsvToListConverter().convert(contents);
   return rows;
@@ -21,9 +25,15 @@ Future<List<List<dynamic>>> readCsvFile(String fileName) async {
 
 /// Ghi dữ liệu từ List<List<dynamic>> vào file CSV
 Future<void> writeCsvFile(String fileName, List<List<dynamic>> rows) async {
+  if (!(await checkFileExists(fileName))) {
+    await createFile(fileName);
+  }
+
   final path = await getFilePath(fileName);
+
   String csv = const ListToCsvConverter().convert(rows);
   final file = File(path);
+
   await file.writeAsString(csv);
 }
 

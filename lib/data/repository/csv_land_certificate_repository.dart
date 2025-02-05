@@ -93,10 +93,13 @@ class LandCertificateRepositoryCSVImpl extends LandCertificateRepository {
 
   @override
   Future<List<LandCertificateEntity>> getAll() async {
-    final rows = await readCsvFile(StorageInformation.fileName);
-    final List<LandCertificateModel> certificates = rows.sublist(1).map((e) => _mappingRowToModel.from(e)).toList();
+    try {
+      final rows = await readCsvFile(StorageInformation.fileName);
+      final List<LandCertificateModel> certificates = rows.sublist(1).map((e) => _mappingRowToModel.from(e)).toList();
 
-    return mapListAsync(certificates, _landCertificateMapping.from);
+      return mapListAsync(certificates, _landCertificateMapping.from);
+    } catch (e) {}
+    return [];
   }
 
   @override
@@ -203,7 +206,6 @@ class ProvinceLandCertificateRepositoryImpl extends ProvinceLandCertificateRepos
     try {
       final rows = await readCsvFile(StorageInformation.fileName);
       final List<LandCertificateModel> certificates = rows.sublist(1).map((e) => _mappingRowToModel.from(e)).toList();
-
 
       List<ProvinceLandCertificateEntity> result = [];
       Map<ProvinceEntity, List<LandCertificateEntity>> map = {};

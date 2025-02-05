@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
@@ -5,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:googleapis_auth/src/auth_client.dart';
 import 'package:injectable/injectable.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../domain/index.dart';
 
@@ -12,6 +14,7 @@ import '../../domain/index.dart';
 class GoogleRepositoryImpl extends GoogleRepository {
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
+      drive.DriveApi.driveScope, // Quyền truy cập Google Drive
       drive.DriveApi.driveFileScope, // Quyền truy cập Google Drive
     ],
   );
@@ -101,8 +104,9 @@ class DriveRepositoryImpl extends DriveRepository {
       driveFile.parents = [folderId]; // Only for new files
       final uploadedFile = await _driveApi.files.create(driveFile, uploadMedia: media);
       print('File CSV đã tải lên với ID: ${uploadedFile.id}');
-    } catch (e) {
-      print("Lỗi khi tải file CSV lên: $e");
+    } catch (e, st) {
+      //log stacktrace
+      log('Lỗi khi tải file CSV lên', error: e, stackTrace: st);
     }
   }
 
@@ -139,14 +143,99 @@ class DriveRepositoryImpl extends DriveRepository {
       final _driveApi = (await this._driveApi)!;
 
       final drive.FileList fileList = await _driveApi.files.list(
-        q: "name='$fileName' and '$folderId' in parents and trashed=false",
+        q: "name='$fileName' and ('$folderId' in parents or sharedWithMe=true  or 'your-service-account-email' in owners) and trashed=false",
         spaces: 'drive',
       );
+      print('Tìm thấy ${fileList.files?.map((e) => e.name).join('|')} tệp trong thư mục.');
 
       return fileList.files?.isNotEmpty == true ? fileList.files!.first : null;
     } catch (e) {
       print("Lỗi khi tìm tệp trong thư mục: $e");
       return null;
+    }
+  }
+
+  /// Tải file về thiết bị
+  Future<File> _downloadFile(String fileId, String fileName) async {
+    try {
+      drive.Media fileMedia =
+          await (await _driveApi)!.files.get(fileId, downloadOptions: drive.DownloadOptions.fullMedia) as drive.Media;
+
+      // Đọc dữ liệu từ stream
+      List<int> dataStore = [];
+      fileMedia.stream.listen(
+        (data) {
+          dataStore.addAll(data);
+        },
+        onDone: () async {
+          final dir = await getApplicationDocumentsDirectory();
+          File localFile = File('${dir.path}/$fileName');
+
+          await localFile.writeAsBytes(dataStore);
+        },
+        onError: (error) {
+          throw Exception("Lỗi khi tải xuống file: $error");
+        },
+      );
+
+      final dir = await getApplicationDocumentsDirectory();
+      return File('${dir.path}/$fileName');
+    } catch (e) {
+      throw Exception("Lỗi khi tải xuống file: $e");
+    }
+  }
+
+  @override
+  Future<DateTime?> getLastModifiedTime() async {
+    try {
+      // 1. **Tìm hoặc tạo thư mục**
+      String? folderId = await _getOrCreateFolder('sổ_đỏ');
+      if (folderId == null) {
+        print("Không thể tạo hoặc tìm thấy thư mục.");
+        throw NotFoundException();
+      }
+
+      // 2. **Kiểm tra file**
+      final existingFile = await _findFileInFolder('sổ_đỏ.csv', folderId);
+      if (existingFile != null && existingFile.id != null) {
+        // final file = (await (await _driveApi)!.files.get(existingFile.id!) as drive.File);
+        final drive.File file = (await (await _driveApi)!.files.get(
+              existingFile.id!,
+              $fields: "id, name, createdTime", // Lấy thời gian tải lên
+            ) as drive.File);
+
+        return file.createdTime?.toLocal();
+      }
+    } catch (e, st) {
+      print("❌ Error getting last modified time: $e");
+      log('Error getting last modified time', error: e, stackTrace: st);
+    }
+    return null;
+  }
+
+  /// Lấy file từ Google Drive (tạo nếu chưa có)
+  @override
+  Future<File> getFile() async {
+    try {
+      // 1. **Tìm hoặc tạo thư mục**
+      String? folderId = await _getOrCreateFolder('sổ_đỏ');
+      if (folderId == null) {
+        print("Không thể tạo hoặc tìm thấy thư mục.");
+        throw NotFoundException();
+      }
+
+      // 2. **Kiểm tra file**
+      final existingFile = await _findFileInFolder('sổ_đỏ.csv', folderId);
+      if (existingFile != null && existingFile.id != null) {
+        return await _downloadFile(existingFile.id!, 'sổ_đỏ.csv');
+      }
+
+      print("Không tìm thấy file trên Drive.");
+      throw NotFoundException();
+    } catch (e, st) {
+      print('Lỗi khi tải file CSV về: $e');
+      print(st);
+      throw NotFoundException();
     }
   }
 }
