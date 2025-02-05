@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:googleapis_auth/googleapis_auth.dart' as gapis;
 
 abstract class GoogleRepository {
-  Future<void> login();
+  Future<bool> login();
 
   Future<void> logout();
 
-  gapis.AuthClient get authClient;
+  Future<gapis.AuthClient?> get authClient;
+
+  Future<bool> get isLogin;
 }
 
 abstract class DriveRepository {

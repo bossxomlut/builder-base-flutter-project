@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../domain/index.dart';
+import '../../domain/use_case/app_login_use_case.dart';
+import '../../injection/injection.dart';
 import '../../resource/index.dart';
 import '../../route/app_router.dart';
 import '../../route/app_router.gr.dart';
@@ -91,7 +94,7 @@ class _SettingsPageState extends State<SettingsPage> with StateTemplate<Settings
           title: const LText(LKey.logout),
           leading: const Icon(LineIcons.alternateSignOut),
           onTap: () {
-            appRouter.goToLoginAtTop();
+            getIt.get<AppLogoutUseCase>().execute(null);
           },
         ),
       ],

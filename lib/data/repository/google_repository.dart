@@ -10,8 +10,6 @@ import '../../domain/index.dart';
 
 @Singleton(as: GoogleRepository)
 class GoogleRepositoryImpl extends GoogleRepository {
-  AuthClient? _authClient;
-
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
       drive.DriveApi.driveFileScope, // Quyền truy cập Google Drive
@@ -19,12 +17,12 @@ class GoogleRepositoryImpl extends GoogleRepository {
   );
 
   @override
-  Future<void> login() async {
+  Future<bool> login() async {
     try {
       //check is signed in
-      if (_googleSignIn.currentUser != null) {
+      if (await isLogin) {
         print("Đã đăng nhập!");
-        return;
+        return true;
       }
 
       // Đăng nhập Google
@@ -32,26 +30,26 @@ class GoogleRepositoryImpl extends GoogleRepository {
 
       if (account != null) {
         // Lấy AuthClient từ GoogleSignIn
-        final authClient = await _googleSignIn.authenticatedClient();
-        if (authClient != null) {
-          _authClient = authClient;
-          print("Đăng nhập thành công!");
-        } else {
-          print("Không lấy được AuthClient!");
-        }
+        // final authClient = await _googleSignIn.authenticatedClient();
+        return true;
       }
     } catch (e) {
       print("Lỗi đăng nhập: $e");
     }
+    return false;
   }
 
   @override
-  AuthClient get authClient => _authClient!;
+  Future<AuthClient?> get authClient => _googleSignIn.authenticatedClient();
 
   @override
   Future<void> logout() {
-    _authClient = null;
     return _googleSignIn.signOut();
+  }
+
+  @override
+  Future<bool> get isLogin {
+    return _googleSignIn.isSignedIn();
   }
 }
 
@@ -59,13 +57,15 @@ class GoogleRepositoryImpl extends GoogleRepository {
 class DriveRepositoryImpl extends DriveRepository {
   final GoogleRepository _googleRepository;
 
-  drive.DriveApi get _driveApi => drive.DriveApi(_googleRepository.authClient);
+  Future<drive.DriveApi?> get _driveApi =>
+      _googleRepository.authClient.then((e) => e == null ? null : drive.DriveApi(e!));
 
   DriveRepositoryImpl(this._googleRepository);
 
   @override
   Future<void> uploadFile(File file) async {
     try {
+      final _driveApi = (await this._driveApi)!;
       final driveFile = drive.File();
       driveFile.name = 'sổ_đỏ.csv';
 
@@ -103,6 +103,8 @@ class DriveRepositoryImpl extends DriveRepository {
   /// **Get or Create Folder**
   Future<String?> _getOrCreateFolder(String folderName) async {
     try {
+      final _driveApi = (await this._driveApi)!;
+
       final drive.FileList folderList = await _driveApi.files.list(
         q: "name='$folderName' and mimeType='application/vnd.google-apps.folder' and trashed=false",
         spaces: 'drive',
@@ -128,6 +130,8 @@ class DriveRepositoryImpl extends DriveRepository {
   /// **Check if file exists in folder**
   Future<drive.File?> _findFileInFolder(String fileName, String folderId) async {
     try {
+      final _driveApi = (await this._driveApi)!;
+
       final drive.FileList fileList = await _driveApi.files.list(
         q: "name='$fileName' and '$folderId' in parents and trashed=false",
         spaces: 'drive',

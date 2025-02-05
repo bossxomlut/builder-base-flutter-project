@@ -15,6 +15,7 @@ class AppRouter extends $AppRouter {
   @override
   List<AutoRoute> get routes => <AutoRoute>[
         AutoRoute(page: SplashRoute.page, initial: true),
+        AutoRoute(page: GoogleLoginRoute.page),
         AutoRoute(page: MainRoute.page),
         AutoRoute(page: PinCodeRoute.page),
         AutoRoute(page: SetUpPinCodeRoute.page),
@@ -31,11 +32,19 @@ extension AppRouterX on AppRouter {
     replaceAll(const [MainRoute()]);
   }
 
-  void goToLogin() {
+  void goToGoogleLogin() {
+    push(const GoogleLoginRoute());
+  }
+
+  void goToGoogleLoginAtTop() {
+    replaceAll(const [GoogleLoginRoute()]);
+  }
+
+  void goToPinCode() {
     push(const PinCodeRoute());
   }
 
-  void goToLoginAtTop() {
+  void goToPinCodeAtTop() {
     replaceAll(const [PinCodeRoute()]);
   }
 

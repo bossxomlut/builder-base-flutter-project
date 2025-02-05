@@ -99,7 +99,7 @@ class SetUpPinCodePageState extends State<SetUpPinCodePage>
     );
 
     // Navigate to pin code page
-    appRouter.goToLoginAtTop();
+    appRouter.goToPinCodeAtTop();
   }
 }
 

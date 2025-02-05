@@ -6,14 +6,26 @@ import '../../core/index.dart';
 import '../index.dart';
 
 @injectable
-class GoogleLoginUseCase extends FutureUseCase<void, void> {
+class CheckGoogleLoginUseCase extends FutureUseCase<bool, void> {
+  CheckGoogleLoginUseCase(this._repository);
+
+  final GoogleRepository _repository;
+
+  @override
+  Future<bool> execute(void input) {
+    return _repository.isLogin;
+  }
+}
+
+@injectable
+class GoogleLoginUseCase extends FutureUseCase<bool, void> {
   GoogleLoginUseCase(this._repository);
 
   final GoogleRepository _repository;
 
   @override
-  Future<void> execute(void input) async {
-    final rs = await _repository.login();
+  Future<bool> execute(void input) async {
+    return _repository.login();
   }
 }
 

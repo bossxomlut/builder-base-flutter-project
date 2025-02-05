@@ -24,15 +24,7 @@ class _SplashPageState extends State<SplashPage> with StateTemplate<SplashPage> 
   }
 
   void navigationHandler() {
-    getIt.get<CheckConfiguredPinCodeUseCase>().execute(null).then(
-      (bool value) {
-        if (value) {
-          appRouter.goToLoginAtTop();
-        } else {
-          appRouter.replaceAll([const SetUpPinCodeRoute()]);
-        }
-      },
-    );
+    getIt.get<AppLoginUseCase>().execute(null);
   }
 
   @override

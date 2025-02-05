@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../../domain/index.dart';
 import '../../injection/injection.dart';
@@ -96,7 +95,7 @@ class _ForgotPinCodePageState extends SetUpPinCodePageState {
     showSuccess(message: LKey.messagePinCodeSetSuccessfully.tr());
 
     // Navigate to pin code page
-    appRouter.goToLoginAtTop();
+    appRouter.goToPinCodeAtTop();
   }
 
   @override
