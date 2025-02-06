@@ -10,6 +10,8 @@ import '../../resource/index.dart';
 import '../model/land_certificate_model.dart';
 
 abstract class StorageInformation {
+  static const String folder = 'sổ_đỏ';
+
   static const String fileName = 'sổ_đỏ.csv';
 
   static const List<String> header = [

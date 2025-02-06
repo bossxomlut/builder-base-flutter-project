@@ -117,7 +117,16 @@ class _InitMain extends _MainPageState with LoadingState {
       ]);
 
       hideLoading();
+
+      getIt.get<ScheduleUploadDataUseCase>().execute(null);
     });
+  }
+
+  @override
+  void dispose() {
+    getIt.get<ScheduleUploadDataUseCase>().cancel();
+
+    super.dispose();
   }
 
   @override

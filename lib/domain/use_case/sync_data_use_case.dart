@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
@@ -64,6 +65,73 @@ class UploadDataUseCase extends FutureUseCase<bool, void> {
       logger.e("Lỗi upload dữ liệu: $e");
     }
     return false;
+  }
+}
+
+@singleton
+class ScheduleUploadDataUseCase extends FutureUseCase<void, void> {
+  ScheduleUploadDataUseCase(this._uploadDataUseCase);
+
+  final UploadDataUseCase _uploadDataUseCase;
+
+  Duration _duration = const Duration(minutes: 5);
+
+  void setDurationAndReSchedule(Duration duration) {
+    _duration = duration;
+    cancel();
+    execute(null);
+  }
+
+  bool isRunning = false;
+
+  Timer? _timer;
+
+  //storage last time upload
+  DateTime? _lastTimeUpload;
+
+  void cancel() {
+    _timer?.cancel();
+    _timer = null;
+    _lastTimeUpload = null;
+  }
+
+  @override
+  Future<void> execute(void input) async {
+    _timer = Timer.periodic(
+      _duration,
+      (timer) async {
+        try {
+          if (isRunning) {
+            return;
+          }
+
+          //get date time modified of current local file
+          final path = await getFilePath(StorageInformation.fileName);
+          final file = File(path);
+          final lastTimeModified = getModifiedTime(file);
+
+          //check if file is modified
+          if (_lastTimeUpload != null && lastTimeModified.isBefore(_lastTimeUpload!)) {
+            return;
+          }
+
+          isRunning = true;
+          final rs = await _uploadDataUseCase.execute(input);
+
+          if (rs) {
+            _lastTimeUpload = DateTime.now();
+            logger.i("Upload dữ liệu thành công");
+          } else {
+            logger.i("Lỗi upload dữ liệu");
+          }
+          //cancel timer
+          isRunning = false;
+        } catch (e) {
+          isRunning = false;
+          logger.e("Lỗi upload dữ liệu: $e");
+        }
+      },
+    );
   }
 }
 
