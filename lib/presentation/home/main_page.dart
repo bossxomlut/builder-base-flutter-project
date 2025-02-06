@@ -108,13 +108,15 @@ class _InitMain extends _MainPageState with LoadingState {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       showLoading();
-      getIt.get<CheckInitialProvinceDataUseCase>().execute(null).whenComplete(
-        () {
-          hideLoading();
-        },
-      );
+
+      await Future.wait([
+        getIt.get<CheckInitialDataUseCase>().execute(null),
+        getIt.get<CheckInitialProvinceDataUseCase>().execute(null),
+      ]);
+
+      hideLoading();
     });
   }
 

@@ -225,6 +225,13 @@ class WardRepositoryImpl extends WardRepository with IsarCrudRepository<WardEnti
       });
     });
   }
+
+  @override
+  Future<void> createAll(List<WardEntity> items) {
+    return isar.writeTxn(() async {
+      await collection.putAll(items.map(createNewItem).toList());
+    });
+  }
 }
 
 @Injectable(as: FlatProvinceRepository)

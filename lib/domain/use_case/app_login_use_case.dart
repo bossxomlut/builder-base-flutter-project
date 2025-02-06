@@ -1,7 +1,10 @@
 import 'package:injectable/injectable.dart';
 
 import '../../core/index.dart';
+import '../../core/utils/file_utils.dart';
+import '../../data/repository/csv_land_certificate_repository.dart';
 import '../../injection/injection.dart';
+import '../../logger/logger.dart';
 import '../../route/app_router.dart';
 import '../../route/app_router.gr.dart';
 import '../index.dart';
@@ -15,7 +18,11 @@ class AppLogoutUseCase extends FutureUseCase<void, void> {
   @override
   Future<void> execute(void input) async {
     await _googleLogoutUseCase.execute(null);
-    //todo: clear database
+    try {
+      await deleteFile(StorageInformation.fileName);
+    } catch (e) {
+      logger.e("Lỗi xóa file: $e");
+    }
     appRouter.goToGoogleLoginAtTop();
   }
 }

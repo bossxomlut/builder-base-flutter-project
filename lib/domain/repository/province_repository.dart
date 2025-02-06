@@ -31,6 +31,8 @@ abstract class WardRepository
         GetOneByNameRepository<WardEntity>,
         ClearAll {
   Future<List<WardEntity>> searchByDistrict(DistrictEntity district, String keyword);
+
+  Future<void> createAll(List<WardEntity> items);
 }
 
 abstract class FlatProvinceRepository

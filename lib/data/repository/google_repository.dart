@@ -8,6 +8,7 @@ import 'package:googleapis_auth/src/auth_client.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../core/utils/stream_utils.dart';
 import '../../domain/index.dart';
 
 @Singleton(as: GoogleRepository)
@@ -161,26 +162,25 @@ class DriveRepositoryImpl extends DriveRepository {
       drive.Media fileMedia =
           await (await _driveApi)!.files.get(fileId, downloadOptions: drive.DownloadOptions.fullMedia) as drive.Media;
 
-      // Đọc dữ liệu từ stream
-      List<int> dataStore = [];
-      fileMedia.stream.listen(
-        (data) {
-          dataStore.addAll(data);
-        },
-        onDone: () async {
-          final dir = await getApplicationDocumentsDirectory();
-          File localFile = File('${dir.path}/$fileName');
+      List<int> dataStore = await fileMedia.stream.toFuture();
 
-          await localFile.writeAsBytes(dataStore);
-        },
-        onError: (error) {
-          throw Exception("Lỗi khi tải xuống file: $error");
-        },
-      );
+      log('📁 Downloaded file data: ${dataStore} ');
 
-      final dir = await getApplicationDocumentsDirectory();
-      return File('${dir.path}/$fileName');
-    } catch (e) {
+      final dir = await getTemporaryDirectory();
+
+      final tempPath = Directory('${dir.path}/temporary');
+
+      // Create the directory if it doesn't exist
+      if (!tempPath.existsSync()) {
+        tempPath.createSync(recursive: true);
+      }
+
+      File localFile = File('${tempPath.path}/$fileName');
+
+      await localFile.writeAsBytes(dataStore);
+
+      return localFile;
+    } catch (e, st) {
       throw Exception("Lỗi khi tải xuống file: $e");
     }
   }

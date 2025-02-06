@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:injectable/injectable.dart';
@@ -9,6 +10,42 @@ import '../../data/model/land_certificate_model.dart';
 import '../../data/repository/csv_land_certificate_repository.dart';
 import '../../logger/logger.dart';
 import '../index.dart';
+
+@injectable
+class CheckInitialDataUseCase extends FutureUseCase<void, void> {
+  CheckInitialDataUseCase(this._downloadDataUseCase);
+
+  final DownloadDataUseCase _downloadDataUseCase;
+
+  @override
+  Future<void> execute(void input) async {
+    final isExistsFile = await checkFileExists(StorageInformation.fileName);
+
+    if (isExistsFile) {
+      return;
+    }
+
+    await _downloadDataUseCase.execute(input);
+  }
+}
+
+@injectable
+class DownloadDataUseCase extends FutureUseCase<void, void> {
+  DownloadDataUseCase(this.driveRepository, this.storageDataUseCase);
+
+  final DriveRepository driveRepository;
+  final StorageDataUseCase storageDataUseCase;
+
+  @override
+  Future<void> execute(void input) async {
+    try {
+      final file = await driveRepository.getFile();
+      await storageDataUseCase.execute(file);
+    } catch (e) {
+      logger.e("Lỗi tải dữ liệu: $e");
+    }
+  }
+}
 
 @injectable
 class UploadDataUseCase extends FutureUseCase<bool, void> {
@@ -41,10 +78,17 @@ class StorageDataUseCase extends FutureUseCase<void, File> {
     try {
       final rows = await readCsvRow(input);
 
+      //check file exists
+      final isExistsFile = await checkFileExists(StorageInformation.fileName);
+      if (!isExistsFile) {
+        await createFile(StorageInformation.fileName);
+      }
+
       await writeCsvFile(StorageInformation.fileName, rows);
 
-      // _simpleNotifier.notify();
-    } catch (e) {
+      _simpleNotifier.notify();
+    } catch (e, stackTrace) {
+      log('Lỗi lưu dữ liệu: $e', stackTrace: stackTrace);
       logger.e("Lỗi lưu dữ liệu: $e");
     }
   }

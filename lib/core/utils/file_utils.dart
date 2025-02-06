@@ -15,9 +15,13 @@ Future<String> getFilePath(String fileName) async {
 
 /// Kiểm tra tồn tại file
 Future<bool> checkFileExists(String fileName) async {
-  final filePath = await getFilePath(fileName);
-  final file = File(filePath);
-  return await file.exists();
+  try {
+    final filePath = await getFilePath(fileName);
+    final file = File(filePath);
+    return file.existsSync();
+  } catch (e) {
+    return false;
+  }
 }
 
 /// Tạo file
@@ -25,6 +29,13 @@ Future<File> createFile(String fileName) async {
   final filePath = await getFilePath(fileName);
   final file = File(filePath);
   return file.create();
+}
+
+/// Xóa file
+Future<void> deleteFile(String fileName) async {
+  final filePath = await getFilePath(fileName);
+  final file = File(filePath);
+  return file.deleteSync();
 }
 
 /// 📌 Chuyển đổi ảnh thành chuỗi Base64

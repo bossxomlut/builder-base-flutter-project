@@ -37,7 +37,6 @@ class _GoogleLoginPageState extends State<GoogleLoginPage> with StateTemplate<Go
             Buttons.google,
             onPressed: () {
               final GoogleLoginUseCase useCase = getIt.get();
-              final CheckGoogleLoginUseCase checkLoginUse = getIt.get();
 
               useCase.execute(null).then(
                 (value) {

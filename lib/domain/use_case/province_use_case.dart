@@ -55,15 +55,22 @@ class CheckInitialProvinceDataUseCase extends FutureUseCase<void, void> {
 
         //create wards
         final wards = district['wards'] as List<dynamic>;
-        for (final ward in wards) {
-          final wardEntity = WardEntity.fromJson(ward as Map<String, dynamic>).copyWith(
-            districtId: districtStorage.id,
-          );
-          final wardStorage = await _wardRepository.create(wardEntity);
-          await _flatProvinceRepository.create(
-            FlatProvinceEntity.combine(provinceStorage, districtStorage, wardStorage),
-          );
-        }
+        final wardEntities = wards
+            .map((ward) => WardEntity.fromJson(ward as Map<String, dynamic>).copyWith(
+                  districtId: districtStorage.id,
+                ))
+            .toList();
+        await _wardRepository.createAll(wardEntities);
+
+        // for (final ward in wards) {
+        //   final wardEntity = WardEntity.fromJson(ward as Map<String, dynamic>).copyWith(
+        //     districtId: districtStorage.id,
+        //   );
+        //   final wardStorage = await _wardRepository.create(wardEntity);
+        //   await _flatProvinceRepository.create(
+        //     FlatProvinceEntity.combine(provinceStorage, districtStorage, wardStorage),
+        //   );
+        // }
       }
 
       log('province: $province');
