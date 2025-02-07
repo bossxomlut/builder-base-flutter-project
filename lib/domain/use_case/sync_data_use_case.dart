@@ -70,9 +70,10 @@ class UploadDataUseCase extends FutureUseCase<bool, void> {
 
 @singleton
 class ScheduleUploadDataUseCase extends FutureUseCase<void, void> {
-  ScheduleUploadDataUseCase(this._uploadDataUseCase);
+  ScheduleUploadDataUseCase(this._uploadDataUseCase, this._syncDataUseCase);
 
   final UploadDataUseCase _uploadDataUseCase;
+  final SyncDataUseCase _syncDataUseCase;
 
   Duration _duration = const Duration(minutes: 5);
 
@@ -116,19 +117,19 @@ class ScheduleUploadDataUseCase extends FutureUseCase<void, void> {
           }
 
           isRunning = true;
-          final rs = await _uploadDataUseCase.execute(input);
+          final rs = await _syncDataUseCase.execute(null);
 
           if (rs) {
             _lastTimeUpload = DateTime.now();
-            logger.i("Upload dữ liệu thành công");
+            logger.i("Sync dữ liệu thành công");
           } else {
-            logger.i("Lỗi upload dữ liệu");
+            logger.i("Lỗi Sync dữ liệu");
           }
           //cancel timer
           isRunning = false;
         } catch (e) {
           isRunning = false;
-          logger.e("Lỗi upload dữ liệu: $e");
+          logger.e("Lỗi Sync dữ liệu: $e");
         }
       },
     );
@@ -163,7 +164,7 @@ class StorageDataUseCase extends FutureUseCase<void, File> {
 }
 
 @injectable
-class SyncDataUseCase extends FutureUseCase<void, void> {
+class SyncDataUseCase extends FutureUseCase<bool, void> {
   SyncDataUseCase(
     this._driveRepository,
     this._storageDataUseCase,
@@ -175,7 +176,7 @@ class SyncDataUseCase extends FutureUseCase<void, void> {
   final UploadDataUseCase _uploadDataUseCase;
 
   @override
-  Future<void> execute(void input) async {
+  Future<bool> execute(void input) async {
     try {
       //load file from drive
       final file = await _driveRepository.getFile();
@@ -206,12 +207,15 @@ class SyncDataUseCase extends FutureUseCase<void, void> {
       ]);
 
       await _uploadDataUseCase.execute(null);
+      return true;
     } catch (e) {
       logger.e("Lỗi đồng bộ dữ liệu: $e");
       if (e is NotFoundException) {
         await _uploadDataUseCase.execute(null);
       }
     }
+
+    return false;
   }
 }
 

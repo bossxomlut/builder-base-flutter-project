@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../../core/utils/app_remote_config.dart';
 import '../../data/repository/csv_land_certificate_repository.dart';
 import '../../domain/index.dart';
 import '../../injection/injection.dart';
@@ -62,7 +62,7 @@ class _SettingsPageState extends State<SettingsPage> with StateTemplate<Settings
         //   padding: EdgeInsets.symmetric(horizontal: 20),
         //   child: AppDivider(),
         // ),
-        if (kDebugMode)
+        if (getIt.get<RemoteAppConfigService>().isShowConfig)
           Column(
             children: [
               ListTile(
@@ -90,7 +90,6 @@ class _SettingsPageState extends State<SettingsPage> with StateTemplate<Settings
                 leading: const Icon(LineIcons.calendarCheck),
                 onTap: () {
                   getIt.get<DriveRepository>().getLastModifiedTime().then((value) {
-                    print('Last modified time: $value');
                     showSimpleInfo(message: 'Thời gian cập nhật file lên drive: $value');
                   });
                 },

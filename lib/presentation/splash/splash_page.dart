@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../core/utils/app_remote_config.dart';
 import '../../domain/index.dart';
 import '../../injection/injection.dart';
 import '../../route/app_router.dart';
-import '../../route/app_router.gr.dart';
 import '../utils/index.dart';
 
 @RoutePage()
@@ -19,6 +19,20 @@ class _SplashPageState extends State<SplashPage> with StateTemplate<SplashPage> 
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      getIt.get<RemoteAppConfigLoader>().load().whenComplete(() {
+        if (getIt.get<RemoteAppConfigService>().isLockedApp) {
+          try {
+            showDialog(
+              context: appRouter.navigatorKey.currentContext!,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return PopScope(canPop: false, child: Container());
+              },
+            );
+          } catch (e) {}
+        }
+      });
+
       navigationHandler();
     });
   }
