@@ -56,6 +56,9 @@ class LandCertificateModel {
 
   //Thời điểm cập nhật
   DateTime? updatedAt;
+
+  //Đã xoá
+  bool? isDeleted;
 }
 
 @injectable
@@ -192,6 +195,7 @@ class MappingToRow extends Mapping<List<dynamic>, LandCertificateModel> {
       input.note ?? '',
       combinedBase64,
       input.updatedAt ?? '',
+      (input.isDeleted?.toString() ?? ''),
     ];
   }
 }
@@ -224,6 +228,7 @@ class MappingRowToModel extends Mapping<LandCertificateModel, List<dynamic>> {
       ..taxRenewalTime = input[19]?.toString().parseDateTime() ?? DateTime(0)
       ..note = input[20]?.toString() ?? ''
       ..files = files
-      ..updatedAt = input[22]?.toString().parseDateTime() ?? DateTime(0);
+      ..updatedAt = input[22]?.toString().parseDateTime() ?? DateTime(0)
+      ..isDeleted = input.length == 24 ? input[23]?.toString().parseBool() ?? false : null;
   }
 }

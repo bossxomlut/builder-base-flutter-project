@@ -82,6 +82,7 @@ void showSimpleInfo({BuildContext? context, required String message}) {
   toastification.show(
     context: context, // optional if you use ToastificationWrapper
     type: ToastificationType.info,
+    style: ToastificationStyle.fillColored,
     autoCloseDuration: const Duration(seconds: 2),
     showProgressBar: false,
     applyBlurEffect: false,

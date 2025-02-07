@@ -8,6 +8,7 @@ import '../../resource/index.dart';
 import '../../route/app_router.dart';
 import '../../route/app_router.gr.dart';
 import '../../widget/index.dart';
+import '../../widget/toast.dart';
 import '../utils/index.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -84,6 +85,20 @@ class _SettingsPageState extends State<SettingsPage> with StateTemplate<Settings
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: AppDivider(),
               ),
+              ListTile(
+                title: const Text('Check thời gian cập nhật cuối cùng'),
+                leading: const Icon(LineIcons.calendarCheck),
+                onTap: () {
+                  getIt.get<DriveRepository>().getLastModifiedTime().then((value) {
+                    print('Last modified time: $value');
+                    showSimpleInfo(message: 'Thời gian cập nhật file lên drive: $value');
+                  });
+                },
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: AppDivider(),
+              ),
             ],
           ),
         ExpansionTile(
@@ -105,6 +120,7 @@ class _SettingsPageState extends State<SettingsPage> with StateTemplate<Settings
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: AppDivider(),
         ),
+
         ListTile(
           title: const Text('Tải lên drive'),
           leading: const Icon(LineIcons.upload),

@@ -206,10 +206,10 @@ class DriveRepositoryImpl extends DriveRepository {
         // final file = (await (await _driveApi)!.files.get(existingFile.id!) as drive.File);
         final drive.File file = (await (await _driveApi)!.files.get(
               existingFile.id!,
-              $fields: "id, name, createdTime", // Lấy thời gian tải lên
+              $fields: "id, name, modifiedTime", // Lấy thời gian tải lên
             ) as drive.File);
 
-        return file.createdTime?.toLocal();
+        return file.modifiedTime?.toLocal();
       }
     } catch (e, st) {
       log('Error getting last modified time', error: e, stackTrace: st);

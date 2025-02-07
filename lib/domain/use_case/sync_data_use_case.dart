@@ -205,9 +205,12 @@ class SyncDataUseCase extends FutureUseCase<void, void> {
         ...mergeRows.map((e) => MappingToRow().from(e)),
       ]);
 
-      await _uploadDataUseCase.execute(input);
+      await _uploadDataUseCase.execute(null);
     } catch (e) {
       logger.e("Lỗi đồng bộ dữ liệu: $e");
+      if (e is NotFoundException) {
+        await _uploadDataUseCase.execute(null);
+      }
     }
   }
 }
@@ -232,6 +235,7 @@ class MergeTwoFiles {
     final result = <LandCertificateModel>[];
     final Map<String, LandCertificateModel> localMap = {for (var item in local) item.cerId!: item};
     final Map<String, LandCertificateModel> remoteMap = {for (var item in remote) item.cerId!: item};
+    final Set<String> processedIds = {};
 
     // 1️⃣ Merge items with the same ID, choosing the newest one
     for (var id in localMap.keys) {
@@ -242,25 +246,27 @@ class MergeTwoFiles {
         } else {
           result.add(remoteMap[id]!);
         }
-        remoteMap.remove(id); // Remove from remote to prevent duplicate processing
+        processedIds.add(id);
       }
+    }
+
+    //remove processedIds in remote and local maps
+    for (var id in processedIds) {
+      localMap.remove(id);
+      remoteMap.remove(id);
     }
 
     // 2️⃣ Handle local-only records
     for (var id in localMap.keys) {
-      if (!remoteMap.containsKey(id)) {
-        if (localMap[id]!.updatedAt!.isAfter(remoteLastedChanged)) {
-          result.add(localMap[id]!);
-        }
-      }
+      result.add(localMap[id]!);
     }
 
     // 3️⃣ Handle remote-only records
     for (var id in remoteMap.keys) {
-      if (remoteMap[id]!.updatedAt!.isAfter(localLastedChanged)) {
-        result.add(remoteMap[id]!);
-      }
+      result.add(remoteMap[id]!);
     }
+
+    logger.i('Merge result: ${result.length} records');
 
     return result;
   }

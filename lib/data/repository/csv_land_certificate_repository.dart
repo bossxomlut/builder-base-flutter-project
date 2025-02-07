@@ -38,6 +38,7 @@ abstract class StorageInformation {
     'Ghi chú',
     'Danh sách tệp tin',
     'Thời điểm cập nhật',
+    'Đã xoá',
   ];
 }
 
@@ -56,8 +57,13 @@ class SimpleNotifier {
 
 @Injectable(as: LandCertificateRepository)
 class LandCertificateRepositoryCSVImpl extends LandCertificateRepository {
-  LandCertificateRepositoryCSVImpl(this._landCertificateMapping, this._certificateModelMapping, this._mappingToRow,
-      this._notifier, this._mappingRowToModel);
+  LandCertificateRepositoryCSVImpl(
+    this._landCertificateMapping,
+    this._certificateModelMapping,
+    this._mappingToRow,
+    this._notifier,
+    this._mappingRowToModel,
+  );
 
   final LandCertificateMapping _landCertificateMapping;
   final LandCertificateModelMapping _certificateModelMapping;
@@ -87,8 +93,16 @@ class LandCertificateRepositoryCSVImpl extends LandCertificateRepository {
       return false;
     }
 
-    await deleteCsvRecord(StorageInformation.fileName, existsItemIndex);
+    //item to model
+    final model = _certificateModelMapping.from(item)
+      ..isDeleted = true
+      ..updatedAt = DateTime.now();
 
+    await updateCsvRecord(
+      StorageInformation.fileName,
+      existsItemIndex,
+      _mappingToRow.from(model),
+    );
     _notifier.notify();
     return true;
   }
@@ -97,7 +111,8 @@ class LandCertificateRepositoryCSVImpl extends LandCertificateRepository {
   Future<List<LandCertificateEntity>> getAll() async {
     try {
       final rows = await readCsvFile(StorageInformation.fileName);
-      final List<LandCertificateModel> certificates = rows.sublist(1).map((e) => _mappingRowToModel.from(e)).toList();
+      final List<LandCertificateModel> certificates =
+          rows.sublist(1).map((e) => _mappingRowToModel.from(e)).where((e) => e.isDeleted != true).toList();
 
       return mapListAsync(certificates, _landCertificateMapping.from);
     } catch (e) {}
@@ -120,7 +135,13 @@ class LandCertificateRepositoryCSVImpl extends LandCertificateRepository {
   Future<List<LandCertificateEntity>> searchByDistrict(DistrictEntity district, String keyword) async {
     final rows = await getAll();
 
-    return rows.where((element) => element.district?.name == district.name).toList();
+    return rows.where((element) {
+      if (district.id == -1) {
+        return element.district == null && district.provinceId == element.province?.id;
+      }
+
+      return element.district?.name == district.name && district.provinceId == element.province?.id;
+    }).toList();
   }
 
   @override
@@ -197,37 +218,38 @@ class LandCertificateObserverDataImpl extends LandCertificateObserverData {
 @Injectable(as: ProvinceLandCertificateRepository)
 class ProvinceLandCertificateRepositoryImpl extends ProvinceLandCertificateRepository {
   ProvinceLandCertificateRepositoryImpl(
-      this._landCertificateMapping, this._mappingRowToModel, this._provinceRepository);
+    this._landCertificateMapping,
+    this._mappingRowToModel,
+    this._provinceRepository,
+    this._landCertificateRepository,
+  );
 
   final LandCertificateMapping _landCertificateMapping;
   final MappingRowToModel _mappingRowToModel;
   final ProvinceRepository _provinceRepository;
+  final LandCertificateRepository _landCertificateRepository;
 
   @override
   Future<List<ProvinceLandCertificateEntity>> getAll() async {
     try {
-      final rows = await readCsvFile(StorageInformation.fileName);
-      final List<LandCertificateModel> certificates = rows.sublist(1).map((e) => _mappingRowToModel.from(e)).toList();
+      final List<LandCertificateEntity> certificates = await _landCertificateRepository.getAll();
 
       List<ProvinceLandCertificateEntity> result = [];
       Map<ProvinceEntity, List<LandCertificateEntity>> map = {};
 
       for (var cer in certificates) {
-        final provinceName = cer.province;
-        print('provinceName: $provinceName');
+        final province = cer.province;
 
-        final provinceEntity =
-            (provinceName.isNotNullOrEmpty ? await _provinceRepository.getOneByName(provinceName!) : null) ??
-                ProvinceEntity(
-                  id: -1,
-                  name: LKey.other.tr(),
-                );
-        final cerEntity = await _landCertificateMapping.from(cer);
+        final provinceEntity = province ??
+            ProvinceEntity(
+              id: -1,
+              name: LKey.other.tr(),
+            );
 
         if (map.containsKey(provinceEntity)) {
-          map[provinceEntity]!.add(cerEntity);
+          map[provinceEntity]!.add(cer);
         } else {
-          map[provinceEntity] = [cerEntity];
+          map[provinceEntity] = [cer];
         }
       }
 
@@ -259,7 +281,6 @@ class SearchGroupCertificateRepositoryImpl extends SearchGroupCertificateReposit
 
   final DistrictRepository _districtRepository;
   final LandCertificateRepository _landCertificateRepository;
-
   @override
   Future<List<ProvinceCountEntity>> getAll() async {
     final allRows = await _landCertificateRepository.getAll();
