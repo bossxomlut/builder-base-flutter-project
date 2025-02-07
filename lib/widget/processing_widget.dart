@@ -218,7 +218,7 @@ class _ProcessingWidgetState extends State<ProcessingWidget> {
                           ),
                           Gap(2),
                           Text(
-                            'Chúc mừng bạn đã tạo sổ đỏ thành công nhé ',
+                            widget.messageSuccessDescription,
                             style: theme.textTheme.bodyMedium,
                             maxLines: 2,
                             textAlign: TextAlign.center,

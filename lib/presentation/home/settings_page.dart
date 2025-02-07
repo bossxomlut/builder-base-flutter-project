@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../../data/repository/csv_land_certificate_repository.dart';
 import '../../domain/index.dart';
 import '../../injection/injection.dart';
 import '../../resource/index.dart';
@@ -70,7 +71,6 @@ class _SettingsPageState extends State<SettingsPage> with StateTemplate<Settings
                   ProcessingWidget(
                     execute: () => Future.sync(() async {
                       await Future.delayed(const Duration(seconds: 1));
-                      // await getIt.get<UploadDataUseCase>().execute(null);
                       await getIt.get<SyncDataUseCase>().execute(null);
                     }),
                     onCompleted: () {
@@ -86,18 +86,35 @@ class _SettingsPageState extends State<SettingsPage> with StateTemplate<Settings
               ),
             ],
           ),
+        ExpansionTile(
+          shape: const RoundedRectangleBorder(),
+          tilePadding: EdgeInsets.only(right: 20),
+          childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+          title: ListTile(
+            title: const Text('Thông tin lưu trữ'),
+            leading: const Icon(LineIcons.file),
+          ),
+          children: [
+            ListTile(
+              title: Text('Drive của bạn'),
+              subtitle: Text('${StorageInformation.folder}/${StorageInformation.fileName}'),
+            ),
+          ],
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: AppDivider(),
+        ),
         ListTile(
-          title: const Text('Tải dữ liệu'),
+          title: const Text('Tải lên drive'),
           leading: const Icon(LineIcons.upload),
           onTap: () {
             ProcessingWidget(
               execute: () => Future.sync(() async {
                 await getIt.get<UploadDataUseCase>().execute(null);
               }),
-              onCompleted: () {
-                // Navigator.of(context).pop();
-              },
-              messageSuccessDescription: 'Đồng bộ dữ liệu thành công',
+              onCompleted: () {},
+              messageSuccessDescription: 'Tải dữ liệu thành công',
             ).show(context);
           },
         ),

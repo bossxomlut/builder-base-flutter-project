@@ -42,6 +42,7 @@ abstract class LKey {
   //message
   static const String messageInvalidSecurityQuestion = 'message.invalidSecurityQuestion';
   static const String messagePinCodeSetSuccessfully = 'message.pinCodeSetSuccessfully';
+  static const String messageEditLandCertificateSuccessfully = 'message.editLandCertificateSuccessfully';
   static const String messageAddLandCertificateSuccessfully = 'message.addLandCertificateSuccessfully';
   static const String messageHaveAnErrorDescription = 'message.haveAnErrorDescription';
   static const String messageProcessingDescription = 'message.processingDescription';

@@ -148,7 +148,9 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
       onCompleted: () {
         Navigator.of(context).pop();
       },
-      messageSuccessDescription: LKey.messageAddLandCertificateSuccessfully.tr(),
+      messageSuccessDescription: haveInitData
+          ? LKey.messageEditLandCertificateSuccessfully.tr()
+          : LKey.messageAddLandCertificateSuccessfully.tr(),
     ).show(context);
   }
 
