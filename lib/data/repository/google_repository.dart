@@ -111,6 +111,7 @@ class DriveRepositoryImpl extends DriveRepository {
     } catch (e, st) {
       //log stacktrace
       log('Lỗi khi tải file CSV lên', error: e, stackTrace: st);
+      rethrow;
     }
   }
 

@@ -63,6 +63,7 @@ class UploadDataUseCase extends FutureUseCase<bool, void> {
       return true;
     } catch (e) {
       logger.e("Lỗi upload dữ liệu: $e");
+      rethrow;
     }
     return false;
   }
