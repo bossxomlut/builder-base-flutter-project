@@ -219,23 +219,25 @@ class _SetUpPinCodeWidgetState extends State<SetUpPinCodeWidget> with StateTempl
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                LText(
-                  LKey.setUpPinCode,
-                  style: theme.textTheme.headlineMedium,
-                ),
-                const SizedBox(height: 40),
-                ValueListenableBuilder<String>(
-                  valueListenable: _pinNotifier,
-                  builder: (context, pin, _) {
-                    return PinCodeWidget(pin, showPin: true);
-                  },
-                ),
-              ],
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  LText(
+                    LKey.setUpPinCode,
+                    style: theme.textTheme.headlineMedium,
+                  ),
+                  const SizedBox(height: 40),
+                  ValueListenableBuilder<String>(
+                    valueListenable: _pinNotifier,
+                    builder: (context, pin, _) {
+                      return PinCodeWidget(pin, showPin: true);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
