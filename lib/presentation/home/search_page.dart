@@ -25,6 +25,16 @@ class _SearchPageState extends BaseState<SearchPage, SearchGroupCubit, SearchGro
   }
 
   @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        context.hideKeyboard();
+      },
+      child: super.build(context),
+    );
+  }
+
+  @override
   Widget buildBody(BuildContext context) {
     return Column(
       children: [
