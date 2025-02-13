@@ -345,7 +345,7 @@ class SearchGroupCertificateRepositoryImpl extends SearchGroupCertificateReposit
     return getAll().then(
       (value) => value
           .where(
-            (element) => element.name!.contains(keyword),
+            (element) => element.name.toLowerCase().contains(keyword.toLowerCase()),
           )
           .toList(),
     );

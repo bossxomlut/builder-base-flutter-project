@@ -21,6 +21,7 @@ dependencies:
   cupertino_icons: ^1.0.8  # A set of iOS-style icons for Flutter apps on iOS.
   curl_logger_dio_interceptor: ^1.0.0  # Logs Dio HTTP requests in a cURL-like format for easier debugging.
   cached_network_image: ^3.4.1
+  csv: ^6.0.0
 
   # D
   dartz: ^0.10.1  # Provides functional data types like Either and Option in Dart.
@@ -47,8 +48,9 @@ dependencies:
   google_nav_bar: ^5.0.7
   extension_google_sign_in_as_googleapis_auth: ^2.0.12
   googleapis: ^13.2.0
-  
-  csv: ^6.0.0
+
+  # H
+  highlight_text: ^1.8.0
 
   # I
   injectable: ^2.4.4  # Simplifies dependency registration with GetIt using code generation.

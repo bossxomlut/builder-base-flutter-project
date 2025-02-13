@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:highlight_text/highlight_text.dart';
 
 import '../../domain/entity/index.dart';
 import '../../resource/index.dart';
@@ -57,6 +58,7 @@ class _SearchPageState extends BaseState<SearchPage, SearchGroupCubit, SearchGro
               itemBuilder: (context, index) {
                 final provinceCountEntity = state.list[index];
                 return CountSearchCard(
+                  query: state.query,
                   countSearch: provinceCountEntity,
                 );
               },
@@ -70,8 +72,13 @@ class _SearchPageState extends BaseState<SearchPage, SearchGroupCubit, SearchGro
 }
 
 class CountSearchCard extends StatelessWidget {
-  const CountSearchCard({super.key, required this.countSearch});
+  const CountSearchCard({
+    super.key,
+    required this.countSearch,
+    this.query,
+  });
   final ProvinceCountEntity countSearch;
+  final String? query;
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +90,23 @@ class CountSearchCard extends StatelessWidget {
         backgroundColor: theme.cardTheme.color,
         childrenPadding: const EdgeInsets.all(16),
         title: ListTile(
-          title: Text('${countSearch.name}'),
+          // title: Text('${countSearch.name}'),
+
+          title: TextHighlight(
+            text: countSearch.name,
+            softWrap: false,
+            textStyle: theme.textTheme.titleMedium,
+            words: query == null
+                ? {}
+                : {
+                    query!: HighlightedWord(
+                      textStyle: theme.textTheme.titleMedium,
+                      decoration: BoxDecoration(
+                        color: theme.primaryColorLight,
+                      ),
+                    ),
+                  },
+          ),
           trailing:
               Text('${countSearch.total} ${countSearch.total == 1 ? LKey.certificate.tr() : LKey.certificates.tr()}'),
         ),
