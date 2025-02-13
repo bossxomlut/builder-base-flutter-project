@@ -41,10 +41,10 @@ class LandCertificateModel {
   DateTime? useTime;
 
   //Đất ở
-  String? residentialArea;
+  double? residentialArea;
 
   //Cây lâu năm
-  String? perennialTreeArea;
+  double? perennialTreeArea;
 
   //Thời điểm đóng thuế
   DateTime? taxDeadlineTime;
@@ -222,8 +222,8 @@ class MappingRowToModel extends Mapping<LandCertificateModel, List<dynamic>> {
       ..useType = input[13]?.toString() ?? ''
       ..purpose = input[14]?.toString() ?? ''
       ..useTime = input[15]?.toString().parseDateTime() ?? DateTime(0)
-      ..residentialArea = input[16]?.toString() ?? ''
-      ..perennialTreeArea = input[17]?.toString() ?? ''
+      ..residentialArea = input[16]?.toString().parseDouble() ?? 0.0
+      ..perennialTreeArea = input[17]?.toString().parseDouble() ?? 0.0
       ..taxDeadlineTime = input[18]?.toString().parseDateTime() ?? DateTime(0)
       ..taxRenewalTime = input[19]?.toString().parseDateTime() ?? DateTime(0)
       ..note = input[20]?.toString() ?? ''

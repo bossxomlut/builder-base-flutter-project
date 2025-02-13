@@ -4,6 +4,7 @@ import '../../core/utils/app_remote_config.dart';
 import '../../domain/index.dart';
 import '../../injection/injection.dart';
 import '../../route/app_router.dart';
+import '../../widget/index.dart';
 import '../utils/index.dart';
 
 @RoutePage()
@@ -43,8 +44,13 @@ class _SplashPageState extends State<SplashPage> with StateTemplate<SplashPage> 
 
   @override
   Widget buildBody(BuildContext context) {
-    return const Center(
-      child: Text('Splash Screen\nHello World!'),
+    return Stack(
+      children: [
+        Center(
+          child: AppImage.asset(url: 'assets/image/logo.png', width: 200, height: 200),
+        ),
+        LoadingWidget(),
+      ],
     );
   }
 }

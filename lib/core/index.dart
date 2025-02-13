@@ -3,6 +3,7 @@ export 'utils/converter_utils.dart';
 export 'utils/dartz_utils.dart';
 export 'utils/date_time_utils.dart';
 export 'utils/execution_timer.dart';
+export 'utils/format_utils.dart';
 export 'utils/list_utils.dart';
 export 'utils/load_file_utils.dart';
 export 'utils/parse_utils.dart';

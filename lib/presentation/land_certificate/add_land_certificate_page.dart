@@ -53,8 +53,8 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
     int? number,
     String? useType,
     String? purpose,
-    String? residentialArea,
-    String? perennialTreeArea,
+    double? residentialArea,
+    double? perennialTreeArea,
     double? purchasePrice,
     DateTime? purchaseDate,
     double? salePrice,
@@ -312,9 +312,10 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                         ),
                         Gap(16),
                         CustomTextField(
-                          initialValue: landCertificateEntity.purchasePrice?.toString(),
+                          initialValue: landCertificateEntity.purchasePrice?.inputFormat(),
                           onChanged: (value) => _updateLandCertificateEntity(purchasePrice: double.tryParse(value)),
                           hint: LKey.fieldsPurchasePrice.tr(),
+                          keyboardType: TextInputType.number,
                         ),
                       ],
                     ),
@@ -341,9 +342,10 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                         ),
                         Gap(16),
                         CustomTextField(
-                          initialValue: landCertificateEntity.salePrice?.toString(),
+                          initialValue: landCertificateEntity.salePrice?.inputFormat(),
                           onChanged: (value) => _updateLandCertificateEntity(salePrice: double.tryParse(value)),
                           hint: LKey.fieldsSalePrice.tr(),
+                          keyboardType: TextInputType.number,
                         ),
                       ],
                     ),
@@ -354,21 +356,24 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                     child: Column(
                       children: [
                         CustomTextField(
-                          initialValue: landCertificateEntity.number?.toString(),
+                          initialValue: landCertificateEntity.number?.inputFormat(),
                           onChanged: (value) => _updateLandCertificateEntity(number: int.tryParse(value)),
                           hint: LKey.fieldsLandPlotNumber.tr(),
+                          keyboardType: TextInputType.number,
                         ),
                         Gap(16),
                         CustomTextField(
-                          initialValue: landCertificateEntity.mapNumber?.toString(),
+                          initialValue: landCertificateEntity.mapNumber?.inputFormat(),
                           onChanged: (value) => _updateLandCertificateEntity(mapNumber: int.tryParse(value)),
                           hint: LKey.fieldsMapNumber.tr(),
+                          keyboardType: TextInputType.number,
                         ),
                         Gap(16),
                         CustomTextField(
-                          initialValue: landCertificateEntity.area?.toString(),
+                          initialValue: landCertificateEntity.area?.inputFormat(),
                           onChanged: (value) => _updateLandCertificateEntity(area: double.tryParse(value)),
                           hint: LKey.fieldsAreaSize.tr(),
+                          keyboardType: TextInputType.number,
                         ),
                         Gap(16),
                         CustomTextField(
@@ -393,15 +398,17 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                     child: Column(
                       children: [
                         CustomTextField(
-                          initialValue: landCertificateEntity.residentialArea,
-                          onChanged: (value) => _updateLandCertificateEntity(residentialArea: value),
+                          initialValue: landCertificateEntity.residentialArea?.inputFormat(),
+                          onChanged: (value) => _updateLandCertificateEntity(residentialArea: double.tryParse(value)),
                           hint: LKey.fieldsResidentialLand.tr(),
+                          keyboardType: TextInputType.number,
                         ),
                         Gap(16),
                         CustomTextField(
-                          initialValue: landCertificateEntity.perennialTreeArea,
-                          onChanged: (value) => _updateLandCertificateEntity(perennialTreeArea: value),
+                          initialValue: landCertificateEntity.perennialTreeArea?.inputFormat(),
+                          onChanged: (value) => _updateLandCertificateEntity(perennialTreeArea: double.tryParse(value)),
                           hint: LKey.fieldsPerennialTrees.tr(),
+                          keyboardType: TextInputType.number,
                         ),
                       ],
                     ),

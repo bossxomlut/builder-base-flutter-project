@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/utils/date_time_utils.dart';
+import '../../../core/utils/format_utils.dart';
 import '../../../core/utils/list_utils.dart';
 import '../../../domain/index.dart';
 import '../../../resource/index.dart';
@@ -69,7 +70,7 @@ class LandCertificateCard extends StatelessWidget {
                   Expanded(
                     child: InfoWidget(
                       title: LKey.fieldsAreaSize.tr(),
-                      value: (certificate.area ?? '---').toString(),
+                      value: (certificate.area?.displayFormat() ?? '---').toString(),
                     ),
                   ),
                 ],
@@ -82,7 +83,7 @@ class LandCertificateCard extends StatelessWidget {
                   Expanded(
                     child: InfoWidget(
                       title: LKey.fieldsPurchasePrice.tr(),
-                      value: certificate.purchasePrice?.toString() ?? '---',
+                      value: certificate.purchasePrice?.displayFormat() ?? '---',
                     ),
                   ),
                   Expanded(

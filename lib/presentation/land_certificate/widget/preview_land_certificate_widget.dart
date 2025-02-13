@@ -7,6 +7,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../../core/utils/date_time_utils.dart';
 import '../../../core/utils/file_utils.dart';
+import '../../../core/utils/format_utils.dart';
 import '../../../core/utils/list_utils.dart';
 import '../../../domain/entity/index.dart';
 
@@ -366,10 +367,10 @@ class LandCertificatePainter extends CustomPainter {
     drawDetailRow('   Không được cấp:', '');
     drawDetailRow('d) Hình thức sử dụng:', landCertificate.useType ?? '');
     drawDetailRow('e) Mục đích sử dụng:', landCertificate.purpose ?? '');
-    drawSectionTitle('2. Nhà ở:', value: landCertificate.residentialArea ?? '');
+    drawSectionTitle('2. Nhà ở:', value: landCertificate.residentialArea?.displayFormat() ?? '');
     drawSectionTitle('3. Công trình xây dựng khác:');
     drawSectionTitle('4. Rừng sản xuất là rừng trồng:');
-    drawSectionTitle('5. Cây lâu năm:', value: landCertificate.perennialTreeArea ?? '');
+    drawSectionTitle('5. Cây lâu năm:', value: landCertificate.perennialTreeArea?.displayFormat() ?? '');
     drawSectionTitle('6. Ghi chú:', value: landCertificate.note ?? '');
     drawSectionTitle('7. Thuế:');
     drawDetailRow('f) Thời điểm gia hạn thuế:', landCertificate.taxRenewalTime?.date ?? '');

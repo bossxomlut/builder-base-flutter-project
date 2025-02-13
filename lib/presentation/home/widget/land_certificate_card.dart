@@ -31,7 +31,7 @@ class ProvinceLandCertificateCard extends StatelessWidget {
                     style: theme.textTheme.titleLarge,
                   ),
                 ),
-                Text('${pCertificates.certificates?.length ?? 0} ${LKey.certificates.tr()}'),
+                Text('${pCertificates.certificates?.length?.displayFormat() ?? 0} ${LKey.certificates.tr()}'),
               ],
             ),
             Gap(16.0),
