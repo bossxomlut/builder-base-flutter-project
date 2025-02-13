@@ -41,7 +41,15 @@ class ProvinceRepositoryImpl extends ProvinceRepository with IsarCrudRepository<
   @override
   Future<List<ProvinceEntity>> search(String keyword) {
     return isar.txn(() async {
-      return collection.where().filter().nameContains(keyword).findAll().then((collections) {
+      return collection
+          .where()
+          .filter()
+          .nameContains(
+            keyword,
+            caseSensitive: false,
+          )
+          .findAll()
+          .then((collections) {
         return mapListAsync(collections, getItemFromCollection);
       });
     });
@@ -105,7 +113,15 @@ class DistrictRepositoryImpl extends DistrictRepository with IsarCrudRepository<
   @override
   Future<List<DistrictEntity>> search(String keyword) {
     return isar.txn(() async {
-      return collection.where().filter().nameContains(keyword).findAll().then((collections) {
+      return collection
+          .where()
+          .filter()
+          .nameContains(
+            keyword,
+            caseSensitive: false,
+          )
+          .findAll()
+          .then((collections) {
         return mapListAsync(collections, getItemFromCollection);
       });
     });
@@ -123,7 +139,10 @@ class DistrictRepositoryImpl extends DistrictRepository with IsarCrudRepository<
           .where()
           .filter()
           .provinceIdEqualTo(province.id)
-          .nameContains(keyword)
+          .nameContains(
+            keyword,
+            caseSensitive: false,
+          )
           .findAll()
           .then((collections) {
         return mapListAsync(collections, getItemFromCollection);
@@ -184,7 +203,15 @@ class WardRepositoryImpl extends WardRepository with IsarCrudRepository<WardEnti
   @override
   Future<List<WardEntity>> search(String keyword) {
     return isar.txn(() async {
-      return collection.where().filter().nameContains(keyword).findAll().then((collections) {
+      return collection
+          .where()
+          .filter()
+          .nameContains(
+            keyword,
+            caseSensitive: false,
+          )
+          .findAll()
+          .then((collections) {
         return mapListAsync(collections, getItemFromCollection);
       });
     });
@@ -202,7 +229,10 @@ class WardRepositoryImpl extends WardRepository with IsarCrudRepository<WardEnti
           .where()
           .filter()
           .districtIdEqualTo(district.id)
-          .nameContains(keyword)
+          .nameContains(
+            keyword,
+            caseSensitive: false,
+          )
           .findAll()
           .then((collections) {
         return mapListAsync(collections, getItemFromCollection);
