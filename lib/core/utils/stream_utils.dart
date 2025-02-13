@@ -1,11 +1,17 @@
 import 'dart:async';
 
 extension StreamUtils<T> on Stream<T> {
-  Future<T> toFuture() {
-    Completer<T> completer = Completer();
-    T? value;
+  Future<List<T>> toFuture() {
+    Completer<List<T>> completer = Completer();
+    List<T>? value;
     listen(
-      (event) => value = event,
+      (event) {
+        if (value == null) {
+          value = [event];
+        } else {
+          value!.add(event);
+        }
+      },
       onDone: () {
         if (value != null) {
           completer.complete(value);

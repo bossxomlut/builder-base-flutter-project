@@ -86,7 +86,7 @@ class LandCertificateMapping extends FutureMapping<LandCertificateEntity, LandCe
     return LandCertificateEntity(
       id: input.id,
       cerId: input.cerId,
-      name: input.name ?? '',
+      name: input.name,
       files: input.files,
       mapNumber: input.mapNumber,
       area: input.area,
@@ -166,11 +166,13 @@ class AttachmentModelToEntityMapping extends Mapping<AppFile, FileModel> {
   }
 }
 
+const String _base64Separator = '|||';
+
 @injectable
 class MappingToRow extends Mapping<List<dynamic>, LandCertificateModel> {
   @override
   List from(LandCertificateModel input) {
-    String combinedBase64 = (input.files ?? []).join("|||");
+    String combinedBase64 = (input.files ?? []).join(_base64Separator);
     return [
       input.cerId ?? '',
       input.name ?? '',
@@ -204,31 +206,31 @@ class MappingToRow extends Mapping<List<dynamic>, LandCertificateModel> {
 class MappingRowToModel extends Mapping<LandCertificateModel, List<dynamic>> {
   @override
   LandCertificateModel from(List input) {
-    final files = input[21].toString().isEmpty ? null : input[21]?.toString().split("|||");
+    final files = input[21].toString().isEmpty ? null : input[21]?.toString().split(_base64Separator);
     return LandCertificateModel()
-      ..cerId = input[0]?.toString() ?? ''
-      ..name = input[1]?.toString() ?? ''
-      ..province = input[2]?.toString() ?? ''
-      ..district = input[3]?.toString() ?? ''
-      ..ward = input[4]?.toString() ?? ''
-      ..detailAddress = input[5]?.toString() ?? ''
-      ..purchaseDate = input[6]?.toString().parseDateTime() ?? DateTime(0)
-      ..purchasePrice = input[7]?.toString().parseDouble() ?? 0.0
-      ..saleDate = input[8]?.toString().parseDateTime() ?? DateTime(0)
-      ..salePrice = input[9]?.toString().parseDouble() ?? 0.0
-      ..number = input[10]?.toString().parseInt() ?? 0
-      ..mapNumber = input[11]?.toString().parseInt() ?? 0
-      ..area = input[12]?.toString().parseDouble() ?? 0.0
-      ..useType = input[13]?.toString() ?? ''
-      ..purpose = input[14]?.toString() ?? ''
-      ..useTime = input[15]?.toString().parseDateTime() ?? DateTime(0)
-      ..residentialArea = input[16]?.toString().parseDouble() ?? 0.0
-      ..perennialTreeArea = input[17]?.toString().parseDouble() ?? 0.0
-      ..taxDeadlineTime = input[18]?.toString().parseDateTime() ?? DateTime(0)
-      ..taxRenewalTime = input[19]?.toString().parseDateTime() ?? DateTime(0)
-      ..note = input[20]?.toString() ?? ''
+      ..cerId = input[0]?.toString()
+      ..name = input[1]?.toString()
+      ..province = input[2]?.toString()
+      ..district = input[3]?.toString()
+      ..ward = input[4]?.toString()
+      ..detailAddress = input[5]?.toString()
+      ..purchaseDate = input[6]?.toString().parseDateTime()
+      ..purchasePrice = input[7]?.toString().parseDouble()
+      ..saleDate = input[8]?.toString().parseDateTime()
+      ..salePrice = input[9]?.toString().parseDouble()
+      ..number = input[10]?.toString().parseInt()
+      ..mapNumber = input[11]?.toString().parseInt()
+      ..area = input[12]?.toString().parseDouble()
+      ..useType = input[13]?.toString()
+      ..purpose = input[14]?.toString()
+      ..useTime = input[15]?.toString().parseDateTime()
+      ..residentialArea = input[16]?.toString().parseDouble()
+      ..perennialTreeArea = input[17]?.toString().parseDouble()
+      ..taxDeadlineTime = input[18]?.toString().parseDateTime()
+      ..taxRenewalTime = input[19]?.toString().parseDateTime()
+      ..note = input[20]?.toString()
       ..files = files
-      ..updatedAt = input[22]?.toString().parseDateTime() ?? DateTime(0)
+      ..updatedAt = input[22]?.toString().parseDateTime()
       ..isDeleted = input.length == 24 ? input[23]?.toString().parseBool() ?? false : null;
   }
 }

@@ -154,6 +154,10 @@ class StorageDataUseCase extends FutureUseCase<void, File> {
         await createFile(StorageInformation.fileName);
       }
 
+      if (rows.isNotEmpty) {
+        rows[0] = StorageInformation.header;
+      }
+
       await writeCsvFile(StorageInformation.fileName, rows);
 
       _simpleNotifier.notify();

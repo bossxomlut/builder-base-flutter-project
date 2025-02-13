@@ -166,7 +166,7 @@ class DriveRepositoryImpl extends DriveRepository {
       drive.Media fileMedia =
           await (await _driveApi)!.files.get(fileId, downloadOptions: drive.DownloadOptions.fullMedia) as drive.Media;
 
-      List<int> dataStore = await fileMedia.stream.toFuture();
+      List<int> dataStore = (await fileMedia.stream.toFuture()).expand((element) => element).toList();
 
       log('📁 Downloaded file data: ${dataStore} ');
 
