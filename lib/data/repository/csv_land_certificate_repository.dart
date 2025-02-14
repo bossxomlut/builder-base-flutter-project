@@ -137,6 +137,10 @@ class LandCertificateRepositoryCSVImpl extends LandCertificateRepository {
 
     return rows.where((element) {
       if (district.id == -1) {
+        if (district.provinceId == -1) {
+          return element.district == null && element.province == null;
+        }
+
         return element.district == null && district.provinceId == element.province?.id;
       }
 
