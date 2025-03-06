@@ -1,4 +1,5 @@
 import 'package:device_preview/device_preview.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +21,8 @@ bool get showDevicePreview => false;
 void main() async {
   ///Ensure flutter binding is initialized
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(); // Nếu dùng Firebase
 
   ///Ensure localization is initialized
   await Future.wait(<Future<void>>[

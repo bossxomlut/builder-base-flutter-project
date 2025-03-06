@@ -40,6 +40,7 @@ dependencies:
   freezed_annotation: any  # Annotation support for the Freezed package to create immutable and sealed classes.
   flutter_secure_storage: ^9.2.2 #Flutter Secure Storage provides API to store data in secure storage.
   flutter_slidable: ^3.1.2
+  firebase_core: ^3.12.1
 
   # G
   gap: ^3.0.1  # Provides spacing between widgets in Flutter layouts.
