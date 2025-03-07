@@ -8,6 +8,7 @@ import '../../resource/index.dart';
 import '../../widget/index.dart';
 import '../../widget/toast.dart';
 import '../province/search_province_page.dart';
+import '../setting/cubit/config_setting_cubit.dart';
 import '../utils/index.dart';
 
 @RoutePage()
@@ -35,6 +36,9 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
   void initState() {
     if (haveInitData) {
       landCertificateEntity = widget.initialLandCertificateEntity!;
+    } else {
+      final configCubit = getIt.get<ConfigSettingCubit>();
+      landCertificateEntity = landCertificateEntity.copyWith(province: configCubit.defaultProvince);
     }
     super.initState();
   }

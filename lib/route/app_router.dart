@@ -24,6 +24,7 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: AddLandCertificateRoute.page),
         AutoRoute(page: ViewLandCertificateRoute.page),
         AutoRoute(page: LandCertificateListRoute.page),
+        AutoRoute(page: ConfigSettingRoute.page),
       ];
 }
 

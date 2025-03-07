@@ -10,6 +10,7 @@ import 'key_value_storage.dart';
 @singleton
 class SimpleStorage extends KeyValueStorage {
   static const String firstLaunchKey = 'firstLaunch';
+  static const String defaultProvinceName = 'defaultProvinceName';
 
   late final SharedPreferences _prefs;
 

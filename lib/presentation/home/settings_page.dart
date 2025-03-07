@@ -121,6 +121,18 @@ class _SettingsPageState extends State<SettingsPage> with StateTemplate<Settings
         ),
 
         ListTile(
+          title: const Text('Cấu hình mặc định'),
+          leading: const Icon(LineIcons.cogs),
+          trailing: const Icon(LineIcons.arrowRight),
+          onTap: () {
+            appRouter.push(const ConfigSettingRoute());
+          },
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: AppDivider(),
+        ),
+        ListTile(
           title: const Text('Tải lên drive'),
           leading: const Icon(LineIcons.upload),
           onTap: () {

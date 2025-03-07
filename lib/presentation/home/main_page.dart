@@ -9,6 +9,7 @@ import '../../injection/injection.dart';
 import '../../resource/index.dart';
 import '../../route/app_router.dart';
 import '../../widget/index.dart';
+import '../setting/cubit/config_setting_cubit.dart';
 import '../utils/index.dart';
 import 'home_page.dart';
 
@@ -113,7 +114,11 @@ class _InitMain extends _MainPageState with LoadingState {
 
       await Future.wait([
         getIt.get<CheckInitialDataUseCase>().execute(null),
-        getIt.get<CheckInitialProvinceDataUseCase>().execute(null),
+        getIt.get<CheckInitialProvinceDataUseCase>().execute(null).then(
+          (void value) {
+            return getIt.get<ConfigSettingCubit>().init();
+          },
+        ),
       ]);
 
       hideLoading();
