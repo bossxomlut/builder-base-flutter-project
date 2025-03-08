@@ -27,6 +27,9 @@ class AddLandCertificatePage extends StatefulWidget {
 class _AddLandCertificatePageState extends State<AddLandCertificatePage> with StateTemplate<AddLandCertificatePage> {
   LandCertificateEntity landCertificateEntity = LandCertificateEntity(id: -1);
 
+  //helper to storage list of expand status
+  List<bool> _expandList = [];
+
   final CreateLandCertificateUseCase _createLandCertificateUseCase = getIt.get<CreateLandCertificateUseCase>();
 
   bool get haveInitData => widget.initialLandCertificateEntity != null;
@@ -39,6 +42,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
   void initState() {
     if (haveInitData) {
       landCertificateEntity = widget.initialLandCertificateEntity!;
+      _expandList = List.generate(landCertificateEntity.otherAreas?.length ?? 0, (index) => true);
     } else {
       final configCubit = getIt.get<ConfigSettingCubit>();
       landCertificateEntity = landCertificateEntity.copyWith(province: configCubit.defaultProvince);
@@ -441,6 +445,11 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 16),
                               child: OtherAreaWidget(
+                                isExpanded: _expandList[index],
+                                onExpand: (value) {
+                                  _expandList[index] = value;
+                                  // setState(() {});
+                                },
                                 areaEntity: area,
                                 title: 'Khác ${index + 1} (${area.total.displayFormat()})',
                                 onChanged: (value) {
@@ -455,13 +464,11 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                                   setState(() {});
                                 },
                                 onRemove: () {
-                                  print('remove: ${index}');
-                                  print('asc: ${landCertificateEntity.otherAreas}');
-
                                   try {
                                     final List<AreaEntity> list = [...?landCertificateEntity.otherAreas];
 
                                     list.removeAt(index);
+                                    _expandList.removeAt(index);
 
                                     landCertificateEntity = landCertificateEntity.copyWith(otherAreas: list);
                                     setState(() {});
@@ -478,6 +485,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                             landCertificateEntity = landCertificateEntity.copyWith(
                               otherAreas: [...?landCertificateEntity.otherAreas, AreaEntity()],
                             );
+                            _expandList.add(true);
                             setState(() {});
                           },
                           child: Row(
@@ -627,12 +635,16 @@ class OtherAreaWidget extends StatefulWidget {
     required this.onChanged,
     required this.onRemove,
     required this.title,
+    this.isExpanded = true,
+    required this.onExpand,
   });
 
   final AreaEntity? areaEntity;
   final ValueChanged<AreaEntity> onChanged;
   final VoidCallback onRemove;
   final String title;
+  final bool isExpanded;
+  final ValueChanged<bool> onExpand;
 
   @override
   State<OtherAreaWidget> createState() => _OtherAreaWidgetState();
@@ -641,7 +653,6 @@ class OtherAreaWidget extends StatefulWidget {
 class _OtherAreaWidgetState extends State<OtherAreaWidget> {
   final TextEditingController _residentialAreaController = TextEditingController();
   final TextEditingController _perennialTreeAreaController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
@@ -669,7 +680,9 @@ class _OtherAreaWidgetState extends State<OtherAreaWidget> {
   Widget build(BuildContext context) {
     final theme = context.appTheme;
     return ExpansionTile(
-      initiallyExpanded: true,
+      key: ValueKey(widget.isExpanded),
+      initiallyExpanded: widget.isExpanded,
+      onExpansionChanged: widget.onExpand,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
         side: BorderSide(color: theme.dividerColor),

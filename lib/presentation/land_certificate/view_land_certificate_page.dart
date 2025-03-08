@@ -223,12 +223,12 @@ class _ViewLandCertificatePageState extends State<ViewLandCertificatePage> with 
                           label: LKey.fieldsPerennialTrees.tr(),
                           initialValue: landCertificateEntity.perennialTreeArea?.displayFormat() ?? nullPlaceHolder,
                         ),
-                        const Gap(16),
-                        Text(
-                          'Diện tích khác',
-                          style: theme.textTheme.titleMedium,
-                        ),
-                        if (landCertificateEntity.otherAreas.isNotNullAndEmpty)
+                        if (landCertificateEntity.otherAreas.isNotNullAndEmpty) ...[
+                          const Gap(16),
+                          Text(
+                            'Diện tích khác',
+                            style: theme.textTheme.titleMedium,
+                          ),
                           ListView.separated(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
@@ -261,6 +261,7 @@ class _ViewLandCertificatePageState extends State<ViewLandCertificatePage> with 
                             separatorBuilder: (BuildContext context, int index) => const Gap(8),
                             itemCount: landCertificateEntity.otherAreas!.length,
                           ),
+                        ]
                       ],
                     ),
                   ),
