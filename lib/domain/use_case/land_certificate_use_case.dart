@@ -9,7 +9,7 @@ class CreateLandCertificateUseCase {
   CreateLandCertificateUseCase(this._landCertificateRepository);
 
   Future<void> execute(LandCertificateEntity landCertificate) async {
-    final otherAreas = landCertificate.otherAreas ?? [];
+    final otherAreas = landCertificate.otherAreas?.toList() ?? [];
 
     //clear other areas that have no residential area or perennial tree area
     otherAreas.removeWhere((a) => a.residentialArea == null && a.perennialTreeArea == null);

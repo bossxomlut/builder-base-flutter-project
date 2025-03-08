@@ -110,6 +110,7 @@ class LandCertificateMapping extends FutureMapping<LandCertificateEntity, LandCe
       district: district,
       ward: ward,
       detailAddress: input.detailAddress,
+      otherAreas: input.otherAreas?.map((e) => AreaEntity.fromString(e)!).toList(),
     );
   }
 }
@@ -141,7 +142,7 @@ class LandCertificateModelMapping extends Mapping<LandCertificateModel, LandCert
       ..taxDeadlineTime = item.taxDeadlineTime
       ..taxRenewalTime = item.taxRenewalTime
       ..note = item.note
-      ..otherAreas = item.otherAreas?.map((e) => e.toString()).toList();
+      ..otherAreas = item.otherAreas?.map((e) => e.storageFormat()).toList();
   }
 }
 

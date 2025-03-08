@@ -93,9 +93,11 @@ class LandCertificateEntity with _$LandCertificateEntity implements GetId<int> {
   }
 
   double get totalArea {
-    return (residentialArea ?? 0) +
-        (perennialTreeArea ?? 0) +
-        (otherAreas?.fold(0, (previousValue, element) => previousValue! + element.total) ?? 0);
+    return (residentialArea ?? 0) + (perennialTreeArea ?? 0);
+  }
+
+  double get totalAllArea {
+    return totalArea + (otherAreas?.fold(0, (previousValue, element) => previousValue! + element.total) ?? 0);
   }
 }
 
@@ -110,11 +112,6 @@ class AreaEntity with _$AreaEntity {
     double? residentialArea,
     double? perennialTreeArea,
   }) = _AreaEntity;
-
-  @override
-  String toString() {
-    return '${residentialArea ?? 0}_${perennialTreeArea ?? 0}';
-  }
 
   static AreaEntity? fromString(String value) {
     final values = value.split('_');
@@ -131,6 +128,10 @@ class AreaEntity with _$AreaEntity {
 
 extension AreaEntityX on AreaEntity {
   double get total => (residentialArea ?? 0) + (perennialTreeArea ?? 0);
+
+  String storageFormat() {
+    return '${residentialArea ?? 0}_${perennialTreeArea ?? 0}';
+  }
 }
 
 class AddressEntity {

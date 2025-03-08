@@ -198,20 +198,69 @@ class _ViewLandCertificatePageState extends State<ViewLandCertificatePage> with 
                   AddCard(
                     title: LKey.sectionsArea.tr(),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        CustomTextField(
+                          isReadOnly: true,
+                          onChanged: (value) {},
+                          label: 'Tổng diện tích',
+                          initialValue: landCertificateEntity.totalAllArea.displayFormat(),
+                        ),
+                        const Gap(16),
+                        Text('Tổng: ${landCertificateEntity.totalArea.displayFormat()}',
+                            style: theme.textTheme.titleMedium),
+                        const Gap(10),
                         CustomTextField(
                           isReadOnly: true,
                           onChanged: (value) {},
                           label: LKey.fieldsResidentialLand.tr(),
                           initialValue: landCertificateEntity.residentialArea?.displayFormat() ?? nullPlaceHolder,
                         ),
-                        const Gap(16),
+                        const Gap(8),
                         CustomTextField(
                           isReadOnly: true,
                           onChanged: (value) {},
                           label: LKey.fieldsPerennialTrees.tr(),
                           initialValue: landCertificateEntity.perennialTreeArea?.displayFormat() ?? nullPlaceHolder,
                         ),
+                        const Gap(16),
+                        Text(
+                          'Diện tích khác',
+                          style: theme.textTheme.titleMedium,
+                        ),
+                        if (landCertificateEntity.otherAreas.isNotNullAndEmpty)
+                          ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (BuildContext context, int index) {
+                              final otherArea = landCertificateEntity.otherAreas![index];
+                              return Card(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Text('${index + 1}. Tổng: ${otherArea.total.displayFormat()}',
+                                        style: theme.textTheme.titleMedium),
+                                    const Gap(10),
+                                    CustomTextField(
+                                      isReadOnly: true,
+                                      onChanged: (value) {},
+                                      label: 'Đất ở',
+                                      initialValue: otherArea.residentialArea?.displayFormat() ?? nullPlaceHolder,
+                                    ),
+                                    const Gap(8),
+                                    CustomTextField(
+                                      isReadOnly: true,
+                                      onChanged: (value) {},
+                                      label: 'Cây lâu năm',
+                                      initialValue: otherArea.perennialTreeArea?.displayFormat() ?? nullPlaceHolder,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            separatorBuilder: (BuildContext context, int index) => const Gap(8),
+                            itemCount: landCertificateEntity.otherAreas!.length,
+                          ),
                       ],
                     ),
                   ),

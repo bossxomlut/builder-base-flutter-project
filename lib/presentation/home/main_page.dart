@@ -38,11 +38,10 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
       body: TabBarView(
         physics: const NeverScrollableScrollPhysics(),
         controller: _tabController,
-        children: [
-          HomePage(),
-          // SearchProvincePage(),
-          SearchPage(),
-          SettingsPage(),
+        children: const <Widget>[
+          KeepAlivePage(child: HomePage()),
+          KeepAlivePage(child: SearchPage()),
+          KeepAlivePage(child: SettingsPage()),
         ],
       ),
       floatingActionButton: FloatingActionButton(

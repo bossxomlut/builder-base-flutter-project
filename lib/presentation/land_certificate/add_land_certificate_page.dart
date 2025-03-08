@@ -406,7 +406,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                       children: [
                         OutlineField(
                           label: 'Tổng diện tích',
-                          value: landCertificateEntity.totalArea.displayFormat(),
+                          value: landCertificateEntity.totalAllArea.displayFormat(),
                           onTap: () {},
                           showTrailingIcon: false,
                           isDisabled: true,
@@ -442,7 +442,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                               padding: const EdgeInsets.only(bottom: 16),
                               child: OtherAreaWidget(
                                 areaEntity: area,
-                                title: 'Khác ${index + 1}',
+                                title: 'Khác ${index + 1} (${area.total.displayFormat()})',
                                 onChanged: (value) {
                                   final List<AreaEntity> list = [...?landCertificateEntity.otherAreas];
 
