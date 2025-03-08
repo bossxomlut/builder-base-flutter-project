@@ -114,17 +114,18 @@ class _InitMain extends _MainPageState with LoadingState {
 
       await Future.wait([
         getIt.get<CheckInitialDataUseCase>().execute(null),
-        getIt.get<CheckInitialProvinceDataUseCase>().execute(null).then(
-          (void value) {
-            return getIt.get<ConfigSettingCubit>().init();
-          },
-        ),
+        _initProvinceData(),
       ]);
 
       hideLoading();
 
       getIt.get<ScheduleUploadDataUseCase>().execute(null);
     });
+  }
+
+  Future _initProvinceData() async {
+    await getIt.get<CheckInitialProvinceDataUseCase>().execute(null);
+    await getIt.get<ConfigSettingCubit>().init();
   }
 
   @override

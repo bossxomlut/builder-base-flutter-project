@@ -39,6 +39,7 @@ abstract class StorageInformation {
     'Danh sách tệp tin',
     'Thời điểm cập nhật',
     'Đã xoá',
+    'Diện tích khác',
   ];
 }
 

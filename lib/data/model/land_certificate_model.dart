@@ -22,6 +22,9 @@ class LandCertificateModel {
   DateTime? saleDate;
   double? salePrice;
 
+  //Các diện khác
+  List<String>? otherAreas;
+
   //Thửa đất số
   int? number;
 
@@ -137,7 +140,8 @@ class LandCertificateModelMapping extends Mapping<LandCertificateModel, LandCert
       ..perennialTreeArea = item.perennialTreeArea
       ..taxDeadlineTime = item.taxDeadlineTime
       ..taxRenewalTime = item.taxRenewalTime
-      ..note = item.note;
+      ..note = item.note
+      ..otherAreas = item.otherAreas?.map((e) => e.toString()).toList();
   }
 }
 
@@ -173,6 +177,7 @@ class MappingToRow extends Mapping<List<dynamic>, LandCertificateModel> {
   @override
   List from(LandCertificateModel input) {
     String combinedBase64 = (input.files ?? []).join(_base64Separator);
+    String combineOtherAreas = (input.otherAreas ?? []).join(_base64Separator);
     return [
       input.cerId ?? '',
       input.name ?? '',
@@ -198,6 +203,7 @@ class MappingToRow extends Mapping<List<dynamic>, LandCertificateModel> {
       combinedBase64,
       input.updatedAt ?? '',
       (input.isDeleted?.toString() ?? ''),
+      combineOtherAreas,
     ];
   }
 }
@@ -207,6 +213,7 @@ class MappingRowToModel extends Mapping<LandCertificateModel, List<dynamic>> {
   @override
   LandCertificateModel from(List input) {
     final files = input[21].toString().isEmpty ? null : input[21]?.toString().split(_base64Separator);
+
     return LandCertificateModel()
       ..cerId = input[0]?.toString()
       ..name = input[1]?.toString()
@@ -231,6 +238,23 @@ class MappingRowToModel extends Mapping<LandCertificateModel, List<dynamic>> {
       ..note = input[20]?.toString()
       ..files = files
       ..updatedAt = input[22]?.toString().parseDateTime()
-      ..isDeleted = input.length == 24 ? input[23]?.toString().parseBool() ?? false : null;
+      ..isDeleted = isDeleted(input)
+      ..otherAreas = otherAreas(input);
+  }
+
+  bool? isDeleted(dynamic input) {
+    try {
+      return input[23].toString().parseBool() ?? false;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  List<String>? otherAreas(dynamic input) {
+    try {
+      return input[24].toString().isEmpty ? null : input[24]?.toString().split(_base64Separator);
+    } catch (e) {
+      return null;
+    }
   }
 }

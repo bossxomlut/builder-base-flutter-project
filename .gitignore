@@ -51,3 +51,4 @@ injection.config.dart
 ios/Runner.xcodeproj/project.pbxproj
 ios/Runner.xcworkspace/contents.xcworkspacedata
 GoogleService-Info.plist
+google-services.json

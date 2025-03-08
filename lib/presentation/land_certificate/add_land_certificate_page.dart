@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/index.dart';
@@ -401,18 +404,100 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                     title: LKey.sectionsArea.tr(),
                     child: Column(
                       children: [
+                        OutlineField(
+                          label: 'Tổng diện tích',
+                          value: landCertificateEntity.totalArea.displayFormat(),
+                          onTap: () {},
+                          showTrailingIcon: false,
+                          isDisabled: true,
+                        ),
+                        Gap(16),
                         CustomTextField(
                           initialValue: landCertificateEntity.residentialArea?.inputFormat(),
-                          onChanged: (value) => _updateLandCertificateEntity(residentialArea: double.tryParse(value)),
-                          hint: LKey.fieldsResidentialLand.tr(),
+                          onChanged: (value) {
+                            landCertificateEntity = landCertificateEntity.copyWith(
+                              residentialArea: double.tryParse(value),
+                            );
+                            setState(() {});
+                          },
+                          label: LKey.fieldsResidentialLand.tr(),
                           keyboardType: TextInputType.number,
                         ),
                         Gap(16),
                         CustomTextField(
                           initialValue: landCertificateEntity.perennialTreeArea?.inputFormat(),
-                          onChanged: (value) => _updateLandCertificateEntity(perennialTreeArea: double.tryParse(value)),
-                          hint: LKey.fieldsPerennialTrees.tr(),
+                          onChanged: (value) {
+                            landCertificateEntity = landCertificateEntity.copyWith(
+                              perennialTreeArea: double.tryParse(value),
+                            );
+                            setState(() {});
+                          },
+                          label: LKey.fieldsPerennialTrees.tr(),
                           keyboardType: TextInputType.number,
+                        ),
+                        Gap(16),
+                        ...?landCertificateEntity.otherAreas?.mapIndexed(
+                          (index, area) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              child: OtherAreaWidget(
+                                areaEntity: area,
+                                title: 'Khác ${index + 1}',
+                                onChanged: (value) {
+                                  final List<AreaEntity> list = [...?landCertificateEntity.otherAreas];
+
+                                  list[index] = value;
+
+                                  landCertificateEntity = landCertificateEntity.copyWith(
+                                    otherAreas: list,
+                                  );
+
+                                  setState(() {});
+                                },
+                                onRemove: () {
+                                  print('remove: ${index}');
+                                  print('asc: ${landCertificateEntity.otherAreas}');
+
+                                  try {
+                                    final List<AreaEntity> list = [...?landCertificateEntity.otherAreas];
+
+                                    list.removeAt(index);
+
+                                    landCertificateEntity = landCertificateEntity.copyWith(otherAreas: list);
+                                    setState(() {});
+                                  } catch (e, st) {
+                                    log(e.toString(), error: e, stackTrace: st);
+                                  }
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                        OutlinedButton(
+                          onPressed: () {
+                            landCertificateEntity = landCertificateEntity.copyWith(
+                              otherAreas: [...?landCertificateEntity.otherAreas, AreaEntity()],
+                            );
+                            setState(() {});
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.add,
+                                color: theme.colorScheme.primary,
+                              ),
+                              Gap(8),
+                              Text(
+                                'Khác',
+                                style: context.appTheme.textTheme.bodyLarge?.copyWith(
+                                  color: theme.colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -530,7 +615,97 @@ void AppShowDatePicker(BuildContext context, ValueChanged<DateTime?> onChanged) 
   showDatePicker(
     context: context,
     initialDate: DateTime.now(),
-    firstDate: DateTime(2000),
+    firstDate: DateTime(1900),
     lastDate: DateTime(2100),
   ).then(onChanged);
+}
+
+class OtherAreaWidget extends StatefulWidget {
+  const OtherAreaWidget({
+    super.key,
+    this.areaEntity,
+    required this.onChanged,
+    required this.onRemove,
+    required this.title,
+  });
+
+  final AreaEntity? areaEntity;
+  final ValueChanged<AreaEntity> onChanged;
+  final VoidCallback onRemove;
+  final String title;
+
+  @override
+  State<OtherAreaWidget> createState() => _OtherAreaWidgetState();
+}
+
+class _OtherAreaWidgetState extends State<OtherAreaWidget> {
+  final TextEditingController _residentialAreaController = TextEditingController();
+  final TextEditingController _perennialTreeAreaController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _residentialAreaController.text = widget.areaEntity?.residentialArea?.inputFormat() ?? '';
+    _perennialTreeAreaController.text = widget.areaEntity?.perennialTreeArea?.inputFormat() ?? '';
+  }
+
+  @override
+  void didUpdateWidget(covariant OtherAreaWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!const DeepCollectionEquality().equals(oldWidget.areaEntity, widget.areaEntity)) {
+      _residentialAreaController.text = widget.areaEntity?.residentialArea?.inputFormat() ?? '';
+      _perennialTreeAreaController.text = widget.areaEntity?.perennialTreeArea?.inputFormat() ?? '';
+    }
+  }
+
+  @override
+  void dispose() {
+    _residentialAreaController.dispose();
+    _perennialTreeAreaController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.appTheme;
+    return ExpansionTile(
+      initiallyExpanded: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(color: theme.dividerColor),
+      ),
+      collapsedShape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(color: theme.dividerColor),
+      ),
+      backgroundColor: theme.colorScheme.surface,
+      leading: IconButton(
+        onPressed: widget.onRemove,
+        icon: const Icon(LineIcons.trash),
+      ),
+      tilePadding: const EdgeInsets.only(right: 16),
+      childrenPadding: EdgeInsets.symmetric(horizontal: 16),
+      title: Text(widget.title),
+      children: [
+        CustomTextField(
+          controller: _residentialAreaController,
+          onChanged: (value) {
+            widget.onChanged((widget.areaEntity ?? AreaEntity()).copyWith(residentialArea: double.tryParse(value)));
+          },
+          label: LKey.fieldsResidentialLand.tr(),
+          keyboardType: TextInputType.number,
+        ),
+        Gap(16),
+        CustomTextField(
+          controller: _perennialTreeAreaController,
+          onChanged: (value) {
+            widget.onChanged((widget.areaEntity ?? AreaEntity()).copyWith(perennialTreeArea: double.tryParse(value)));
+          },
+          label: LKey.fieldsPerennialTrees.tr(),
+          keyboardType: TextInputType.number,
+        ),
+        Gap(12),
+      ],
+    );
+  }
 }

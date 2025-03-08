@@ -17,17 +17,20 @@ class ConfigSettingCubit extends Cubit<ConfigSettingState> with SafeEmit {
   final ProvinceRepository _provinceRepository;
   final SimpleStorage _simpleStorage;
 
-  static const String defaultProvinceName = 'Bình Dương';
+  static const String defaultProvinceName = 'Tỉnh Bình Dương';
 
   Future init() async {
-    //get current storage name, if not => use defaultProvinceName
-    final provinceName = (await _simpleStorage.getString(SimpleStorage.defaultProvinceName)) ?? defaultProvinceName;
+    try {
+      //get current storage name, if not => use defaultProvinceName
+      final provinceName = (await _simpleStorage.getString(SimpleStorage.defaultProvinceName)) ?? defaultProvinceName;
 
-    //search province by name
-    final province = await _provinceRepository.getOneByName(provinceName);
 
-    //update state
-    emit(state.copyWith(defaultProvince: province));
+      //search province by name
+      final province = await _provinceRepository.getOneByName(provinceName);
+
+      //update state
+      emit(state.copyWith(defaultProvince: province));
+    } catch (e) {}
   }
 
   void updateDefaultProvince(String provinceName) async {

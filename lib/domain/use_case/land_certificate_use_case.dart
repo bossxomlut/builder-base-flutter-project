@@ -9,20 +9,13 @@ class CreateLandCertificateUseCase {
   CreateLandCertificateUseCase(this._landCertificateRepository);
 
   Future<void> execute(LandCertificateEntity landCertificate) async {
-    List<String> files = [];
-    //
-    // for (AppFile file in [...?landCertificate.files]) {
-    //   final isLocalFile = await isInternalPath(file.path);
-    //   if (isLocalFile) {
-    //     files.add(file);
-    //   } else {
-    //     final localPath = await saveFileToLocalDirectory(File(file.path));
-    //     files.add(file.copyWith(path: localPath));
-    //   }
-    // }
+    final otherAreas = landCertificate.otherAreas ?? [];
 
-    final lastedCertificate = landCertificate;
-    // final lastedCertificate = landCertificate.copyWith(files: files);
+    //clear other areas that have no residential area or perennial tree area
+    otherAreas.removeWhere((a) => a.residentialArea == null && a.perennialTreeArea == null);
+
+    final lastedCertificate = landCertificate.copyWith(otherAreas: otherAreas);
+
     if (landCertificate.id != -1) {
       await _landCertificateRepository.update(lastedCertificate);
     } else {
