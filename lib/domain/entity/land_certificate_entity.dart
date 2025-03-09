@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+
 import '../../core/utils/string_utils.dart';
 import '../../data/repository/isar_repository.dart';
 import '../index.dart';
@@ -99,7 +101,7 @@ class LandCertificateEntity with _$LandCertificateEntity implements GetId<int> {
   }
 
   double get totalAllArea {
-    return totalArea + (otherAreas?.fold(0, (previousValue, element) => previousValue! + element.total) ?? 0);
+    return totalArea + (otherAreas?.map((e) => e.total).sum ?? 0);
   }
 }
 

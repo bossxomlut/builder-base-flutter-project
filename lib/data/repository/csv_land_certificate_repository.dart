@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 import '../../core/index.dart';
 import '../../core/persistence/csv_storage.dart';
 import '../../core/utils/id_utils.dart';
+import '../../core/utils/search_utils.dart';
 import '../../domain/index.dart';
 import '../../resource/index.dart';
 import '../model/land_certificate_model.dart';
@@ -127,9 +128,11 @@ class LandCertificateRepositoryCSVImpl extends LandCertificateRepository {
   }
 
   @override
-  Future<List<LandCertificateEntity>> search(String keyword) {
-    // TODO: implement search
-    throw UnimplementedError();
+  Future<List<LandCertificateEntity>> search(String keyword) async {
+    final rows = await getAll();
+    final LandCertificateSearchBuilder searchBuilder = LandCertificateSearchBuilder();
+
+    return rows.where((e) => searchBuilder.isMatch(e, keyword)).toList();
   }
 
   @override
@@ -290,6 +293,10 @@ class SearchGroupCertificateRepositoryImpl extends SearchGroupCertificateReposit
   Future<List<ProvinceCountEntity>> getAll() async {
     final allRows = await _landCertificateRepository.getAll();
 
+    return _fromLandCerList(allRows);
+  }
+
+  Future<List<ProvinceCountEntity>> _fromLandCerList(List<LandCertificateEntity> allRows) async {
     Map<ProvinceEntity, int> map = {};
     Map<ProvinceEntity, List<DistrictCountEntity>> districtMap = {};
 
@@ -346,13 +353,26 @@ class SearchGroupCertificateRepositoryImpl extends SearchGroupCertificateReposit
   }
 
   @override
-  Future<List<ProvinceCountEntity>> search(String keyword) {
-    return getAll().then(
-      (value) => value
-          .where(
-            (element) => element.name.toLowerCase().contains(keyword.toLowerCase()),
-          )
-          .toList(),
-    );
+  Future<List<ProvinceCountEntity>> search(String keyword) async {
+    final allRows = await _landCertificateRepository.search(keyword);
+    return _fromLandCerList(allRows);
+  }
+}
+
+class LandCertificateSearchBuilder extends SearchBuilder<LandCertificateEntity> {
+  @override
+  bool isMatch(LandCertificateEntity item, String keyword) {
+    final lowerKeyword = keyword.toLowerCase();
+
+    return [
+      item.name,
+      item.province?.name,
+      item.district?.name,
+      item.ward?.name,
+      item.detailAddress,
+      item.note,
+      item.useType,
+      item.purpose,
+    ].any((value) => value?.toLowerCase().contains(lowerKeyword) ?? false);
   }
 }

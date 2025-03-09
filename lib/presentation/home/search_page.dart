@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:highlight_text/highlight_text.dart';
 
+import '../../core/utils/search_utils.dart';
 import '../../domain/entity/index.dart';
 import '../../resource/index.dart';
 import '../../route/app_router.dart';
@@ -18,10 +19,25 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends BaseState<SearchPage, SearchGroupCubit, SearchGroupState> {
+  //create debounce time for search
+  final Debouncer _debouncer = Debouncer(milliseconds: 400);
+
+  void _onSearchChanged(String value) {
+    _debouncer.run(() {
+      cubit.search(value);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     cubit.search('');
+  }
+
+  @override
+  void dispose() {
+    _debouncer.cancel();
+    super.dispose();
   }
 
   @override
@@ -43,10 +59,10 @@ class _SearchPageState extends BaseState<SearchPage, SearchGroupCubit, SearchGro
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: TextField(
             onChanged: (value) {
-              cubit.search(value);
+              _onSearchChanged(value);
             },
             decoration: InputDecoration(
-              hintText: LKey.searchByProvince.tr(),
+              hintText: 'Tìm kiếm thành phố, tên,...',
               prefixIcon: Icon(Icons.search),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
