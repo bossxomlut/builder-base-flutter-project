@@ -60,6 +60,7 @@ class LandCertificateEntity with _$LandCertificateEntity implements GetId<int> {
     WardEntity? ward,
     String? detailAddress,
     List<String>? files,
+    List<AreaEntity>? otherAreas,
   }) {
     return LandCertificateEntity(
       id: id,
@@ -85,6 +86,7 @@ class LandCertificateEntity with _$LandCertificateEntity implements GetId<int> {
       taxDeadlineTime: taxDeadlineTime ?? this.taxDeadlineTime,
       taxRenewalTime: taxRenewalTime ?? this.taxRenewalTime,
       note: note ?? this.note,
+      otherAreas: otherAreas ?? this.otherAreas,
     );
   }
 

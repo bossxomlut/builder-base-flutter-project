@@ -457,9 +457,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
 
                                   list[index] = value;
 
-                                  landCertificateEntity = landCertificateEntity.copyWith(
-                                    otherAreas: list,
-                                  );
+                                  landCertificateEntity = landCertificateEntity.copyWith2(otherAreas: list);
 
                                   setState(() {});
                                 },
@@ -470,7 +468,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                                     list.removeAt(index);
                                     _expandList.removeAt(index);
 
-                                    landCertificateEntity = landCertificateEntity.copyWith(otherAreas: list);
+                                    landCertificateEntity = landCertificateEntity.copyWith2(otherAreas: list);
                                     setState(() {});
                                   } catch (e, st) {
                                     log(e.toString(), error: e, stackTrace: st);
@@ -482,7 +480,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                         ),
                         OutlinedButton(
                           onPressed: () {
-                            landCertificateEntity = landCertificateEntity.copyWith(
+                            landCertificateEntity = landCertificateEntity.copyWith2(
                               otherAreas: [...?landCertificateEntity.otherAreas, AreaEntity()],
                             );
                             _expandList.add(true);
