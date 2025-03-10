@@ -1,18 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
 
-abstract class SearchBuilder<T> {
-  bool isMatch(T item, String keyword);
-}
-
-abstract class SearchBuilderByInput<T, I> {
-  bool isMatch(T item, I input);
-}
-
-abstract class ComplexSearchBuilder<T> {
-  bool isMatch(T item, Map searchParams);
-}
-
 class Debouncer {
   final int milliseconds;
   Timer? _timer;

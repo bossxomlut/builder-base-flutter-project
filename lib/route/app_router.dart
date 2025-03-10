@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 
 import '../domain/index.dart';
-import '../presentation/land_certificate/cubit/land_certificate_list_cubit.dart';
 import 'app_router.gr.dart';
 
 export 'route_logger_observer.dart';
@@ -60,19 +59,33 @@ extension AppRouterX on AppRouter {
 
 extension LandCertificateListRouteX on AppRouter {
   void goToCertificateGroupByProvince(ProvinceEntity province) {
-    push(LandCertificateListRoute(level: ProvinceLevel.province, province: province));
+    push(LandCertificateListRoute(
+      province: province,
+      searchInformation: null,
+    ));
   }
 
-  void goToCertificateGroupByDistrict(DistrictEntity district) {
-    push(LandCertificateListRoute(level: ProvinceLevel.district, district: district));
+  void goToCertificateGroupByDistrict(
+    DistrictEntity district,
+    SearchInformationEntity searchInformation,
+  ) {
+    push(LandCertificateListRoute(
+      district: district,
+      searchInformation: searchInformation,
+    ));
   }
 
   void goToCertificateGroupByWard(WardEntity ward) {
-    push(LandCertificateListRoute(level: ProvinceLevel.ward, ward: ward));
+    push(LandCertificateListRoute(
+      ward: ward,
+      searchInformation: null,
+    ));
   }
 
   void goToCertificateGroupByAll() {
-    push(LandCertificateListRoute(level: ProvinceLevel.all));
+    push(LandCertificateListRoute(
+      searchInformation: null,
+    ));
   }
 }
 

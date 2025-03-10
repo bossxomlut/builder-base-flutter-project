@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 
+import '../../core/index.dart';
 import '../index.dart';
 
 @injectable
@@ -21,5 +22,18 @@ class CreateLandCertificateUseCase {
     } else {
       await _landCertificateRepository.create(lastedCertificate);
     }
+  }
+}
+
+//delete usecase
+@injectable
+class DeleteLandCertificateUseCase extends UseCase<void, LandCertificateEntity> {
+  final LandCertificateRepository _landCertificateRepository;
+
+  DeleteLandCertificateUseCase(this._landCertificateRepository);
+
+  @override
+  void execute(LandCertificateEntity input) {
+    _landCertificateRepository.delete(input);
   }
 }

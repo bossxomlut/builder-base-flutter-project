@@ -7,21 +7,16 @@ import 'package:injectable/injectable.dart';
 import '../../../domain/index.dart';
 import '../../utils/cubit_utils.dart';
 
-enum ProvinceLevel {
-  province,
-  district,
-  ward,
-  all,
-}
-
 @injectable
 class LandCertificateListCubit extends Cubit<LandCertificateListState> with SafeEmit<LandCertificateListState> {
   LandCertificateListCubit(
-    this._landCertificateRepository,
+    this._searchUseCase,
+    this._deleteUseCase,
     this._landCertificateObserverData,
   ) : super(LandCertificateListState.initial());
 
-  final LandCertificateRepository _landCertificateRepository;
+  final SearchLCByProvinceUseCase _searchUseCase;
+  final DeleteLandCertificateUseCase _deleteUseCase;
 
   final LandCertificateObserverData _landCertificateObserverData;
 
@@ -39,15 +34,17 @@ class LandCertificateListCubit extends Cubit<LandCertificateListState> with Safe
     return super.close();
   }
 
-  void setLevel(
-    ProvinceLevel level, {
+  void init({
+    String? keyword,
+    FilterLandCertificateEntity? filter,
     ProvinceEntity? province,
     DistrictEntity? district,
     WardEntity? ward,
   }) {
     emit(
       state.copyWith(
-        level: level,
+        keyword: keyword,
+        filter: filter,
         province: province,
         district: district,
         ward: ward,
@@ -55,19 +52,18 @@ class LandCertificateListCubit extends Cubit<LandCertificateListState> with Safe
     );
   }
 
-  void onSearch(String keyword) {
+  void onSearch(String? keyword) {
     emit(state.copyWith(keyword: keyword));
     try {
-      switch (state.level) {
-        case ProvinceLevel.province:
-          _landCertificateRepository.searchByProvince(state.province!, keyword).then(_emitList);
-        case ProvinceLevel.district:
-          _landCertificateRepository.searchByDistrict(state.district!, keyword).then(_emitList);
-        case ProvinceLevel.ward:
-          _landCertificateRepository.searchByWard(state.ward!, keyword).then(_emitList);
-        case ProvinceLevel.all:
-          _landCertificateRepository.search(keyword).then(_emitList);
-      }
+      _searchUseCase
+          .execute(ProvinceSearchInformationEntity(
+            keyword: state.keyword,
+            filter: state.filter,
+            province: state.province,
+            district: state.district,
+            ward: state.ward,
+          ))
+          .then(_emitList);
     } catch (e) {
       log('error', error: e, stackTrace: StackTrace.current);
       _emitList([]);
@@ -79,16 +75,14 @@ class LandCertificateListCubit extends Cubit<LandCertificateListState> with Safe
   }
 
   void remove(LandCertificateEntity item) {
-    print('item: ${item}');
-
-    _landCertificateRepository.delete(item);
+    _deleteUseCase.execute(item);
   }
 }
 
 class LandCertificateListState extends Equatable {
   LandCertificateListState({
     required this.keyword,
-    required this.level,
+    this.filter,
     required this.list,
     this.province,
     this.district,
@@ -98,13 +92,12 @@ class LandCertificateListState extends Equatable {
   factory LandCertificateListState.initial() {
     return LandCertificateListState(
       keyword: '',
-      level: ProvinceLevel.all,
       list: [],
     );
   }
 
   final String keyword;
-  final ProvinceLevel level;
+  final FilterLandCertificateEntity? filter;
   final ProvinceEntity? province;
   final DistrictEntity? district;
   final WardEntity? ward;
@@ -112,7 +105,8 @@ class LandCertificateListState extends Equatable {
 
   @override
   List<Object?> get props => [
-        level,
+        keyword,
+        filter,
         province,
         district,
         ward,
@@ -121,7 +115,7 @@ class LandCertificateListState extends Equatable {
 
   LandCertificateListState copyWith({
     String? keyword,
-    ProvinceLevel? level,
+    FilterLandCertificateEntity? filter,
     ProvinceEntity? province,
     DistrictEntity? district,
     WardEntity? ward,
@@ -129,7 +123,7 @@ class LandCertificateListState extends Equatable {
   }) {
     return LandCertificateListState(
       keyword: keyword ?? this.keyword,
-      level: level ?? this.level,
+      filter: filter ?? this.filter,
       province: province ?? this.province,
       district: district ?? this.district,
       ward: ward ?? this.ward,

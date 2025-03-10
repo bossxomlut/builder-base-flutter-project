@@ -16,28 +16,16 @@ import 'widget/land_certificate_card.dart';
 class LandCertificateListPage extends StatefulWidget {
   const LandCertificateListPage({
     super.key,
-    required this.level,
     this.province,
     this.district,
     this.ward,
+    required this.searchInformation,
   });
 
-  final ProvinceLevel level;
   final ProvinceEntity? province;
   final DistrictEntity? district;
   final WardEntity? ward;
-
-  factory LandCertificateListPage.province(ProvinceEntity province) {
-    return LandCertificateListPage(level: ProvinceLevel.province, province: province);
-  }
-
-  factory LandCertificateListPage.district(DistrictEntity district) {
-    return LandCertificateListPage(level: ProvinceLevel.district, district: district);
-  }
-
-  factory LandCertificateListPage.ward(WardEntity ward) {
-    return LandCertificateListPage(level: ProvinceLevel.ward, ward: ward);
-  }
+  final SearchInformationEntity? searchInformation;
 
   @override
   State<LandCertificateListPage> createState() => _LandCertificateListPageState();
@@ -51,87 +39,18 @@ class _LandCertificateListPageState
 
   final Duration _duration = Duration(milliseconds: 300);
 
-  void _removeItem(int index) {
-    final removedItem = _items[index];
-
-    cubit.remove(removedItem);
-    //
-    // _items.removeAt(index);
-    //
-    // _listKey.currentState?.removeItem(
-    //   index,
-    //   (context, animation) => _buildItem(removedItem, index, animation),
-    //   duration: _duration,
-    // );
-    //
-    // if (_items.isEmpty) {
-    //   Future.delayed(_duration, () {
-    //     try {
-    //       isEmptyNotifier.value = true;
-    //     } catch (e) {}
-    //   });
-    // }
-  }
-
-  void _addItem(LandCertificateEntity item) {
-    _items.add(item);
-
-    _listKey.currentState?.insertItem(
-      _items.length - 1,
-      duration: _duration,
-    );
-  }
-
-  Widget _buildItem(LandCertificateEntity item, int index, Animation<double> animation) {
-    return SlideTransition(
-      position: animation.drive(
-        Tween<Offset>(
-          begin: const Offset(1, 0),
-          end: Offset.zero,
-        ).chain(CurveTween(curve: Curves.easeInOut)),
-      ),
-      child: Slidable(
-        child: LandCertificateCard(
-          item,
-          backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-        ),
-        enabled: true,
-        endActionPane: ActionPane(
-          motion: const ScrollMotion(),
-          children: [
-            SlidableAction(
-              onPressed: (BuildContext context) {
-                AppDialog(
-                  title: LKey.delete.tr(),
-                  description: LKey.messageDeleteItemConfirmDescription.tr(),
-                  onConfirm: () {
-                    // _removeItem(index);
-                    cubit.remove(item);
-                  },
-                  onCancel: () {},
-                ).show(context);
-              },
-              backgroundColor: Theme.of(context).colorScheme.errorContainer,
-              icon: LineIcons.trash,
-              label: LKey.delete.tr(),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   void initState() {
     super.initState();
     cubit
-      ..setLevel(
-        widget.level,
+      ..init(
+        keyword: widget.searchInformation?.keyword ?? '',
+        filter: widget.searchInformation?.filter,
         province: widget.province,
         district: widget.district,
         ward: widget.ward,
       )
-      ..onSearch('')
+      ..onSearch(null)
       ..startListen();
   }
 
@@ -147,16 +66,7 @@ class _LandCertificateListPageState
   }
 
   String get title {
-    switch (widget.level) {
-      case ProvinceLevel.province:
-        return widget.province!.name;
-      case ProvinceLevel.district:
-        return widget.district!.name;
-      case ProvinceLevel.ward:
-        return widget.ward!.name;
-      case ProvinceLevel.all:
-        return LKey.all.tr();
-    }
+    return widget.province?.name ?? widget.district?.name ?? widget.ward?.name ?? LKey.all.tr();
   }
 
   @override
@@ -357,5 +267,44 @@ class _LandCertificateListPageState
     //     ],
     //   ),
     // );
+  }
+
+  Widget _buildItem(LandCertificateEntity item, int index, Animation<double> animation) {
+    return SlideTransition(
+      position: animation.drive(
+        Tween<Offset>(
+          begin: const Offset(1, 0),
+          end: Offset.zero,
+        ).chain(CurveTween(curve: Curves.easeInOut)),
+      ),
+      child: Slidable(
+        child: LandCertificateCard(
+          item,
+          backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+        ),
+        enabled: true,
+        endActionPane: ActionPane(
+          motion: const ScrollMotion(),
+          children: [
+            SlidableAction(
+              onPressed: (BuildContext context) {
+                AppDialog(
+                  title: LKey.delete.tr(),
+                  description: LKey.messageDeleteItemConfirmDescription.tr(),
+                  onConfirm: () {
+                    // _removeItem(index);
+                    cubit.remove(item);
+                  },
+                  onCancel: () {},
+                ).show(context);
+              },
+              backgroundColor: Theme.of(context).colorScheme.errorContainer,
+              icon: LineIcons.trash,
+              label: LKey.delete.tr(),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

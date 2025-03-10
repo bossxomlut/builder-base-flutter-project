@@ -23,6 +23,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends BaseState<SearchPage, SearchGroupCubit, SearchGroupState> {
   //create debounce time for search
   final Debouncer _debouncer = Debouncer(milliseconds: 400);
+  final TextEditingController _searchController = TextEditingController();
 
   void _onSearchChanged(String value) {
     _debouncer.run(() {
@@ -34,11 +35,15 @@ class _SearchPageState extends BaseState<SearchPage, SearchGroupCubit, SearchGro
   void initState() {
     super.initState();
     cubit.search('');
+    _searchController.addListener(() {
+      _onSearchChanged(_searchController.text);
+    });
   }
 
   @override
   void dispose() {
     _debouncer.cancel();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -63,9 +68,7 @@ class _SearchPageState extends BaseState<SearchPage, SearchGroupCubit, SearchGro
             children: [
               Expanded(
                 child: TextField(
-                  onChanged: (value) {
-                    _onSearchChanged(value);
-                  },
+                  controller: _searchController,
                   decoration: InputDecoration(
                     hintText: 'Tìm kiếm thành phố, tên,...',
                     prefixIcon: Icon(Icons.search),
@@ -73,6 +76,21 @@ class _SearchPageState extends BaseState<SearchPage, SearchGroupCubit, SearchGro
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
                     fillColor: theme.canvasColor,
+                    suffixIcon: AnimatedBuilder(
+                      animation: _searchController,
+                      builder: (context, child) {
+                        if (_searchController.text.isEmpty) {
+                          return const SizedBox.shrink();
+                        }
+                        return child!;
+                      },
+                      child: IconButton(
+                        onPressed: () {
+                          _searchController.clear();
+                        },
+                        icon: const Icon(Icons.clear),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -113,6 +131,7 @@ class _SearchPageState extends BaseState<SearchPage, SearchGroupCubit, SearchGro
                 final provinceCountEntity = state.list[index];
                 return CountSearchCard(
                   query: state.query,
+                  filter: state.filter,
                   countSearch: provinceCountEntity,
                 );
               },
@@ -130,10 +149,12 @@ class CountSearchCard extends StatelessWidget {
     super.key,
     required this.countSearch,
     this.query,
+    required this.filter,
   });
 
   final ProvinceCountEntity countSearch;
   final String? query;
+  final FilterLandCertificateEntity? filter;
 
   @override
   Widget build(BuildContext context) {
@@ -189,6 +210,10 @@ class CountSearchCard extends StatelessWidget {
 
                   appRouter.goToCertificateGroupByDistrict(
                     districtEntity,
+                    SearchInformationEntity(
+                      keyword: query ?? '',
+                      filter: filter,
+                    ),
                   );
                 },
               );

@@ -2,17 +2,16 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../domain/entity/filter_land_certificate_entity.dart';
 import '../../../domain/index.dart';
 import '../../utils/index.dart';
 
 @injectable
 class SearchGroupCubit extends Cubit<SearchGroupState> with SafeEmit<SearchGroupState> {
-  SearchGroupCubit(this.repository, this._landCertificateObserverData) : super(SearchGroupState()) {
+  SearchGroupCubit(this._searchUseCase, this._landCertificateObserverData) : super(SearchGroupState()) {
     startListen();
   }
 
-  final SearchGroupCertificateRepository repository;
+  final SearchGroundCertificateUseCase _searchUseCase;
   final LandCertificateObserverData _landCertificateObserverData;
 
   void startListen() {
@@ -30,14 +29,11 @@ class SearchGroupCubit extends Cubit<SearchGroupState> with SafeEmit<SearchGroup
   }
 
   void search(String query) {
-    // repository.search(query).then((list) {
-    //   emit(state.copyWith(query: query, list: list));
-    // });
     searchAndFilter(query);
   }
 
   void searchAndFilter(String query) {
-    repository.searchAndFilter(query, state.filter).then((list) {
+    _searchUseCase.execute(SearchInformationEntity(keyword: query, filter: state.filter)).then((list) {
       emit(state.copyWith(query: query, list: list));
     });
   }

@@ -1,5 +1,4 @@
 import '../../data/model/observer_data.dart';
-import '../entity/filter_land_certificate_entity.dart';
 import '../index.dart';
 
 abstract class LandCertificateRepository
@@ -13,6 +12,7 @@ abstract class LandCertificateRepository
   Future<LandCertificateEntity> readByCerId(String cerId);
   Future<int> findIndexByCerId(String cerId);
   Future<List<LandCertificateEntity>> searchAndFilter(String keyword, FilterLandCertificateEntity? filter);
+  Future<List<LandCertificateEntity>> searchByBuilder(LandCertificateSearchBuilder builder);
 }
 
 //listen have any change in database

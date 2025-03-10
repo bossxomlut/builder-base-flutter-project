@@ -235,26 +235,30 @@ class _ViewLandCertificatePageState extends State<ViewLandCertificatePage> with 
                             itemBuilder: (BuildContext context, int index) {
                               final otherArea = landCertificateEntity.otherAreas![index];
                               return Card(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    Text('${index + 1}. Tổng: ${otherArea.total.displayFormat()}',
-                                        style: theme.textTheme.titleMedium),
-                                    const Gap(10),
-                                    CustomTextField(
-                                      isReadOnly: true,
-                                      onChanged: (value) {},
-                                      label: 'Đất ở',
-                                      initialValue: otherArea.residentialArea?.displayFormat() ?? nullPlaceHolder,
-                                    ),
-                                    const Gap(8),
-                                    CustomTextField(
-                                      isReadOnly: true,
-                                      onChanged: (value) {},
-                                      label: 'Cây lâu năm',
-                                      initialValue: otherArea.perennialTreeArea?.displayFormat() ?? nullPlaceHolder,
-                                    ),
-                                  ],
+                                color: theme.cardColor,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+                                      Text('${index + 1}. Tổng: ${otherArea.total.displayFormat()}',
+                                          style: theme.textTheme.titleMedium),
+                                      const Gap(10),
+                                      CustomTextField(
+                                        isReadOnly: true,
+                                        onChanged: (value) {},
+                                        label: 'Đất ở',
+                                        initialValue: otherArea.residentialArea?.displayFormat() ?? nullPlaceHolder,
+                                      ),
+                                      const Gap(8),
+                                      CustomTextField(
+                                        isReadOnly: true,
+                                        onChanged: (value) {},
+                                        label: 'Cây lâu năm',
+                                        initialValue: otherArea.perennialTreeArea?.displayFormat() ?? nullPlaceHolder,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               );
                             },

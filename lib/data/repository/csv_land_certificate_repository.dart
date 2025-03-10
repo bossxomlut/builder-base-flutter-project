@@ -5,8 +5,6 @@ import 'package:injectable/injectable.dart';
 import '../../core/index.dart';
 import '../../core/persistence/csv_storage.dart';
 import '../../core/utils/id_utils.dart';
-import '../../core/utils/search_utils.dart';
-import '../../domain/entity/filter_land_certificate_entity.dart';
 import '../../domain/index.dart';
 import '../../resource/index.dart';
 import '../model/land_certificate_model.dart';
@@ -43,19 +41,6 @@ abstract class StorageInformation {
     'Đã xoá',
     'Diện tích khác',
   ];
-}
-
-@singleton
-class SimpleNotifier {
-  final StreamController<void> _controller = StreamController<void>.broadcast();
-
-  void notify() {
-    _controller.add(null);
-  }
-
-  void addListener(Function(void value) callback) {
-    _controller.stream.listen(callback);
-  }
 }
 
 @Injectable(as: LandCertificateRepository)
@@ -131,9 +116,8 @@ class LandCertificateRepositoryCSVImpl extends LandCertificateRepository {
   @override
   Future<List<LandCertificateEntity>> search(String keyword) async {
     final rows = await getAll();
-    final LandCertificateSearchBuilder searchBuilder = LandCertificateSearchBuilder();
-
-    return rows.where((e) => searchBuilder.isMatch(e, keyword)).toList();
+    final lowerKeyword = keyword.toLowerCase();
+    return rows.where((element) => element.name?.toLowerCase().contains(lowerKeyword) ?? false).toList();
   }
 
   @override
@@ -214,14 +198,21 @@ class LandCertificateRepositoryCSVImpl extends LandCertificateRepository {
   @override
   Future<List<LandCertificateEntity>> searchAndFilter(String keyword, FilterLandCertificateEntity? filter) async {
     final rows = await getAll();
-    final LandCertificateSearchComplexBuilder searchBuilder = LandCertificateSearchComplexBuilder();
+    final LandCertificateSearchBuilder searchBuilder = LandCertificateSearchBuilder();
+    searchBuilder.keyword(keyword);
 
-    return rows
-        .where((e) => searchBuilder.isMatch(e, {
-              'keyword': keyword,
-              'filter': filter,
-            }))
-        .toList();
+    if (filter != null) {
+      searchBuilder.filter(filter);
+    }
+
+    return searchBuilder.search(rows);
+  }
+
+  @override
+  Future<List<LandCertificateEntity>> searchByBuilder(LandCertificateSearchBuilder builder) async {
+    final rows = await getAll();
+
+    return builder.search(rows);
   }
 }
 
@@ -375,92 +366,5 @@ class SearchGroupCertificateRepositoryImpl extends SearchGroupCertificateReposit
   @override
   Future<List<ProvinceCountEntity>> searchAndFilter(String keyword, FilterLandCertificateEntity? filter) {
     return _landCertificateRepository.searchAndFilter(keyword, filter).then(_fromLandCerList);
-  }
-}
-
-class LandCertificateSearchBuilder extends SearchBuilder<LandCertificateEntity> {
-  @override
-  bool isMatch(LandCertificateEntity item, String keyword) {
-    final lowerKeyword = keyword.toLowerCase();
-
-    return [
-      item.name,
-      item.province?.name,
-      item.district?.name,
-      item.ward?.name,
-      item.detailAddress,
-      item.note,
-      item.useType,
-      item.purpose,
-    ].any((value) => value?.toLowerCase().contains(lowerKeyword) ?? false);
-  }
-}
-
-class FilterLandCertificateSearchBuilder
-    extends SearchBuilderByInput<LandCertificateEntity, FilterLandCertificateEntity> {
-  @override
-  bool isMatch(LandCertificateEntity entity, FilterLandCertificateEntity input) {
-    // 🗓️ Tìm kiếm theo ngày mua
-    if (input.purchaseDateFrom != null &&
-        (entity.purchaseDate == null || entity.purchaseDate!.isBefore(input.purchaseDateFrom!))) {
-      return false;
-    }
-    if (input.purchaseDateTo != null &&
-        (entity.purchaseDate == null || entity.purchaseDate!.isAfter(input.purchaseDateTo!))) {
-      return false;
-    }
-
-    // 🗓️ Tìm kiếm theo ngày bán
-    if (input.saleDateFrom != null && (entity.saleDate == null || entity.saleDate!.isBefore(input.saleDateFrom!))) {
-      return false;
-    }
-    if (input.saleDateTo != null && (entity.saleDate == null || entity.saleDate!.isAfter(input.saleDateTo!))) {
-      return false;
-    }
-
-    // 💰 Tìm kiếm theo giá mua
-    if (input.purchasePriceFrom != null &&
-        (entity.purchasePrice == null || entity.purchasePrice! < input.purchasePriceFrom!)) {
-      return false;
-    }
-    if (input.purchasePriceTo != null &&
-        (entity.purchasePrice == null || entity.purchasePrice! > input.purchasePriceTo!)) {
-      return false;
-    }
-
-    // 💰 Tìm kiếm theo giá bán
-    if (input.salePriceFrom != null && (entity.salePrice == null || entity.salePrice! < input.salePriceFrom!)) {
-      return false;
-    }
-    if (input.salePriceTo != null && (entity.salePrice == null || entity.salePrice! > input.salePriceTo!)) {
-      return false;
-    }
-
-    // 📏 Tìm kiếm theo diện tích
-    if (input.areaFrom != null && (entity.totalAllArea < input.areaFrom!)) {
-      return false;
-    }
-    if (input.areaTo != null && (entity.totalAllArea > input.areaTo!)) {
-      return false;
-    }
-
-    return true;
-  }
-}
-
-class LandCertificateSearchComplexBuilder extends ComplexSearchBuilder<LandCertificateEntity> {
-  final LandCertificateSearchBuilder _searchBuilder = LandCertificateSearchBuilder();
-  final FilterLandCertificateSearchBuilder _filterSearchBuilder = FilterLandCertificateSearchBuilder();
-
-  @override
-  bool isMatch(LandCertificateEntity item, Map searchParams) {
-    final keyword = searchParams['keyword'] as String;
-    final FilterLandCertificateEntity? filter = searchParams['filter'] as FilterLandCertificateEntity?;
-
-    if (filter == null) {
-      return _searchBuilder.isMatch(item, keyword);
-    }
-
-    return _searchBuilder.isMatch(item, keyword) && _filterSearchBuilder.isMatch(item, filter);
   }
 }

@@ -1,6 +1,7 @@
 export 'package:freezed_annotation/freezed_annotation.dart';
 
 export 'app_file.dart';
+export 'filter_land_certificate_entity.dart';
 export 'land_certificate_entity.dart';
 export 'province_entity.dart';
 export 'search_entity.dart';

@@ -165,58 +165,9 @@ class _LandCertificateFilterFormState extends State<LandCertificateFilterForm> {
                           ],
                         ),
                         const Gap(10),
-                        //Thời điểm đóng thuế
-                        Text('Thời điểm đóng thuế', style: Theme.of(context).textTheme.titleMedium),
-                        const Gap(8),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: OutlineField(
-                                label: 'Từ thời điểm',
-                                value: _filter?.taxDeadlineTimeFrom?.date,
-                                onTap: () async {
-                                  AppShowDatePicker(
-                                    context,
-                                    (selectedDate) {
-                                      if (selectedDate != null) {
-                                        _filter = _filter?.copyWith(
-                                          taxDeadlineTimeFrom: selectedDate,
-                                        );
-                                        setState(() {});
-                                      }
-                                    },
-                                  );
-                                },
-                                trailing: Icon(Icons.calendar_today_outlined),
-                              ),
-                            ),
-                            const Gap(8),
-                            Expanded(
-                              child: OutlineField(
-                                label: 'Đến thời điểm',
-                                value: _filter?.taxDeadlineTimeTo?.date,
-                                onTap: () async {
-                                  AppShowDatePicker(
-                                    context,
-                                    (selectedDate) {
-                                      if (selectedDate != null) {
-                                        _filter = _filter?.copyWith(
-                                          taxDeadlineTimeTo: selectedDate,
-                                        );
-                                        setState(() {});
-                                      }
-                                    },
-                                  );
-                                },
-                                trailing: Icon(Icons.calendar_today_outlined),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Gap(10),
 
                         //Thời điểm gia hạn thuế
-                        Text('Thời điểm gia hạn thuế', style: Theme.of(context).textTheme.titleMedium),
+                        Text('Thời điểm gia hạn đất', style: Theme.of(context).textTheme.titleMedium),
                         const Gap(8),
                         Row(
                           children: [
@@ -252,6 +203,55 @@ class _LandCertificateFilterFormState extends State<LandCertificateFilterForm> {
                                       if (selectedDate != null) {
                                         _filter = _filter?.copyWith(
                                           taxRenewalTimeTo: selectedDate,
+                                        );
+                                        setState(() {});
+                                      }
+                                    },
+                                  );
+                                },
+                                trailing: Icon(Icons.calendar_today_outlined),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Gap(10),
+                        //Thời điểm đóng thuế
+                        Text('Thời hạn đóng thuế', style: Theme.of(context).textTheme.titleMedium),
+                        const Gap(8),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: OutlineField(
+                                label: 'Từ thời điểm',
+                                value: _filter?.taxDeadlineTimeFrom?.date,
+                                onTap: () async {
+                                  AppShowDatePicker(
+                                    context,
+                                    (selectedDate) {
+                                      if (selectedDate != null) {
+                                        _filter = _filter?.copyWith(
+                                          taxDeadlineTimeFrom: selectedDate,
+                                        );
+                                        setState(() {});
+                                      }
+                                    },
+                                  );
+                                },
+                                trailing: Icon(Icons.calendar_today_outlined),
+                              ),
+                            ),
+                            const Gap(8),
+                            Expanded(
+                              child: OutlineField(
+                                label: 'Đến thời điểm',
+                                value: _filter?.taxDeadlineTimeTo?.date,
+                                onTap: () async {
+                                  AppShowDatePicker(
+                                    context,
+                                    (selectedDate) {
+                                      if (selectedDate != null) {
+                                        _filter = _filter?.copyWith(
+                                          taxDeadlineTimeTo: selectedDate,
                                         );
                                         setState(() {});
                                       }
@@ -410,21 +410,22 @@ class _LandCertificateFilterFormState extends State<LandCertificateFilterForm> {
         const Gap(8),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: FilledButton(
-              onPressed: () {
-                //validate
+          child: SafeArea(
+            child: FilledButton(
+                onPressed: () {
+                  //validate
 
-                if (_filter?.isValid == false) {
-                  showError(message: 'Vui lòng chọn ít nhất một điều kiện lọc');
-                  return;
-                }
+                  if (_filter?.isValid == false) {
+                    showError(message: 'Vui lòng chọn ít nhất một điều kiện lọc');
+                    return;
+                  }
 
-                Navigator.of(context).pop();
-                widget.onApply?.call(_filter);
-              },
-              child: Text('Áp dụng')),
+                  Navigator.of(context).pop();
+                  widget.onApply?.call(_filter);
+                },
+                child: Text('Áp dụng')),
+          ),
         ),
-        const Gap(8),
       ],
     );
   }
