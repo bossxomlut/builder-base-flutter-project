@@ -1,4 +1,5 @@
 import '../../data/model/observer_data.dart';
+import '../entity/filter_land_certificate_entity.dart';
 import '../index.dart';
 
 abstract class LandCertificateRepository
@@ -11,6 +12,7 @@ abstract class LandCertificateRepository
   Future<List<LandCertificateEntity>> searchByWard(WardEntity ward, String keyword);
   Future<LandCertificateEntity> readByCerId(String cerId);
   Future<int> findIndexByCerId(String cerId);
+  Future<List<LandCertificateEntity>> searchAndFilter(String keyword, FilterLandCertificateEntity? filter);
 }
 
 //listen have any change in database
@@ -20,4 +22,6 @@ abstract class ProvinceLandCertificateRepository
     implements GetListRepository<ProvinceLandCertificateEntity>, SearchRepository<ProvinceLandCertificateEntity> {}
 
 abstract class SearchGroupCertificateRepository
-    implements GetListRepository<ProvinceCountEntity>, SearchRepository<ProvinceCountEntity> {}
+    implements GetListRepository<ProvinceCountEntity>, SearchRepository<ProvinceCountEntity> {
+  Future<List<ProvinceCountEntity>> searchAndFilter(String keyword, FilterLandCertificateEntity? filter);
+}

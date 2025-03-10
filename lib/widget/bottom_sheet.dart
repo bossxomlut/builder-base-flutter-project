@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'index.dart';
 
 mixin ShowBottomSheet<T> on Widget {
-  Future<T?> show(BuildContext context) {
+  Future<T?> show(BuildContext context, {bool showDragHandle = true}) {
     context.hideKeyboard();
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      showDragHandle: true,
+      showDragHandle: showDragHandle,
       useSafeArea: true,
       builder: (BuildContext context) {
         return ConstrainedBox(

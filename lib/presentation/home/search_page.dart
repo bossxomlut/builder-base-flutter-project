@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:highlight_text/highlight_text.dart';
+import 'package:line_icons/line_icon.dart';
 
 import '../../core/utils/search_utils.dart';
 import '../../domain/entity/index.dart';
@@ -9,6 +10,7 @@ import '../../route/app_router.dart';
 import '../../widget/index.dart';
 import '../land_certificate/cubit/search_group_cubit.dart';
 import '../land_certificate/widget/land_certificate_card.dart';
+import '../land_certificate/widget/land_certificate_filter_form.dart';
 import '../utils/base_state.dart';
 
 class SearchPage extends StatefulWidget {
@@ -57,18 +59,44 @@ class _SearchPageState extends BaseState<SearchPage, SearchGroupCubit, SearchGro
         const SafeArea(child: SizedBox.shrink()),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: TextField(
-            onChanged: (value) {
-              _onSearchChanged(value);
-            },
-            decoration: InputDecoration(
-              hintText: 'Tìm kiếm thành phố, tên,...',
-              prefixIcon: Icon(Icons.search),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20)),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  onChanged: (value) {
+                    _onSearchChanged(value);
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Tìm kiếm thành phố, tên,...',
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    fillColor: theme.canvasColor,
+                  ),
+                ),
               ),
-              fillColor: theme.canvasColor,
-            ),
+              IconButton(
+                onPressed: () {
+                  LandCertificateFilterForm(
+                    filter: cubit.state.filter,
+                    onApply: (filter) {
+                      cubit.setFilter(filter);
+                    },
+                  ).show(context, showDragHandle: false);
+                },
+                icon: BlocSelector<SearchGroupCubit, SearchGroupState, bool>(
+                    selector: (state) => state.filter != null,
+                    builder: (context, isHaveFilter) {
+                      return Badge(
+                        isLabelVisible: isHaveFilter,
+                        child: LineIcon(
+                          LineIcons.filter,
+                        ),
+                      );
+                    }),
+              ),
+            ],
           ),
         ),
         const Gap(20),
@@ -103,6 +131,7 @@ class CountSearchCard extends StatelessWidget {
     required this.countSearch,
     this.query,
   });
+
   final ProvinceCountEntity countSearch;
   final String? query;
 
@@ -167,28 +196,6 @@ class CountSearchCard extends StatelessWidget {
             separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 8),
             itemCount: countSearch.districts.length,
           )
-
-          // for (var district in countSearch.districts)
-          //   ListTile(
-          //     tileColor: theme.colorScheme.surface,
-          //     shape: const RoundedRectangleBorder(
-          //       borderRadius: BorderRadius.all(Radius.circular(8)),
-          //     ),
-          //     title: Text('${district.name}'),
-          //     trailing:
-          //         Text('${district.total} ${countSearch.total == 1 ? LKey.certificate.tr() : LKey.certificates.tr()}'),
-          //     onTap: () {
-          //       final districtEntity = DistrictEntity(
-          //         id: district.id,
-          //         provinceId: countSearch.id,
-          //         name: district.name,
-          //       );
-          //
-          //       appRouter.goToCertificateGroupByDistrict(
-          //         districtEntity,
-          //       );
-          //     },
-          //   ),
         ],
       ),
     );
