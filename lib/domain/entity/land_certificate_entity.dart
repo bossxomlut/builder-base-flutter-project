@@ -113,16 +113,16 @@ extension LandCertificateEntityX on LandCertificateEntity {
 @freezed
 class AreaEntity with _$AreaEntity {
   factory AreaEntity({
-    double? residentialArea,
-    double? perennialTreeArea,
+    String? typeName,
+    double? area,
   }) = _AreaEntity;
 
   static AreaEntity? fromString(String value) {
     final values = value.split('_');
     try {
       return AreaEntity(
-        residentialArea: double.tryParse(values[0]),
-        perennialTreeArea: double.tryParse(values[1]),
+        typeName: values[0].isNotNullOrEmpty ? values[0] : null,
+        area: double.tryParse(values[1]),
       );
     } catch (e) {
       return null;
@@ -131,10 +131,10 @@ class AreaEntity with _$AreaEntity {
 }
 
 extension AreaEntityX on AreaEntity {
-  double get total => (residentialArea ?? 0) + (perennialTreeArea ?? 0);
+  double get total => area ?? 0;
 
   String storageFormat() {
-    return '${residentialArea ?? 0}_${perennialTreeArea ?? 0}';
+    return '${typeName ?? ''}_${area ?? 0}';
   }
 }
 

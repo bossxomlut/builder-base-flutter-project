@@ -13,7 +13,7 @@ class CreateLandCertificateUseCase {
     final otherAreas = landCertificate.otherAreas?.toList() ?? [];
 
     //clear other areas that have no residential area or perennial tree area
-    otherAreas.removeWhere((a) => a.residentialArea == null && a.perennialTreeArea == null);
+    otherAreas.removeWhere((a) => a.area == null);
 
     final lastedCertificate = landCertificate.copyWith(otherAreas: otherAreas);
 

@@ -33,16 +33,16 @@ class _OtherAreaWidgetState extends State<OtherAreaWidget> {
   @override
   void initState() {
     super.initState();
-    _residentialAreaController.text = widget.areaEntity?.residentialArea?.inputFormat() ?? '';
-    _perennialTreeAreaController.text = widget.areaEntity?.perennialTreeArea?.inputFormat() ?? '';
+    _residentialAreaController.text = widget.areaEntity?.typeName ?? '';
+    _perennialTreeAreaController.text = widget.areaEntity?.area?.inputFormat() ?? '';
   }
 
   @override
   void didUpdateWidget(covariant OtherAreaWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (!const DeepCollectionEquality().equals(oldWidget.areaEntity, widget.areaEntity)) {
-      _residentialAreaController.text = widget.areaEntity?.residentialArea?.inputFormat() ?? '';
-      _perennialTreeAreaController.text = widget.areaEntity?.perennialTreeArea?.inputFormat() ?? '';
+      _residentialAreaController.text = widget.areaEntity?.typeName ?? '';
+      _perennialTreeAreaController.text = widget.areaEntity?.area?.inputFormat() ?? '';
     }
   }
 
@@ -80,18 +80,17 @@ class _OtherAreaWidgetState extends State<OtherAreaWidget> {
         CustomTextField(
           controller: _residentialAreaController,
           onChanged: (value) {
-            widget.onChanged((widget.areaEntity ?? AreaEntity()).copyWith(residentialArea: double.tryParse(value)));
+            widget.onChanged((widget.areaEntity ?? AreaEntity()).copyWith(typeName: value));
           },
-          label: LKey.fieldsResidentialLand.tr(),
-          keyboardType: TextInputType.number,
+          label: 'Loại đất',
         ),
         Gap(16),
         CustomTextField(
           controller: _perennialTreeAreaController,
           onChanged: (value) {
-            widget.onChanged((widget.areaEntity ?? AreaEntity()).copyWith(perennialTreeArea: double.tryParse(value)));
+            widget.onChanged((widget.areaEntity ?? AreaEntity()).copyWith(area: double.tryParse(value)));
           },
-          label: LKey.fieldsPerennialTrees.tr(),
+          label: 'Diện tích',
           keyboardType: TextInputType.number,
         ),
         Gap(12),

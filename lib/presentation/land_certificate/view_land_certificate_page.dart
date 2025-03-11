@@ -241,21 +241,20 @@ class _ViewLandCertificatePageState extends State<ViewLandCertificatePage> with 
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
-                                      Text('${index + 1}. Tổng: ${otherArea.total.displayFormat()}',
-                                          style: theme.textTheme.titleMedium),
+                                      Text('Khác ${index + 1}', style: theme.textTheme.titleMedium),
                                       const Gap(10),
                                       CustomTextField(
                                         isReadOnly: true,
                                         onChanged: (value) {},
-                                        label: 'Đất ở',
-                                        initialValue: otherArea.residentialArea?.displayFormat() ?? nullPlaceHolder,
+                                        label: 'Loại đất',
+                                        initialValue: otherArea.typeName ?? nullPlaceHolder,
                                       ),
                                       const Gap(8),
                                       CustomTextField(
                                         isReadOnly: true,
                                         onChanged: (value) {},
-                                        label: 'Cây lâu năm',
-                                        initialValue: otherArea.perennialTreeArea?.displayFormat() ?? nullPlaceHolder,
+                                        label: 'Diện tích',
+                                        initialValue: otherArea.area?.displayFormat() ?? nullPlaceHolder,
                                       ),
                                     ],
                                   ),

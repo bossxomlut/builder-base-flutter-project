@@ -452,7 +452,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                                   // setState(() {});
                                 },
                                 areaEntity: area,
-                                title: 'Khác ${index + 1} (${area.total.displayFormat()})',
+                                title: 'Khác ${index + 1}',
                                 onChanged: (value) {
                                   final List<AreaEntity> list = [...?landCertificateEntity.otherAreas];
 
