@@ -216,7 +216,11 @@ class SyncDataUseCase extends FutureUseCase<bool, void> {
     } catch (e) {
       logger.e("Lỗi đồng bộ dữ liệu: $e");
       if (e is NotFoundException) {
-        await _uploadDataUseCase.execute(null);
+        try {
+          await _uploadDataUseCase.execute(null);
+        } catch (e) {
+          logger.e("Lỗi upload dữ liệu: $e");
+        }
       }
     }
 
