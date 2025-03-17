@@ -88,7 +88,7 @@ class DriveRepositoryImpl extends DriveRepository {
       String? folderId = await _getOrCreateFolder(StorageInformation.folder);
       if (folderId == null) {
         print("Không thể tạo hoặc tìm thấy thư mục.");
-        return;
+        throw NotFoundException();
       }
 
       // 2. **Check if the file already exists**
