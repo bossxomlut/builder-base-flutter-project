@@ -35,30 +35,21 @@ class ProvinceLandCertificateCard extends StatelessWidget {
               ],
             ),
             Gap(16.0),
-            Column(
-              children: [
-                ...?SplitListUtils.splitList<LandCertificateEntity>(pCertificates.certificates ?? [])?.map(
-                  (certificate) => Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: LandCertificateCard(certificate),
-                  ),
-                ),
-              ],
-            ),
-            if ((pCertificates.certificates?.length ?? 0) > SplitListUtils.seeMoreCount)
-              Align(
-                alignment: Alignment.centerRight,
-                child: SeeMoreWidget(
-                  onTap: () {
-                    appRouter.goToCertificateGroupByProvince(
-                      ProvinceEntity(
-                        id: pCertificates.id ?? -1,
-                        name: pCertificates.name ?? '',
-                      ),
-                    );
-                  },
-                ),
+            SeeMoreList<LandCertificateEntity>(
+              items: pCertificates.certificates ?? [],
+              itemBuilder: (certificate, _) => Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: LandCertificateCard(certificate),
               ),
+              onSeeMore: () {
+                appRouter.goToCertificateGroupByProvince(
+                  ProvinceEntity(
+                    id: pCertificates.id ?? -1,
+                    name: pCertificates.name ?? '',
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),

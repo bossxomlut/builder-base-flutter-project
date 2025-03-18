@@ -207,21 +207,30 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                         ),
                         Gap(8),
                         if (landCertificateEntity.files.isNotNullAndEmpty)
-                          ...?landCertificateEntity.files?.map(
-                            (file) {
+                          SeeMoreList<String>(
+                            items: landCertificateEntity.files ?? [],
+                            itemBuilder: (String file, int? index) {
                               return Padding(
                                 padding: const EdgeInsets.only(top: 8),
-                                child: Base64ImagePlaceholder(
-                                  data: file,
-                                  onRemove: () {
-                                    final List<String> list = [...?landCertificateEntity.files];
-                                    list.remove(file);
-                                    _updateLandCertificateEntity(files: list);
+                                child: GestureDetector(
+                                  onTap: () {
+                                    showImages(context, landCertificateEntity.files ?? [], index ?? 0);
                                   },
+                                  child: Base64ImagePlaceholder(
+                                    data: file,
+                                    onRemove: () {
+                                      final List<String> list = [...?landCertificateEntity.files];
+                                      list.remove(file);
+                                      _updateLandCertificateEntity(files: list);
+                                    },
+                                  ),
                                 ),
                               );
                             },
-                          )
+                            onSeeMore: () {
+                              showImages(context, landCertificateEntity.files ?? [], 0);
+                            },
+                          ),
                       ],
                     ),
                   ),
