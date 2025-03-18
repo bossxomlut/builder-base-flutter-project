@@ -332,11 +332,10 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                           trailing: Icon(Icons.calendar_today_outlined),
                         ),
                         Gap(16),
-                        CustomTextField(
+                        CustomTextField.number(
                           initialValue: landCertificateEntity.purchasePrice?.inputFormat(),
-                          onChanged: (value) => _updateLandCertificateEntity(purchasePrice: double.tryParse(value)),
+                          onChanged: (value) => _updateLandCertificateEntity(purchasePrice: value),
                           label: LKey.fieldsPurchasePrice.tr(),
-                          keyboardType: TextInputType.number,
                         ),
                       ],
                     ),
@@ -362,11 +361,10 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                           trailing: Icon(Icons.calendar_today_outlined),
                         ),
                         Gap(16),
-                        CustomTextField(
+                        CustomTextField.number(
                           initialValue: landCertificateEntity.salePrice?.inputFormat(),
-                          onChanged: (value) => _updateLandCertificateEntity(salePrice: double.tryParse(value)),
+                          onChanged: (value) => _updateLandCertificateEntity(salePrice: value),
                           label: LKey.fieldsSalePrice.tr(),
-                          keyboardType: TextInputType.number,
                         ),
                       ],
                     ),
@@ -376,25 +374,22 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                     title: LKey.sectionsLandPlot.tr(),
                     child: Column(
                       children: [
-                        CustomTextField(
+                        CustomTextField.number(
                           initialValue: landCertificateEntity.number?.inputFormat(),
-                          onChanged: (value) => _updateLandCertificateEntity(number: int.tryParse(value)),
+                          onChanged: (value) => _updateLandCertificateEntity(number: value?.toInt()),
                           label: LKey.fieldsLandPlotNumber.tr(),
-                          keyboardType: TextInputType.number,
                         ),
                         Gap(16),
-                        CustomTextField(
+                        CustomTextField.number(
                           initialValue: landCertificateEntity.mapNumber?.inputFormat(),
-                          onChanged: (value) => _updateLandCertificateEntity(mapNumber: int.tryParse(value)),
+                          onChanged: (value) => _updateLandCertificateEntity(mapNumber: value?.toInt()),
                           label: LKey.fieldsMapNumber.tr(),
-                          keyboardType: TextInputType.number,
                         ),
                         Gap(16),
-                        CustomTextField(
+                        CustomTextField.number(
                           initialValue: landCertificateEntity.area?.inputFormat(),
-                          onChanged: (value) => _updateLandCertificateEntity(area: double.tryParse(value)),
+                          onChanged: (value) => _updateLandCertificateEntity(area: value),
                           label: LKey.fieldsAreaSize.tr(),
-                          keyboardType: TextInputType.number,
                         ),
                         Gap(16),
                         CustomTextField(
@@ -426,28 +421,26 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                           isDisabled: true,
                         ),
                         Gap(16),
-                        CustomTextField(
+                        CustomTextField.number(
                           initialValue: landCertificateEntity.residentialArea?.inputFormat(),
                           onChanged: (value) {
                             landCertificateEntity = landCertificateEntity.copyWith(
-                              residentialArea: double.tryParse(value),
+                              residentialArea: value,
                             );
                             setState(() {});
                           },
                           label: LKey.fieldsResidentialLand.tr(),
-                          keyboardType: TextInputType.number,
                         ),
                         Gap(16),
-                        CustomTextField(
+                        CustomTextField.number(
                           initialValue: landCertificateEntity.perennialTreeArea?.inputFormat(),
                           onChanged: (value) {
                             landCertificateEntity = landCertificateEntity.copyWith(
-                              perennialTreeArea: double.tryParse(value),
+                              perennialTreeArea: value,
                             );
                             setState(() {});
                           },
                           label: LKey.fieldsPerennialTrees.tr(),
-                          keyboardType: TextInputType.number,
                         ),
                         Gap(16),
                         ...?landCertificateEntity.otherAreas?.mapIndexed(

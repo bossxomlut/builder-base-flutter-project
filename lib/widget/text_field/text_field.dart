@@ -1,7 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
+import '../../core/index.dart';
 import '../../resource/index.dart';
 
 // Custom TextField Widget for Reuse
@@ -17,6 +19,7 @@ class CustomTextField extends StatefulWidget {
   final FocusNode? focusNode;
   final Widget? prefixIcon;
   final bool isReadOnly;
+  final List<TextInputFormatter>? inputFormatters;
 
   const CustomTextField({
     Key? key,
@@ -31,6 +34,7 @@ class CustomTextField extends StatefulWidget {
     this.focusNode,
     this.prefixIcon,
     this.isReadOnly = false,
+    this.inputFormatters,
   }) : super(key: key);
 
   factory CustomTextField.password({
@@ -68,6 +72,41 @@ class CustomTextField extends StatefulWidget {
       onChanged: onChanged,
       focusNode: focusNode,
       prefixIcon: const Icon(Icons.search),
+    );
+  }
+
+  factory CustomTextField.number({
+    required String label,
+    String? initialValue,
+    TextEditingController? controller,
+    bool isRequired = false,
+    required ValueChanged<double?> onChanged,
+    FocusNode? focusNode,
+    Key? key,
+  }) {
+    return CustomTextField(
+      key: key,
+      label: label,
+      initialValue: initialValue,
+      controller: controller,
+      isRequired: isRequired,
+      onChanged: (String numberString) {
+        final number = numberString.replaceAll(',', '').parseDouble();
+
+        onChanged?.call(number);
+      },
+      keyboardType: TextInputType.number,
+      focusNode: focusNode,
+      inputFormatters: [
+        FilteringTextInputFormatter(RegExp(r'[\d.]'), allow: true),
+        ThousandTextInputFormatter(),
+        DecimalTextInputFormatter(),
+        DotTextInputFormatter(),
+        MinMaxNumberInputFormatter(
+          null,
+          17976931348623157.0,
+        ),
+      ],
     );
   }
 
@@ -190,10 +229,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                     })
                 : null,
           ),
-          // inputFormatters: [
-          //   //prevent space
-          //   FilteringTextInputFormatter.deny(RegExp(r'\s')),
-          // ],
+          inputFormatters: widget.inputFormatters,
         ),
       ),
     );
