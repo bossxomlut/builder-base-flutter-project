@@ -288,6 +288,8 @@ class _ListPhotoViewState extends State<ListPhotoView> with SingleTickerProvider
                 child: PhotoViewGallery.builder(
                   scrollPhysics: const NeverScrollableScrollPhysics(),
                   pageController: pageController,
+                  enableRotation: true,
+                  wantKeepAlive: true,
                   backgroundDecoration: BoxDecoration(color: Colors.transparent),
                   builder: (BuildContext context, int index) {
                     return PhotoViewGalleryPageOptions(
