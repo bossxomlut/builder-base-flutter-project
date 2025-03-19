@@ -128,6 +128,7 @@ flutter:
   assets:
     - assets/config/
     - assets/image/
+    - assets/icon/
     - assets/translations/
     - assets/translations/en-US.json
     - assets/translations/vi-VN.json

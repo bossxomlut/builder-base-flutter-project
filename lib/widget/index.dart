@@ -8,6 +8,7 @@ export 'app_step_widget.dart';
 export 'bottom_sheet.dart';
 export 'dialog.dart';
 export 'file_picker.dart';
+export 'icon.dart';
 export 'image/image.dart';
 export 'image/image_place_holder.dart';
 export 'keep_alive_page.dart';

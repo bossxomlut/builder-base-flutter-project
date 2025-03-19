@@ -17,8 +17,16 @@ class ProvinceLandCertificateCard extends StatelessWidget {
     final theme = context.appTheme;
     return Card(
       margin: const EdgeInsets.all(0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.0),
+        side: BorderSide(
+          color: Color(0xFFCCCCCC),
+          width: 1.0,
+          strokeAlign: 1.0,
+        ),
+      ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(25.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,10 +36,13 @@ class ProvinceLandCertificateCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     pCertificates.name ?? '---',
-                    style: theme.textTheme.titleLarge,
+                    style: theme.provinceStyle,
                   ),
                 ),
-                Text('${pCertificates.certificates?.length?.displayFormat() ?? 0} ${LKey.certificates.tr()}'),
+                Text(
+                  '${pCertificates.certificates?.length?.displayFormat() ?? 0} ${LKey.certificates.tr()}',
+                  style: theme.totalCerStyle,
+                ),
               ],
             ),
             Gap(16.0),

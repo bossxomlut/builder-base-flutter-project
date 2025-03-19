@@ -29,7 +29,7 @@ class _SettingsPageState extends State<SettingsPage> with StateTemplate<Settings
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: LText(
             LKey.settings,
-            style: theme.textTheme.displaySmall,
+            style: theme.headingStyle,
           ),
         ),
         const Gap(20),
@@ -145,24 +145,24 @@ class _SettingsPageState extends State<SettingsPage> with StateTemplate<Settings
             ).show(context);
           },
         ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: AppDivider(),
-        ),
-        ListTile(
-          title: const LText(LKey.darkMode),
-          leading: const Icon(LineIcons.moonAlt),
-          trailing: ValueListenableBuilder(
-              valueListenable: ThemeUtils.themeModeNotifier,
-              builder: (context, themMode, _) {
-                return Switch(
-                  value: themMode == ThemeMode.dark,
-                  onChanged: (bool value) {
-                    ThemeUtils.toggleThemeMode();
-                  },
-                );
-              }),
-        ),
+        // const Padding(
+        //   padding: EdgeInsets.symmetric(horizontal: 20),
+        //   child: AppDivider(),
+        // ),
+        // ListTile(
+        //   title: const LText(LKey.darkMode),
+        //   leading: const Icon(LineIcons.moonAlt),
+        //   trailing: ValueListenableBuilder(
+        //       valueListenable: ThemeUtils.themeModeNotifier,
+        //       builder: (context, themMode, _) {
+        //         return Switch(
+        //           value: themMode == ThemeMode.dark,
+        //           onChanged: (bool value) {
+        //             ThemeUtils.toggleThemeMode();
+        //           },
+        //         );
+        //       }),
+        // ),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: AppDivider(),

@@ -163,7 +163,7 @@ class CountSearchCard extends StatelessWidget {
       child: ExpansionTile(
         key: ValueKey(countSearch.id),
         shape: const RoundedRectangleBorder(),
-        backgroundColor: theme.cardTheme.color,
+        // backgroundColor: theme.cardTheme.color,
         childrenPadding: const EdgeInsets.all(16),
         title: ListTile(
           // title: Text('${countSearch.name}'),
@@ -194,7 +194,7 @@ class CountSearchCard extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               final district = countSearch.districts[index];
               return ListTile(
-                tileColor: theme.colorScheme.surface,
+                tileColor: theme.cerCardColor,
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(8)),
                 ),

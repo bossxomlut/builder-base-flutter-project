@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../resource/string.dart';
+import '../../resource/index.dart';
 import '../land_certificate/province_certificate_list_page.dart';
 import '../utils/index.dart';
 
@@ -60,7 +60,7 @@ class SliverMultilineAppBar extends StatelessWidget {
           child: Text(
             title,
             textScaleFactor: .68,
-            style: Theme.of(context).textTheme.displaySmall,
+            style: Theme.of(context).headingStyle,
             textAlign: TextAlign.start,
           ),
         ),

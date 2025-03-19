@@ -68,7 +68,7 @@ class _OtherAreaWidgetState extends State<OtherAreaWidget> {
         borderRadius: BorderRadius.circular(8),
         side: BorderSide(color: theme.dividerColor),
       ),
-      backgroundColor: theme.colorScheme.surface,
+      backgroundColor: theme.cardColor,
       leading: IconButton(
         onPressed: widget.onRemove,
         icon: const Icon(LineIcons.trash),
