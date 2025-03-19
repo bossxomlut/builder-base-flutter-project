@@ -13,6 +13,7 @@ class OutlineField extends StatelessWidget {
     this.showTrailingIcon = true,
     this.trailing,
     this.isDisabled = false,
+    this.borderColor,
   });
 
   final String label;
@@ -21,6 +22,7 @@ class OutlineField extends StatelessWidget {
   final bool showTrailingIcon;
   final Widget? trailing;
   final bool isDisabled;
+  final Color? borderColor;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,7 @@ class OutlineField extends StatelessWidget {
           height: 54,
           padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
-            border: Border.all(color: theme.borderColor),
+            border: Border.all(color: borderColor ?? theme.borderColor),
             borderRadius: BorderRadius.circular(4.0),
             color: isDisabled ? theme.borderColor : theme.canvasColor,
           ),

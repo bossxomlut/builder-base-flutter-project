@@ -291,6 +291,9 @@ class _ViewLandCertificatePageState extends State<ViewLandCertificatePage> with 
                           value: landCertificateEntity.taxDeadlineTime.date,
                           trailing: const Icon(Icons.calendar_today_outlined),
                           onTap: () {},
+                          borderColor: landCertificateEntity.taxDeadlineTime != null
+                              ? theme.getWarningByCountDate(landCertificateEntity.taxDeadlineTime.countToNow)
+                              : null,
                         ),
                       ],
                     ),

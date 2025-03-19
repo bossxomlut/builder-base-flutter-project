@@ -327,6 +327,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                                   _updateLandCertificateEntity(purchaseDate: selectedDate);
                                 }
                               },
+                              initialDate: landCertificateEntity.purchaseDate,
                             );
                           },
                           trailing: Icon(Icons.calendar_today_outlined),
@@ -356,6 +357,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                                   _updateLandCertificateEntity(saleDate: selectedDate);
                                 }
                               },
+                              initialDate: landCertificateEntity.saleDate,
                             );
                           },
                           trailing: Icon(Icons.calendar_today_outlined),
@@ -528,6 +530,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                                   _updateLandCertificateEntity(taxRenewalTime: selectedDate);
                                 }
                               },
+                              initialDate: landCertificateEntity.taxRenewalTime,
                             );
                           },
                           trailing: Icon(Icons.calendar_today_outlined),
@@ -536,6 +539,9 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                         OutlineField(
                           label: LKey.fieldsTaxPaymentDeadline.tr() + '*',
                           value: landCertificateEntity.taxDeadlineTime.date,
+                          borderColor: landCertificateEntity.taxDeadlineTime != null
+                              ? theme.getWarningByCountDate(landCertificateEntity.taxDeadlineTime.countToNow)
+                              : null,
                           onTap: () async {
                             AppShowDatePicker(
                               context,
@@ -544,6 +550,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                                   _updateLandCertificateEntity(taxDeadlineTime: selectedDate);
                                 }
                               },
+                              initialDate: landCertificateEntity.taxDeadlineTime,
                             );
                           },
                           trailing: Icon(Icons.calendar_today_outlined),

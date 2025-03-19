@@ -43,7 +43,11 @@ extension DateTimeUtils on DateTime? {
   }
 
   int countDays(DateTime other) {
-    final difference = this!.difference(other);
+    // Đặt thời gian về 00:00:00 để chỉ tính theo ngày
+    final startDate = DateTime(this!.year, this!.month, this!.day);
+    final endDate = DateTime(other.year, other.month, other.day);
+
+    final difference = startDate.difference(endDate);
     return difference.inDays;
   }
 
