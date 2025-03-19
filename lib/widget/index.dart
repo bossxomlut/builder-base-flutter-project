@@ -18,6 +18,7 @@ export 'localization_text.dart';
 export 'processing_widget.dart';
 export 'see_more_list.dart';
 export 'see_more_widget.dart';
+export 'shimmer.dart';
 //Text Field
 export 'text_field/multi_line_field.dart';
 export 'text_field/outline_field.dart';

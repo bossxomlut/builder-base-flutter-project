@@ -37,19 +37,36 @@ class ProvinceLandCertificateListCubit extends Cubit<CertificateListState> with 
 
   void onSearch(String query) async {
     final list = await certificateRepository.search(query);
-    emit(CertificateListState(list: list));
+    emit(CertificateListState(list: list, isLoading: false));
   }
 }
 
 class CertificateListState extends Equatable {
-  CertificateListState({required this.list});
+  CertificateListState({
+    required this.list,
+    required this.isLoading,
+  });
 
   factory CertificateListState.initial() {
-    return CertificateListState(list: []);
+    return CertificateListState(isLoading: true, list: []);
   }
 
+  final bool isLoading;
   final List<ProvinceLandCertificateEntity> list;
 
   @override
-  List<Object?> get props => [list.hashCode];
+  List<Object?> get props => [
+        list.hashCode,
+        isLoading,
+      ];
+
+  CertificateListState copyWith({
+    bool? isLoading,
+    List<ProvinceLandCertificateEntity>? list,
+  }) {
+    return CertificateListState(
+      isLoading: isLoading ?? this.isLoading,
+      list: list ?? this.list,
+    );
+  }
 }

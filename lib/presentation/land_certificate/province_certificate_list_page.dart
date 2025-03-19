@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../widget/index.dart';
 import '../home/widget/land_certificate_card.dart';
 import '../utils/base_state.dart';
 import 'cubit/province_certificate_list_cubit.dart';
@@ -26,22 +27,28 @@ class _CertificateListPageState
 
   @override
   Widget buildBody(BuildContext context) {
-    return BlocBuilder<ProvinceLandCertificateListCubit, CertificateListState>(builder: (context, state) {
-      if (state.list.isEmpty) {
-        return EmptyLandCertificateWidget();
-      }
+    return BlocBuilder<ProvinceLandCertificateListCubit, CertificateListState>(
+      builder: (context, state) {
+        // if (state.isLoading) {
+        //   return const ListLandCertificateShimmer();
+        // }
 
-      return ListView.separated(
-        itemCount: state.list.length,
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
-        separatorBuilder: (context, index) => SizedBox(height: 10),
-        itemBuilder: (context, index) {
-          final provinceLandCertificateEntity = state.list[index];
-          return ProvinceLandCertificateCard(
-            pCertificates: provinceLandCertificateEntity,
-          );
-        },
-      );
-    });
+        if (state.list.isEmpty) {
+          return EmptyLandCertificateWidget();
+        }
+
+        return ListView.separated(
+          itemCount: state.list.length,
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
+          separatorBuilder: (context, index) => SizedBox(height: 10),
+          itemBuilder: (context, index) {
+            final provinceLandCertificateEntity = state.list[index];
+            return ProvinceLandCertificateCard(
+              pCertificates: provinceLandCertificateEntity,
+            );
+          },
+        );
+      },
+    );
   }
 }
