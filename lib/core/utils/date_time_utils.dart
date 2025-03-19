@@ -42,6 +42,14 @@ extension DateTimeUtils on DateTime? {
     return DateFormat('dd/MM/yyyy').format(this!);
   }
 
+  String get dateDisplace {
+    if (this == null) {
+      return '---';
+    }
+
+    return DateFormat('dd/MM/yyyy').format(this!);
+  }
+
   int countDays(DateTime other) {
     // Đặt thời gian về 00:00:00 để chỉ tính theo ngày
     final startDate = DateTime(this!.year, this!.month, this!.day);

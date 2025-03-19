@@ -58,7 +58,7 @@ class LandCertificateCard extends StatelessWidget {
                       Expanded(
                         child: InfoWidget(
                           title: LKey.fieldsPurchaseDate.tr(),
-                          value: certificate.purchaseDate.date,
+                          value: certificate.purchaseDate.dateDisplace,
                         ),
                       ),
                       Expanded(
@@ -83,7 +83,9 @@ class LandCertificateCard extends StatelessWidget {
                       Expanded(
                         child: InfoWidget(
                           title: LKey.fieldsSpecificAddress.tr(),
-                          value: certificate?.displayAddress ?? '---',
+                          value: certificate.displayAddress.isNotNullOrEmpty
+                              ? certificate?.displayAddress ?? '---'
+                              : '---',
                         ),
                       ),
                     ],
