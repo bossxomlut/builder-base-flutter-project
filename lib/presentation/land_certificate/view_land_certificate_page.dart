@@ -59,7 +59,7 @@ class _ViewLandCertificatePageState extends State<ViewLandCertificatePage> with 
                       padding: const EdgeInsets.only(top: 16),
                       child: AddCard(
                         title: LKey.sectionsLandCertificateImage.tr(),
-                        child: SeeMoreList<String>(
+                        child: ExpandMoreList<String>(
                           items: landCertificateEntity.files ?? [],
                           itemBuilder: (String file, int? index) {
                             return Padding(
@@ -73,9 +73,6 @@ class _ViewLandCertificatePageState extends State<ViewLandCertificatePage> with 
                                 ),
                               ),
                             );
-                          },
-                          onSeeMore: () {
-                            showImages(context, landCertificateEntity.files ?? [], 0);
                           },
                         ),
                       ),

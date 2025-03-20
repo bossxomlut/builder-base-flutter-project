@@ -207,7 +207,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                         ),
                         Gap(8),
                         if (landCertificateEntity.files.isNotNullAndEmpty)
-                          SeeMoreList<String>(
+                          ExpandMoreList<String>(
                             items: landCertificateEntity.files ?? [],
                             itemBuilder: (String file, int? index) {
                               return Padding(
@@ -217,6 +217,7 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                                     showImages(context, landCertificateEntity.files ?? [], index ?? 0);
                                   },
                                   child: Base64ImagePlaceholder(
+                                    key: ValueKey(file),
                                     data: file,
                                     onRemove: () {
                                       final List<String> list = [...?landCertificateEntity.files];
@@ -226,9 +227,6 @@ class _AddLandCertificatePageState extends State<AddLandCertificatePage> with St
                                   ),
                                 ),
                               );
-                            },
-                            onSeeMore: () {
-                              showImages(context, landCertificateEntity.files ?? [], 0);
                             },
                           ),
                       ],

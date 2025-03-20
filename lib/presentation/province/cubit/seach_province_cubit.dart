@@ -3,9 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../domain/index.dart';
+import '../../utils/cubit_utils.dart';
 
 @injectable
-class SearchProvinceCubit extends Cubit<SearchProvinceState> {
+class SearchProvinceCubit extends Cubit<SearchProvinceState> with SafeEmit<SearchProvinceState> {
   SearchProvinceCubit(
     this._provinceRepository,
     this._districtRepository,

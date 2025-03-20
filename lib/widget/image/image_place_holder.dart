@@ -131,6 +131,14 @@ class _Base64ImagePlaceholderState extends State<Base64ImagePlaceholder> {
   }
 
   @override
+  void didUpdateWidget(covariant Base64ImagePlaceholder oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.data != widget.data) {
+      imageBytes = base64Decode(widget.data);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final height = 120.0;
     final theme = context.appTheme;
