@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 
+import '../../resource/index.dart';
 import '../index.dart';
 
 extension AmountFormat on num {
@@ -20,6 +20,16 @@ extension AmountFormat on num {
     //just show number
     //if is double seprate by , at decimal
     return NumberFormat("###0.###", "en_US").format(this);
+  }
+}
+
+extension DisplayFormat on String? {
+  String get displayFormat {
+    if (isNotNullOrEmpty) {
+      return this!;
+    }
+
+    return nullPlaceHolder;
   }
 }
 

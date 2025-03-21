@@ -45,7 +45,7 @@ class LandCertificateCard extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          certificate.name ?? '---',
+                          certificate.name.displayFormat,
                           style: theme.cerNameStyle,
                         ),
                       ),
@@ -54,6 +54,7 @@ class LandCertificateCard extends StatelessWidget {
                   ),
                   Gap(18.0),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         child: InfoWidget(
@@ -64,28 +65,25 @@ class LandCertificateCard extends StatelessWidget {
                       Expanded(
                         child: InfoWidget(
                           title: LKey.fieldsAreaSize.tr(),
-                          value: (certificate.area?.displayFormat() ?? '---').toString(),
+                          value: (certificate.area?.displayFormat().displayFormat ?? '').displayFormat,
                         ),
                       ),
                     ],
                   ),
                   Gap(10.0),
                   Row(
-                    // mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         child: InfoWidget(
                           title: LKey.fieldsPurchasePrice.tr(),
-                          value: certificate.purchasePrice?.displayFormat() ?? '---',
+                          value: (certificate.purchasePrice?.displayFormat() ?? '').displayFormat,
                         ),
                       ),
                       Expanded(
                         child: InfoWidget(
                           title: LKey.fieldsSpecificAddress.tr(),
-                          value: certificate.displayAddress.isNotNullOrEmpty
-                              ? certificate?.displayAddress ?? '---'
-                              : '---',
+                          value: certificate.displayAddress.displayFormat,
                         ),
                       ),
                     ],
@@ -125,23 +123,6 @@ class LandCertificateCard extends StatelessWidget {
                   ),
                 ),
               ),
-            // if (certificate.files.isNotNullAndEmpty)
-            //   Positioned(
-            //     right: 0,
-            //     top: 0,
-            //     child: GestureDetector(
-            //       onTap: () {
-            //         // PreviewLandCertificateWidget(landCertificate: certificate).show(context);
-            //
-            //         renderAndShareImage(
-            //           certificate,
-            //         );
-            //       },
-            //       child: Icon(
-            //         LineIcons.alternateShare,
-            //       ),
-            //     ),
-            //   ),
           ],
         ),
       ),

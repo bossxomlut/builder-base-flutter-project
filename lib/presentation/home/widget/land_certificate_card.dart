@@ -35,7 +35,7 @@ class ProvinceLandCertificateCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    pCertificates.name ?? '---',
+                    pCertificates.name.displayFormat,
                     style: theme.provinceStyle,
                   ),
                 ),

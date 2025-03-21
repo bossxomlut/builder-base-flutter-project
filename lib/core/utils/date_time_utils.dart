@@ -1,5 +1,6 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+
+import '../../resource/index.dart';
 
 extension DateTimeUtils on DateTime? {
   //calculate now - this explain for notification
@@ -44,7 +45,7 @@ extension DateTimeUtils on DateTime? {
 
   String get dateDisplace {
     if (this == null) {
-      return '---';
+      return nullPlaceHolder;
     }
 
     return DateFormat('dd/MM/yyyy').format(this!);
@@ -107,7 +108,7 @@ extension DateTimeUtils on DateTime? {
 
   String get dateTimeServiceDisplay {
     if (this == null) {
-      return '---';
+      return nullPlaceHolder;
     }
     return DateFormat('[HH:mm] dd/MM/yyyy').format(this!);
   }

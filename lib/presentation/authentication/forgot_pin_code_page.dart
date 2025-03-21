@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../core/index.dart';
 import '../../domain/index.dart';
 import '../../injection/injection.dart';
 import '../../resource/index.dart';
@@ -157,7 +158,7 @@ class _EncryptPinCodeWidgetState extends State<EncryptPinCodeWidget> {
                 final String? code = snapshot.data;
                 return OutlineField(
                   label: LKey.setUpPinCode.tr(),
-                  value: code ?? '---',
+                  value: code.displayFormat,
                   onTap: () {
                     //copy to clipboard
                     Clipboard.setData(ClipboardData(text: code ?? ''));
