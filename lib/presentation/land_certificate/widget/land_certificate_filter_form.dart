@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../core/index.dart';
 import '../../../domain/entity/filter_land_certificate_entity.dart';
-import '../../../resource/index.dart';
 import '../../../widget/index.dart';
 import '../../../widget/toast.dart';
+import '../../utils/index.dart';
 
 class LandCertificateFilterForm extends StatefulWidget with ShowBottomSheet {
   const LandCertificateFilterForm({super.key, this.filter, this.onApply});
@@ -16,7 +16,7 @@ class LandCertificateFilterForm extends StatefulWidget with ShowBottomSheet {
   State<LandCertificateFilterForm> createState() => _LandCertificateFilterFormState();
 }
 
-class _LandCertificateFilterFormState extends State<LandCertificateFilterForm> {
+class _LandCertificateFilterFormState extends State<LandCertificateFilterForm> with StateTemplate {
   FilterLandCertificateEntity? _filter;
 
   @override
@@ -27,7 +27,17 @@ class _LandCertificateFilterFormState extends State<LandCertificateFilterForm> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = context.appTheme;
+    return ClipRRect(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(12),
+        topRight: Radius.circular(12),
+      ),
+      child: super.build(context),
+    );
+  }
+
+  @override
+  Widget buildBody(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -282,30 +292,24 @@ class _LandCertificateFilterFormState extends State<LandCertificateFilterForm> {
                         Row(
                           children: [
                             Expanded(
-                              child: CustomTextField(
+                              child: CustomTextField.number(
                                 label: 'Từ giá',
-                                initialValue: _filter?.purchasePriceFrom?.toString(),
-                                onChanged: (String value) {
-                                  _filter = _filter?.copyWith(
-                                    purchasePriceFrom: double.tryParse(value),
-                                  );
+                                initialValue: _filter?.purchasePriceFrom?.inputFormat(),
+                                onChanged: (value) {
+                                  _filter = _filter?.copyWith(purchasePriceFrom: value);
                                   setState(() {});
                                 },
-                                keyboardType: TextInputType.number,
                               ),
                             ),
                             const Gap(8),
                             Expanded(
-                              child: CustomTextField(
+                              child: CustomTextField.number(
                                 label: 'Đến giá',
-                                initialValue: _filter?.purchasePriceTo?.toString(),
-                                onChanged: (String value) {
-                                  _filter = _filter?.copyWith(
-                                    purchasePriceTo: double.tryParse(value),
-                                  );
+                                initialValue: _filter?.purchasePriceTo?.inputFormat(),
+                                onChanged: (value) {
+                                  _filter = _filter?.copyWith(purchasePriceTo: value);
                                   setState(() {});
                                 },
-                                keyboardType: TextInputType.number,
                               ),
                             ),
                           ],
@@ -319,29 +323,23 @@ class _LandCertificateFilterFormState extends State<LandCertificateFilterForm> {
                         Row(
                           children: [
                             Expanded(
-                              child: CustomTextField(
+                              child: CustomTextField.number(
                                 label: 'Từ giá',
-                                initialValue: _filter?.salePriceFrom?.toString(),
-                                onChanged: (String value) {
-                                  _filter = _filter?.copyWith(
-                                    salePriceFrom: double.tryParse(value),
-                                  );
+                                initialValue: _filter?.salePriceFrom?.inputFormat(),
+                                onChanged: (value) {
+                                  _filter = _filter?.copyWith(salePriceFrom: value);
                                 },
-                                keyboardType: TextInputType.number,
                               ),
                             ),
                             const Gap(8),
                             Expanded(
-                              child: CustomTextField(
+                              child: CustomTextField.number(
                                 label: 'Đến giá',
-                                initialValue: _filter?.salePriceTo?.toString(),
-                                onChanged: (String value) {
-                                  _filter = _filter?.copyWith(
-                                    salePriceTo: double.tryParse(value),
-                                  );
+                                initialValue: _filter?.salePriceTo?.inputFormat(),
+                                onChanged: (value) {
+                                  _filter = _filter?.copyWith(salePriceTo: value);
                                   setState(() {});
                                 },
-                                keyboardType: TextInputType.number,
                               ),
                             ),
                           ],
@@ -368,26 +366,22 @@ class _LandCertificateFilterFormState extends State<LandCertificateFilterForm> {
                             Row(
                               children: [
                                 Expanded(
-                                  child: CustomTextField(
+                                  child: CustomTextField.number(
                                     label: 'Từ diện tích',
-                                    initialValue: _filter?.areaFrom?.toString(),
-                                    onChanged: (String value) {
-                                      _filter = _filter?.copyWith(
-                                        areaFrom: double.tryParse(value),
-                                      );
+                                    initialValue: _filter?.areaFrom?.inputFormat(),
+                                    onChanged: (value) {
+                                      _filter = _filter?.copyWith(areaFrom: value);
                                       setState(() {});
                                     },
                                   ),
                                 ),
                                 const Gap(8),
                                 Expanded(
-                                  child: CustomTextField(
+                                  child: CustomTextField.number(
                                     label: 'Đến diện tích',
-                                    initialValue: _filter?.areaTo?.toString(),
-                                    onChanged: (String value) {
-                                      _filter = _filter?.copyWith(
-                                        areaTo: double.tryParse(value),
-                                      );
+                                    initialValue: _filter?.areaTo?.inputFormat(),
+                                    onChanged: (value) {
+                                      _filter = _filter?.copyWith(areaTo: value);
                                       setState(() {});
                                     },
                                   ),
